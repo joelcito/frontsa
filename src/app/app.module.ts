@@ -16,7 +16,6 @@ import { LoginModule } from './login/login.module';
     AppRoutingModule,
     DashboardModule,
     BrowserAnimationsModule,
-
     LoginModule
   ],
   providers: [],

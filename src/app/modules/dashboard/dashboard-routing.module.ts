@@ -5,7 +5,8 @@ import { loginGuard } from '../../login/login.guard';
 
 const routes: Routes = [
   {
-    path: 'dashboard',
+    // path: 'dashboard',
+    path: '',
     component: DashboardComponent,
     canActivate:[loginGuard],
     loadChildren: () => import('./router-child.module').then(m => m.RouterChildModule)

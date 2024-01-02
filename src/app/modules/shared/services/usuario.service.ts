@@ -36,4 +36,9 @@ export class UsuarioService {
     return this.http.post(`${this.base_host}/auth/register`, body);
   }
 
+  // ACTUALIZAR USUARIOS
+  updateUsuer(body:any, id:any){
+    return this.http.put(`${this.base_url}/usuarios`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
 }

@@ -78,6 +78,10 @@ export class UsuarioComponent implements OnInit{
       duration:2000
     });
   }
+
+  edit(id:string, username:string){
+    console.log(id, username)
+  }
 }
 
 export interface UsuarioElement{
