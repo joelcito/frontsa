@@ -35,10 +35,39 @@
 
         <mat-divider></mat-divider>
 
-        <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of menuNav">
+        <!-- <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of menuNav">
           <mat-icon class="icono">{{ nav.icon }}</mat-icon>
           {{ nav.name }}
-        </a>
+        </a> -->
+
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Menú 1
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <a mat-list-item [routerLink]="">
+              <mat-icon class="icono">home</mat-icon>
+              primero
+            </a>
+            <a mat-list-item [routerLink]="">
+              <mat-icon class="icono">account_circle</mat-icon>
+              primero
+            </a>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Menú 2
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>Contenido del menú 2</p>
+          </mat-expansion-panel>
+
+          <!-- Agrega más paneles de expansión según tu estructura de menú -->
+        </mat-accordion>
 
       </mat-nav-list>
     </mat-sidenav>

@@ -1,1 +1,70 @@
-<p>tipo-saneo works!</p>
+
+<mat-card>
+  <h2 class="alinear">Listado de Usuarios</h2>
+  <mat-card-header>
+    <div>
+      <mat-form-field hintLabel="Buscar tipo saneo" appearance="fill">
+        <mat-label>Buscar Tipo Saneo</mat-label>
+        <input matInput #input>
+      </mat-form-field>
+    </div>
+  </mat-card-header>
+  <mat-card-header>
+    <div class="derecha">
+      <ul>
+        <li><button mat-raised-button color="primary" (click)="openTipoSaneoDialog()">Agregar Tipo Saneo</button></li>
+      </ul>
+    </div>
+  </mat-card-header>
+  <div mat-card-image>
+
+  </div>
+  <mat-card-content>
+    <table mat-table [dataSource]="dataSourceTipoSaneo" class="mat-cell">
+
+      <!-- id columna -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>N°</th>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+      </ng-container>
+
+      <!-- usuario -->
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef>USUARIO</th>
+        <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
+      </ng-container>
+
+      <!-- usuario -->
+      <ng-container matColumnDef="descripcion">
+        <th mat-header-cell *matHeaderCellDef>DESCRIPCION</th>
+        <td mat-cell *matCellDef="let element">{{ element.descripcion }}</td>
+      </ng-container>
+
+      <!-- usuario -->
+      <!-- <ng-container matColumDef="password">
+        <th mat-header-cell *matHeaderCellDef>CONTRASEÑA</th>
+        <td mat-cell *matCellDef="let element">{{ element.password }}</td>
+      </ng-container> -->s
+
+      <!-- ACCIONE -->
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
+        <td mat-cell *matCellDef="let element; let i=index">
+          <!-- <button mat-icon-button color="warn" (click)="edit(element)"> -->
+          <button mat-icon-button color="warn" (click)="edit(element.id, element.nombre, element.descripcion)">
+            <mat-icon aria-label="Edit">edit</mat-icon>
+          </button>
+          <button mat-icon-button color="accent">
+            <mat-icon aria-label="Delete">delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
+  </mat-card-content>
+</mat-card>

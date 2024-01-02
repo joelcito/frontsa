@@ -14,18 +14,15 @@ import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/s
 export class UsuarioComponent implements OnInit{
 
   // con esto injectamos
-  private usuarioService = inject(UsuarioService);
-  public  dialog         = inject(MatDialog);
-  private snackBar       = inject(MatSnackBar);
-
-  displayedColumns: String[]  = ['id', 'usuario','activo', 'acciones'];
-                   dataSource = new MatTableDataSource<UsuarioElement>();
+  private          usuarioService = inject(UsuarioService);
+  public           dialog         = inject(MatDialog);
+  private          snackBar       = inject(MatSnackBar);
+  displayedColumns: String[]      = ['id', 'usuario','activo', 'acciones'];
+                   dataSource     = new MatTableDataSource<UsuarioElement>();
 
   ngOnInit(): void {
    this.getUsuarios();
   }
-
-
 
   getUsuarios(): void{
     this.usuarioService.getUsuarios().subscribe({

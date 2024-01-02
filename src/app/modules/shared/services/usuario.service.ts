@@ -28,7 +28,7 @@ export class UsuarioService {
 
   // ESTO OPTIENE LOS USUARIO
   getUsuarios(){
-    return this.http.get(`${this.base_url}/usuarios`, {headers: this.agregarAuthorizationHeader()});
+    return this.http.get(`${this.base_url}/usuarios/listado`, {headers: this.agregarAuthorizationHeader()});
   }
 
   // esto ira al register
