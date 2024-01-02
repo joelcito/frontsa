@@ -1,0 +1,54 @@
+.dashboard-container{
+  display       : flex;
+  flex-direction: column;
+  position      : absolute;
+  top           : 0;
+  bottom        : 0;
+  right         : 0;
+  left          : 0;
+}
+
+.h1.app-name{
+  margin-left: 8px;
+}
+
+ul li{
+  list-style: none;
+
+}
+
+div ul{
+  display: flex;
+  align-items: center;
+}
+
+.aliniar_derecha{
+  margin-left:auto;
+}
+
+.profile-card{
+  text-align: center;
+  padding: 0 20px 20px 20px;
+}
+
+.hedaer{
+  margin-top: 20px;
+}
+
+.sidenav-container{
+  flex: 1;
+}
+
+.is-mobile .sidenav-container{
+  flex: 1 0 auto;
+}
+
+.icono{
+  margin-right: 5px;
+  margin-top: 20px;
+}
+
+.is-mobile .dashboard-toolbar{
+  position: fixed;
+  z-index: 2;
+}

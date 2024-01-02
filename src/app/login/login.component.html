@@ -1,0 +1,30 @@
+<!-- app.component.html -->
+<!-- <form class="example-form" (ngSubmit)="onSubmit()">
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Usuario" name="username" [(ngModel)]="formData.username" required>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <input matInput type="password" placeholder="Contraseña" name="password" [(ngModel)]="formData.password" required>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit">Iniciar sesión</button>
+</form> -->
+
+<!-- app.component.html -->
+<div class="container">
+  <div class="logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Logo_segip.jpg" alt="Logo de la empresa" width="30%">
+  </div>
+  <form class="example-form" (ngSubmit)="onSubmit()">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Usuario" name="username" [(ngModel)]="formData.username" required>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <input matInput type="password" placeholder="Contraseña" name="password" [(ngModel)]="formData.password" required>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Iniciar sesión</button>
+  </form>
+</div>

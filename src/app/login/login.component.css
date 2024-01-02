@@ -1,0 +1,20 @@
+/* app.component.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* O ajusta la altura según tus necesidades */
+}
+
+.logo {
+  margin-bottom: 20px; /* Espaciado entre el logotipo y el formulario */
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+form {
+  width: 300px; /* Ancho del formulario */
+  text-align: center; /* Alineación del contenido dentro del formulario */
+}
