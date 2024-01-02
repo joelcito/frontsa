@@ -81,18 +81,4 @@ export class NewUsuarioComponent implements OnInit  {
       password: ['', [Validators.required]]
     });
   }
-
-  // getValidadorFindByCampoByFormulario(datos:any){
-  //   this.validadorService.getValidadorFindByCampoByFormulario(datos).subscribe((result:any) => {
-  //     this.requerimeinto_user = result.tipo_validador
-  //     const validatorsArray: ValidatorFn[] = eval(this.requerimeinto_user);
-
-  //     this.usuarioForm = this.fb.group({
-  //       username:['', validatorsArray],
-  //       // username:['', [Validators.required, Validators.email]],
-  //       password:['', [Validators.required]]
-  //     });
-
-  //   })
-  // }
 }
