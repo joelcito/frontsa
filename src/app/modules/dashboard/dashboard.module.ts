@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { UsuarioModule } from '../usuario/usuario.module';
 import { TipoSaneoModule } from '../tipo_saneo/tipo-saneo.module';
+import { RolModule } from '../rol/rol.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { TipoSaneoModule } from '../tipo_saneo/tipo-saneo.module';
     RouterModule,
     SharedModule,
     UsuarioModule,
-    TipoSaneoModule
+    TipoSaneoModule,
+    RolModule
   ]
 })
 

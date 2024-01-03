@@ -41,4 +41,12 @@ export class UsuarioService {
     return this.http.put(`${this.base_url}/usuarios`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
+  getMenuRol(usuario:number,rol:number ){
+    let datos = {
+      "usuario" : usuario,
+      "rol" : rol
+    }
+    return this.http.post(`${this.base_url}/usuarios/menu`, datos, {headers: this.agregarAuthorizationHeader()});
+  }
+
 }

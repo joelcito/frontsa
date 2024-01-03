@@ -2,6 +2,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { Component, inject } from '@angular/core';
 import { LoginService } from '../../../../login/login.service';
 import { Router } from '@angular/router';
+import { UsuarioService } from '../../services/usuario.service';
 // import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -11,61 +12,147 @@ import { Router } from '@angular/router';
 })
 export class SidenavComponent {
 
-  mobileQuery: MediaQueryList;
-
-  loginService:LoginService = inject(LoginService);
-  router      :Router       = inject(Router);
+  mobileQuery   : MediaQueryList;
+  loginService  : LoginService = inject(LoginService);
+  router        : Router      = inject(Router);
+  usuarioService: UsuarioService = inject(UsuarioService);
+  correo        : string = '';
+  roles         : any = []
+  rol_actual    : any = [];
   // _snackBar   :MatSnackBar  = inject(MatSnackBar);
 
+  // PRIMERA VERSION
   // menuNav = [
   //   {name:"Home", route:"home", icon:"home"},
   //   {name:"Usuario", route:"usuario", icon:"account_circle"},
   //   {name:"Tipo Saneo", route:"tipo_saneo", icon:"find_in_page"},
   // ];
 
-    menuNav = [
-      {
-        name: 'Home',
-        icon: 'home',
-        route: '/home',
-        active: true,
-        subMenus: [
-          { name: 'Tablets', url: '#' },
-          { name: 'Mobiles', url: '#' },
-          { name: 'Desktop', url: '#' }
-        ] // Puedes añadir submenús aquí si corresponde
-      },
-      {
-        name: 'Profile',
-        icon: 'person',
-        route: '/profile',
-        active: true,
-        subMenus: [
-          { name: 'Settings', route: '/profile/settings' },
-          { name: 'Preferences', route: '/profile/preferences' }
-        ]
-      },
-      {
-        name: 'Web Browser',
-        icon: 'fa fa-globe',
-        active: false,
-        subMenus: [
-          { name: 'Chrome', url: '#' },
-          { name: 'Firefox', url: '#' },
-          { name: 'Desktop', url: '#' }
-        ]
-      }
-      // Puedes seguir añadiendo más elementos con submenús si es necesario
-    ];
+
+  // SEGUNDA VERSION
+    // menuNav: {
+    //   name: string;
+    //   icon: string;
+    //   route: string;
+    //   active: boolean;
+    //   subMenus: { name: string; url: string , active:boolean }[];
+    // }[] = [
+    //         {
+    //           name: 'Home',
+    //           icon: 'home',
+    //           route: '/home',
+    //           active: true,
+    //           subMenus: [
+    //             { name: 'Listado', url: 'home', active:true },
+    //           ]
+    //         },
+    //         {
+    //           name: 'Usuario',
+    //           icon: 'person',
+    //           route: '/profile',
+    //           active: true,
+    //           subMenus: [
+    //             { name: 'Listado Usuarios', url: 'usuario', active:true },
+    //             { name: 'Listado Rol', url: 'rol' , active:true},
+    //           ]
+    //         },
+    //         {
+    //           name: 'Tipo Saneo',
+    //           icon: 'find_in_page',
+    //           route: '/home',
+    //           active: true,
+    //           subMenus: [
+    //             { name: 'Listado', url: 'tipo_saneo' , active:true},
+    //           ]
+    //         }
+    //       ];
+
+
+    // TERCERA VERSION
+    menuNav: {
+      name: string;
+      icon: string;
+      route: string;
+      active: boolean;
+      subMenus: { name: string; url: string , active:boolean }[];
+    }[] = [];
 
   constructor(media: MediaMatcher) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    const datos = sessionStorage.getItem('datos');
+    // PARA RESCATAR LOS DATOS
+    if(datos){
+      let dar = JSON.parse(datos)
+      this.correo  = dar.username
+      this.roles = dar.roles
+
+      // console.log(this.roles, this.roles.length)
+      if(this.roles.length > 0){
+        this.rol_actual = this.roles[0]
+        const rol_id = this.rol_actual.id
+        this.parametrizarRolActual(dar.id ,rol_id)
+      }
+    }
+
+    // DE AQUI VAMOS A PARAMETRIZAR LOS DATOS
+    // this.menuNav = [
+    //   {
+    //     name: 'Home',
+    //     icon: 'home',
+    //     route: '/home',
+    //     active: true,
+    //     subMenus: [
+    //       { name: 'Listado', url: 'home', active:true },
+    //     ]
+    //   },
+    //   {
+    //     name: 'Usuario',
+    //     icon: 'person',
+    //     route: '/profile',
+    //     active: true,
+    //     subMenus: [
+    //       { name: 'Listado Usuarios', url: 'usuario', active:true },
+    //       { name: 'Listado Rol', url: 'rol' , active:true},
+    //     ]
+    //   },
+    //   {
+    //     name: 'Tipo Saneo',
+    //     icon: 'find_in_page',
+    //     route: '/home',
+    //     active: true,
+    //     subMenus: [
+    //       { name: 'Listado', url: 'tipo_saneo' , active:true},
+    //     ]
+    //   }
+    // ];
   }
 
   cerrarSesion(){
     this.loginService.logout()
     this.router.navigate(['login']);
     // this.openSnackBar('Cerro la session con Exito', 'Cerrar');
+  }
+
+  parametrizarRolActual(usuario:number,rol:number ){
+    this.usuarioService.getMenuRol(usuario, rol).subscribe((datos:any) => {
+
+      console.log(datos.menus)
+
+      const datosRecuperados = JSON.parse(datos.menus);
+      this.menuNav = datosRecuperados
+
+      console.log(datosRecuperados)
+    })
+  }
+
+  cambiarRol(rol:any){
+    const datos = sessionStorage.getItem('datos');
+    if(datos){
+      let dar = JSON.parse(datos)
+      this.parametrizarRolActual(dar.id ,rol)
+
+      console.log(dar.id ,rol)
+    }
   }
 
   // openSnackBar(message: string, action: string) {

@@ -34,14 +34,18 @@ export class LoginComponent implements OnInit {
   private loginService = inject(LoginService);
 
   formData = {
-    username: 'joel',
-    password: '123'
+    username: 'jjjoelcito123@gmail.com',
+    password: '123456789'
   };
 
   onSubmit() {
 
     this.loginService.login(this.formData).pipe(
       tap((ressul: any) => { // Aquí se está utilizando `any` temporalmente
+
+        // console.log(ressul)
+
+        this.loginService.guardarUsuarioLogeuado(ressul.user)
         this.loginService.guardarUsuario(ressul.token);
         this.loginService.guardartoken(ressul.token);
 

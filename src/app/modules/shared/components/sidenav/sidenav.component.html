@@ -12,6 +12,13 @@
         <li>
           <button mat-icon-button  [matMenuTriggerFor]="menu" ><mat-icon>person_outline</mat-icon></button>
           <mat-menu #menu="matMenu">
+            <ng-container *ngFor="let r of roles">
+              <button mat-button color="primary" (click)="cambiarRol(r.id)">
+                <mat-icon>sync</mat-icon>
+                {{ r.nombre }}
+              </button>
+              <hr>
+            </ng-container>
             <button mat-button color="primary" (click)="cerrarSesion()">
               <mat-icon>exit_to_app</mat-icon>
               Cerrar Sesion
@@ -29,7 +36,7 @@
         <div class="profile-card">
           <div class="header">
             <h2>Joel Flores Quispe</h2>
-            <h4>jjjoelcito123&#64;gmail.com</h4>
+            <h4>{{ correo }}</h4>
           </div>
         </div>
 
@@ -40,10 +47,38 @@
           {{ nav.name }}
         </a> -->
 
-        <mat-accordion>
-          <mat-expansion-panel>
+        <!-- <mat-accordion>
+          <mat-expansion-panel *ngFor="let nav of menuNav">
             <mat-expansion-panel-header>
               <mat-panel-title>
+                <mat-icon class="icono">{{ nav.icon }}</mat-icon>
+                {{ nav.name }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <a mat-list-item *ngFor="let subMenu of nav.subMenus" [routerLink]="subMenu.url">
+              {{ subMenu.name }}
+            </a>
+          </mat-expansion-panel>
+        </mat-accordion> -->
+
+        <mat-accordion>
+          <mat-expansion-panel *ngFor="let nav of menuNav">
+            <mat-expansion-panel-header *ngIf="nav.active">
+              <mat-panel-title>
+                <mat-icon class="icono">{{ nav.icon }}</mat-icon>
+                {{ nav.name }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-container *ngFor="let subMenu of nav.subMenus">
+              <a mat-list-item  [routerLink]="subMenu.url" *ngIf="subMenu.active">
+                <mat-icon class="icono">home</mat-icon>
+                {{ subMenu.name }}
+              </a>
+            </ng-container>
+          </mat-expansion-panel>
+          <!-- <mat-expansion-panel>
+            <mat-expansion-panel-header>
+               <mat-panel-title>
                 Menú 1
               </mat-panel-title>
             </mat-expansion-panel-header>
@@ -56,7 +91,6 @@
               primero
             </a>
           </mat-expansion-panel>
-
           <mat-expansion-panel>
             <mat-expansion-panel-header>
               <mat-panel-title>
@@ -64,9 +98,7 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <p>Contenido del menú 2</p>
-          </mat-expansion-panel>
-
-          <!-- Agrega más paneles de expansión según tu estructura de menú -->
+          </mat-expansion-panel> -->
         </mat-accordion>
 
       </mat-nav-list>

@@ -63,6 +63,15 @@ export class LoginService {
     sessionStorage.setItem('token', accessToken);
   }
 
+  guardarUsuarioLogeuado(usuario:any){
+    let datos = {
+      "username": usuario.username,
+      "roles"   : usuario.roles,
+      "id"      : usuario.id,
+    }
+    sessionStorage.setItem('datos', JSON.stringify(datos))
+  }
+
   obtenerDatosToken(token:string):any{
     if(token != null && token != '')
       return JSON.parse(atob(token.split(".")[1]));
@@ -96,4 +105,5 @@ export class LoginService {
     this._usuario = null
     sessionStorage.clear();
   }
+
 }
