@@ -52,3 +52,7 @@ div ul{
   position: fixed;
   z-index: 2;
 }
+
+.color_rol{
+  color: rgb(23, 20, 223);
+}

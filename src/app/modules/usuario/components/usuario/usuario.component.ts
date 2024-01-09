@@ -4,6 +4,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { NewUsuarioComponent } from '../new-usuario/new-usuario.component';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
+import { UserRolComponent } from '../user-rol/user-rol.component';
+import { Observable } from 'rxjs';
+import { RolService } from '../../../shared/services/rol.service';
+import { RolElement } from '../../../rol/components/rol/rol.component';
 
 @Component({
   selector: 'app-usuario',
@@ -14,14 +18,21 @@ import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/s
 export class UsuarioComponent implements OnInit{
 
   // con esto injectamos
-  private          usuarioService = inject(UsuarioService);
-  public           dialog         = inject(MatDialog);
-  private          snackBar       = inject(MatSnackBar);
-  displayedColumns: String[]      = ['id', 'usuario','activo', 'acciones'];
-                   dataSource     = new MatTableDataSource<UsuarioElement>();
+  private usuarioService = inject(UsuarioService);
+  public  dialog         = inject(MatDialog);
+  private snackBar       = inject(MatSnackBar);
+  private rolService     = inject(RolService);
+
+  displayedColumns: String[]       = ['id', 'usuario','activo', 'acciones'];
+                   dataSource      = new MatTableDataSource<UsuarioElement>();
+
+  private menuNav : any[] = [];
+  public  roles: any[]    = [];
+
 
   ngOnInit(): void {
    this.getUsuarios();
+   this.getRoles();
   }
 
   getUsuarios(): void{
@@ -55,7 +66,7 @@ export class UsuarioComponent implements OnInit{
 
   openUsuarioDialog(){
     const dialogRef = this.dialog.open( NewUsuarioComponent, {
-      width: '405px',
+      width: '600px',
       // data: {name: this.name, animal: this.animal},
     });
 
@@ -76,8 +87,55 @@ export class UsuarioComponent implements OnInit{
     });
   }
 
-  edit(id:string, username:string){
-    console.log(id, username)
+  edit(id:string, username:string, estado:string){
+    const dialogRef = this.dialog.open( NewUsuarioComponent, {
+      width: '405px',
+      data: {id: id, username:username, estado:estado},
+    });
+
+    dialogRef.afterClosed().subscribe((result:any) => {
+      if(result == 1){
+        this.openSnackBar('USUARIO REGISTADO ACTUALIZADO','Exitosa');
+        this.getUsuarios();
+      }else if(result == 2){
+        this.openSnackBar('SE PRODUCO UN ERROR AL ACTUALIZAR','Error');
+      }
+
+    });
+  }
+
+
+  opcionesVer(datos:any, id:any){
+
+    // console.log(datos)
+
+    this.menuNav = this.usuarioService.getMenuNavData();
+    const dialogRef = this.dialog.open( UserRolComponent, {
+      width: '405px',
+      data: {
+        datos  : datos,
+        menus  : this.menuNav,
+        roles  : this.roles,
+        usuario: id
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result:any) => {
+      if(result == 1){
+        this.openSnackBar('USUARIO REGISTADO ACTUALIZADO','Exitosa');
+        this.getUsuarios();
+      }else if(result == 2){
+        this.openSnackBar('SE PRODUCO UN ERROR AL ACTUALIZAR','Error');
+      }
+
+    });
+
+  }
+
+  getRoles(){
+    this.rolService.getRoles().subscribe(resul => {
+      this.roles = resul as RolElement[];
+    })
   }
 }
 

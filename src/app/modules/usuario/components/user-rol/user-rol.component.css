@@ -1,0 +1,17 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px; /* Ajusta este valor según sea necesario */
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px; /* Ajusta este valor según sea necesario */
+}

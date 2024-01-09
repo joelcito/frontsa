@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>USUARIO ROL</h2>
+<mat-dialog-content>
+  <form [formGroup]="rolesForm" class="form-container">
+    <div *ngFor="let rol of roles" class="form-field">
+      <mat-slide-toggle [formControlName]="rol.nombre+'_'+rol.id">{{ rol.nombre }}</mat-slide-toggle>
+      <button mat-button color="primary" (click)="verMenusHabilitados(rol.id)" [disabled]="!rolesForm.get(rol.nombre+'_'+rol.id)?.value">
+        <mat-icon>remove_red_eye</mat-icon> Ver Per
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-actions">
+  <button mat-button color="primary" (click)="guardarRol()">
+    <mat-icon>save</mat-icon> Guardar
+  </button>
+  <button mat-button color="primary">
+    <mat-icon>cancel</mat-icon> Cancelar
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>MENU USUARIO</h2>
+<mat-dialog-content>
+  <form [formGroup]="menuFormRolMenu">
+    <div *ngFor="let menu of arrayFormVista; let menuIndex = index">
+      <h3>{{ menu.nombre }}</h3>
+      <mat-slide-toggle [formControlName]="menu.control">
+        {{ menu.estado ? 'Activo' : 'Inactivo' }}
+      </mat-slide-toggle>
+      <ul>
+        <li *ngFor="let subMenu of menu.submenus; let subMenuIndex = index">
+          <div>
+            <span>{{ subMenu.nombre }}</span>
+            <mat-slide-toggle  [formControlName]="subMenu.control">
+              {{ subMenu.estado ? 'Activo' : 'Inactivo' }}
+            </mat-slide-toggle>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button color="primary" (click)="guardarMenusUsuario()">
+    <mat-icon>save</mat-icon> Guardar
+  </button>
+  <button mat-button color="primary">
+    <mat-icon>cancel</mat-icon> Cancelar
+  </button>
+</mat-dialog-actions>

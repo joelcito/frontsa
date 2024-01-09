@@ -17,9 +17,6 @@ export class RolComponent implements OnInit{
                    dataSourceTipoSaneo = new MatTableDataSource<RolElement>();
   displayedColumns: String[]           = ['id', 'nombre', 'acciones'];
 
-
-
-
   ngOnInit(): void {
     this.getRol()
   }

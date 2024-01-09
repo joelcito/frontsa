@@ -14,6 +14,8 @@ export class UsuarioService {
   private httpHeaders  = new HttpHeaders({'Content-Type': 'application/json'});
   private base_url     = environment.base_url
   private base_host     = environment.host
+  private menuNavData: any[] = []; // Inicialmente vacío
+  private rol_asignado:string = '';
 
   constructor(private http:HttpClient) { }
 
@@ -26,19 +28,20 @@ export class UsuarioService {
     return this.httpHeaders;
   }
 
+  // ******************** GET ********************
   // ESTO OPTIENE LOS USUARIO
   getUsuarios(){
     return this.http.get(`${this.base_url}/usuarios/listado`, {headers: this.agregarAuthorizationHeader()});
   }
 
+  getRolesUser(user_id:any){
+    return this.http.get(`${this.base_url}/usuarios/roles_user/${user_id}`, {headers: this.agregarAuthorizationHeader()});
+  }
+
+  // ******************** POST ********************
   // esto ira al register
   saveUsario(body:any){
     return this.http.post(`${this.base_host}/auth/register`, body);
-  }
-
-  // ACTUALIZAR USUARIOS
-  updateUsuer(body:any, id:any){
-    return this.http.put(`${this.base_url}/usuarios`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
   getMenuRol(usuario:number,rol:number ){
@@ -47,6 +50,38 @@ export class UsuarioService {
       "rol" : rol
     }
     return this.http.post(`${this.base_url}/usuarios/menu`, datos, {headers: this.agregarAuthorizationHeader()});
+  }
+
+  saveMenuUserById(datos:any){
+    return this.http.post(`${this.base_url}/usuarios/saveMenuUserById`, datos, {headers: this.agregarAuthorizationHeader()});
+  }
+
+
+  // ******************** PUT ********************
+  // ACTUALIZAR USUARIOS
+  updateUsuer(body:any, id:any){
+    return this.http.put(`${this.base_url}/usuarios`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
+
+
+
+  // *********************************  GETTER AND SETTRS *********************************
+
+  setMenuNavData(data: any[]) {
+    this.menuNavData = data;
+  }
+
+  getMenuNavData(): any[] {
+    return this.menuNavData;
+  }
+
+  setRolAsigando(rol:string) {
+    this.rol_asignado = rol;
+  }
+
+  getRolAsigando(): string {
+    return this.rol_asignado;
   }
 
 }

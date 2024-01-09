@@ -37,5 +37,4 @@ export class TipoSaneoService {
     return this.http.put(`${this.base_url}/tipoSaneos/${id}`, body , {headers: this.agregarAuthorizationHeader()});
   }
 
-
 }

@@ -13,7 +13,7 @@
           <button mat-icon-button  [matMenuTriggerFor]="menu" ><mat-icon>person_outline</mat-icon></button>
           <mat-menu #menu="matMenu">
             <ng-container *ngFor="let r of roles">
-              <button mat-button color="primary" (click)="cambiarRol(r.id)">
+              <button mat-button color="primary" (click)="cambiarRol(r.id, r.nombre)">
                 <mat-icon>sync</mat-icon>
                 {{ r.nombre }}
               </button>
@@ -37,6 +37,7 @@
           <div class="header">
             <h2>Joel Flores Quispe</h2>
             <h4>{{ correo }}</h4>
+            <h4 class="color_rol">{{ rol }}</h4>
           </div>
         </div>
 

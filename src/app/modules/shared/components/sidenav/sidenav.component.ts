@@ -17,6 +17,7 @@ export class SidenavComponent {
   router        : Router      = inject(Router);
   usuarioService: UsuarioService = inject(UsuarioService);
   correo        : string = '';
+  rol           : string = '';
   roles         : any = []
   rol_actual    : any = [];
   // _snackBar   :MatSnackBar  = inject(MatSnackBar);
@@ -91,6 +92,8 @@ export class SidenavComponent {
         this.rol_actual = this.roles[0]
         const rol_id = this.rol_actual.id
         this.parametrizarRolActual(dar.id ,rol_id)
+
+        // console.log(this.rol_actual)
       }
     }
 
@@ -136,21 +139,26 @@ export class SidenavComponent {
   parametrizarRolActual(usuario:number,rol:number ){
     this.usuarioService.getMenuRol(usuario, rol).subscribe((datos:any) => {
 
-      console.log(datos.menus)
-
       const datosRecuperados = JSON.parse(datos.menus);
-      this.menuNav = datosRecuperados
+            this.menuNav     = datosRecuperados
+            this.rol         = this.rol_actual.nombre;
 
-      console.log(datosRecuperados)
+      // console.log(this.rol_actual.nombre)
+      // console.log(datosRecuperados)
+
+      this.usuarioService.setMenuNavData(datosRecuperados);
+      this.usuarioService.setRolAsigando(this.rol_actual.nombre);
+
+      // console.log(datosRecuperados)
     })
   }
 
-  cambiarRol(rol:any){
+  cambiarRol(rol:any, nombre:string){
     const datos = sessionStorage.getItem('datos');
     if(datos){
       let dar = JSON.parse(datos)
       this.parametrizarRolActual(dar.id ,rol)
-
+      this.rol = nombre;
       console.log(dar.id ,rol)
     }
   }

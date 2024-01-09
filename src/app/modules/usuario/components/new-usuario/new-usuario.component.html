@@ -1,15 +1,24 @@
 <h2 mat-dialog-title>Nuevo usuario</h2>
 <mat-dialog-content>
-    <form [formGroup]="usuarioForm">
+    <form [formGroup]="usuarioForm" class="form-container">
         <div class="usuario-container">
-            <mat-form-field>
+            <mat-form-field class="half-width">
                 <input matInput placeholder="Usuario" formControlName="username" required />
             </mat-form-field>
-            <mat-form-field>
+            <mat-form-field class="half-width">
                 <input matInput placeholder="Contraseña" formControlName="password" required />
             </mat-form-field>
         </div>
 
+        <div class="usuario-container">
+          <mat-slide-toggle formControlName="switchControl">Estado</mat-slide-toggle>
+          <!-- <mat-form-field class="half-width">
+              <mat-label>Rol</mat-label>
+              <mat-select matInput formControlName="selectControl">
+                  <mat-option *ngFor="let rol of rolElement" value="{{ rol }}">{{ rol.nombre }}</mat-option>
+              </mat-select>
+          </mat-form-field> -->
+      </div>
     </form>
 </mat-dialog-content>
 <mat-dialog-actions>

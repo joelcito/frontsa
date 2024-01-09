@@ -27,4 +27,8 @@ export class RolService {
   getRoles(){
     return this.http.get(`${this.base_url}/rol/listado`, {headers: this.agregarAuthorizationHeader()});
   }
+
+  updateRolesUser(id:any, body:any){
+    return this.http.post(`${this.base_url}/rol/user_rol/${id}`, body, {headers: this.agregarAuthorizationHeader()})
+  }
 }
