@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { RolService } from '../../../shared/services/rol.service';
+import { NewRolComponent } from '../new-rol/new-rol.component';
 
 @Component({
   selector: 'app-rol',
@@ -42,37 +43,37 @@ export class RolComponent implements OnInit{
   }
 
   openTipoSaneoDialog(){
-    // const dialogRef = this.dialog.open( NewTipoSaneoComponent, {
-    //   width: '405px',
-    //   // data: {name: this.name, animal: this.animal},
-    // });
+    const dialogRef = this.dialog.open( NewRolComponent, {
+      width: '405px',
+      // data: {name: this.name, animal: this.animal},
+    });
 
-    // dialogRef.afterClosed().subscribe((result:any) => {
-    //   if(result == 1){
-    //     this.openSnackBar('USUARIO REGISTADO CON EXITO','Exitosa');
-    //     this.getTiposSaneo();
-    //   }else if(result == 2){
-    //     this.openSnackBar('SE PRODUCO UN ERROR','Error');
-    //   }
+    dialogRef.afterClosed().subscribe((result:any) => {
+      if(result == 1){
+        this.openSnackBar('ROL REGISTADO CON EXITO','Exitosa');
+        this.getRol();
+      }else if(result == 2){
+        this.openSnackBar('SE PRODUCO UN ERROR','Error');
+      }
 
-    // });
+    });
   }
 
-  edit(id:string, nombre:string, descripcion:string){
-      // const dialogRef = this.dialog.open( NewTipoSaneoComponent, {
-      //   width: '405px',
-      //   data: {id: id, nombre: nombre, descripcion: descripcion},
-      // });
+  edit(id:string, nombre:string){
+      const dialogRef = this.dialog.open( NewRolComponent, {
+        width: '405px',
+        data: {id: id, nombre: nombre},
+      });
 
-      // dialogRef.afterClosed().subscribe((result:any) => {
-      //   if(result == 1){
-      //     this.openSnackBar('TIPO DE SANEO ACTUALIZADO','Exitosa');
-      //     this.getTiposSaneo();
-      //   }else if(result == 2){
-      //     this.openSnackBar('SE PRODUCO UN ERROR AL ACTUALIZAR','Error');
-      //   }
+      dialogRef.afterClosed().subscribe((result:any) => {
+        if(result == 1){
+          this.openSnackBar('TIPO DE SANEO ACTUALIZADO','Exitosa');
+          this.getRol();
+        }else if(result == 2){
+          this.openSnackBar('SE PRODUCO UN ERROR AL ACTUALIZAR','Error');
+        }
 
-      // });
+      });
 
     }
 

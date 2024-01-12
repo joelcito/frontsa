@@ -24,3 +24,18 @@ mat-form-field{
 .mat-header:nth-child(1){
   flex: 0 0 6%;
 }
+
+/* BOTONES */
+.btn-editar{
+  background-color: #ffa500; /* Color de fondo naranja */
+  color: white; /* Color del texto blanco */
+}
+
+.btn-editar{
+  background-color: #ffa500; /* Color de fondo naranja */
+  color: white; /* Color del texto blanco */
+}
+.btn-editar{
+  background-color: #ffa500; /* Color de fondo naranja */
+  color: white; /* Color del texto blanco */
+}

@@ -79,22 +79,33 @@ export class SidenavComponent {
     }[] = [];
 
   constructor(media: MediaMatcher) {
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    const datos = sessionStorage.getItem('datos');
+          this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    const datos            = sessionStorage.getItem('datos');
+
+    // console.log((datos)? JSON.parse(datos) : null)
+
     // PARA RESCATAR LOS DATOS
     if(datos){
-      let dar = JSON.parse(datos)
-      this.correo  = dar.username
-      this.roles = dar.roles
 
+      let dar         = JSON.parse(datos)
+          this.correo = dar.username
+          this.roles  = dar.roles
+
+      // console.log(dar)
       // console.log(this.roles, this.roles.length)
+      // console.log(this.rol_actual)
+      this.rol         = this.rol_actual.nombre;
+
       if(this.roles.length > 0){
-        this.rol_actual = this.roles[0]
-        const rol_id = this.rol_actual.id
+              this.rol_actual = this.roles[0]
+        const rol_id          = this.rol_actual.id
         this.parametrizarRolActual(dar.id ,rol_id)
 
         // console.log(this.rol_actual)
       }
+      // console.log("si", this.rol_actual.nombre)
+    }else{
+      // console.log("no")
     }
 
     // DE AQUI VAMOS A PARAMETRIZAR LOS DATOS
@@ -141,9 +152,9 @@ export class SidenavComponent {
 
       const datosRecuperados = JSON.parse(datos.menus);
             this.menuNav     = datosRecuperados
-            this.rol         = this.rol_actual.nombre;
+            this.rol         = datos.rol.nombre;
 
-      // console.log(this.rol_actual.nombre)
+      // console.log(this.rol_actual.nombre, this.rol, datos.rol.nombre)
       // console.log(datosRecuperados)
 
       this.usuarioService.setMenuNavData(datosRecuperados);
@@ -159,7 +170,8 @@ export class SidenavComponent {
       let dar = JSON.parse(datos)
       this.parametrizarRolActual(dar.id ,rol)
       this.rol = nombre;
-      console.log(dar.id ,rol)
+      // console.log(dar.id ,rol, nombre)
+      // console.log(dar.id ,rol)
     }
   }
 

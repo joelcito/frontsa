@@ -6,3 +6,8 @@
 .usuario-container > * {
   width: 100%;
 }
+
+/* Estilo para simular readonly en mat-select */
+/* .mat-select-disabled .mat-select-value {
+  pointer-events: none;
+} */

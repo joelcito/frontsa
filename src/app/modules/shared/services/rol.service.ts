@@ -31,4 +31,12 @@ export class RolService {
   updateRolesUser(id:any, body:any){
     return this.http.post(`${this.base_url}/rol/user_rol/${id}`, body, {headers: this.agregarAuthorizationHeader()})
   }
+
+  saveRol(body:any){
+    return this.http.post(`${this.base_url}/rol/`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
+  updateRol(body:any, id:any){
+    return this.http.put(`${this.base_url}/rol/${id}`, body , {headers: this.agregarAuthorizationHeader()});
+  }
 }

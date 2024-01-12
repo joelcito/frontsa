@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Nuevo Rol</h2>
+<mat-dialog-content>
+    <form [formGroup]="rolForm">
+        <div class="usuario-container">
+            <mat-form-field>
+                <input matInput placeholder="Nombre" formControlName="nombre" required />
+            </mat-form-field>
+            <!-- <mat-form-field>
+                <input matInput placeholder="Descripcion" formControlName="descripcion" required />
+            </mat-form-field> -->
+        </div>
+
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button color="primary" (click)="onSave()" [disabled]="rolForm.invalid">
+        <mat-icon>save</mat-icon> Guardar
+    </button>
+    <button mat-button color="primary" (click)="onCancel()">
+        <mat-icon>cancel</mat-icon> Cancelar
+    </button>
+</mat-dialog-actions>
