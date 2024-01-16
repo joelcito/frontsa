@@ -38,7 +38,7 @@ export class TipoSaneoComponent implements OnInit {
   getTiposSaneo(){
     this.tipoSaneoService.getTiposSaneos().subscribe({
       next: (datos:any) => {
-        console.log(datos)
+        // console.log(datos)
         this.procesarTiposSaneosResponse(datos)
       },
       error: (error:any) => {
@@ -107,9 +107,6 @@ export class TipoSaneoComponent implements OnInit {
 
 
   redirigir(id:any){
-    // const idEncriptado = this.encriptarConRellenoAleatorio(id, 10); // Encriptar el ID
-    // this.router.navigate(['/tipo_saneo/', idEncriptado]); // Redirigir a la URL encriptada
-
     const idEncriptado = this.encriptarConAESBase64URL(id, 'ESTE ES JOEL'); // Encriptar el ID
     this.router.navigate(['/tipo_saneo/', idEncriptado]); // Redirigir a la URL encriptada
   }

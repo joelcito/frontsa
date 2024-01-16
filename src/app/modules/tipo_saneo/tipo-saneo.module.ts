@@ -7,13 +7,17 @@ import { NewTipoSaneoComponent } from './components/new-tipo-saneo/new-tipo-sane
 import { DetalleTipoSaneoComponent } from './components/detalle-tipo-saneo/detalle-tipo-saneo.component';
 import { RouterModule } from '@angular/router';
 import { NewDetalleTipoSaneoComponent } from './components/new-detalle-tipo-saneo/new-detalle-tipo-saneo.component';
+import { DocumentoDetalleTipoSaneoComponent } from './components/documento-detalle-tipo-saneo/documento-detalle-tipo-saneo.component';
+import { NewDocumentoDetalleTipoSaneoComponent } from './components/new-documento-detalle-tipo-saneo/new-documento-detalle-tipo-saneo.component';
 
 @NgModule({
   declarations: [
     TipoSaneoComponent,
     NewTipoSaneoComponent,
     DetalleTipoSaneoComponent,
-    NewDetalleTipoSaneoComponent
+    NewDetalleTipoSaneoComponent,
+    DocumentoDetalleTipoSaneoComponent,
+    NewDocumentoDetalleTipoSaneoComponent
   ],
   imports: [
     RouterModule,

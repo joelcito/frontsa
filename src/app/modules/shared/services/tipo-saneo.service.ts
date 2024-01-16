@@ -45,4 +45,14 @@ export class TipoSaneoService {
   saveDetalleTipoSaneo(body:any){
     return this.http.post(`${this.base_url}/tipoSaneos/detalle_tipo_saneo/`, body, {headers: this.agregarAuthorizationHeader()});
   }
+
+  // ******************************** DOCUMENTO DETALLE TIPO SANEO ********************************
+  getDocumentoDetalleTipoSaneo(id:any){
+    return this.http.get(`${this.base_url}/tipoSaneos/documento_detalle_tipo_saneo/${id}`, {headers: this.agregarAuthorizationHeader()})
+  }
+
+  saveDocumentoDetalleTipoSaneo(body:any){
+    return this.http.post(`${this.base_url}/tipoSaneos/documento_detalle_tipo_saneo/`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
 }

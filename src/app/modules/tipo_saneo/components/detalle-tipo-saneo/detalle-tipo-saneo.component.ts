@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
 import { TipoSaneoService } from '../../../shared/services/tipo-saneo.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,6 +20,8 @@ export class DetalleTipoSaneoComponent implements OnInit  {
   private tipoSaneoService = inject(TipoSaneoService);
   private snackBar         = inject(MatSnackBar);
   public  dialog           = inject(MatDialog);
+  private router           = inject(Router);
+
 
 
   dataSourceDetalleTipoSaneo = new MatTableDataSource<DetalleTipoSaneoElement>();
@@ -81,7 +83,7 @@ export class DetalleTipoSaneoComponent implements OnInit  {
   getDetalleTiposSaneo(id:any){
     this.tipoSaneoService.getDetalleTiposSaneo(id).subscribe({
       next: (datos:any) => {
-        console.log(datos)
+        // console.log(datos)
         // this.tipo_saneo = dato
         this.procesarDetalleTiposSaneosResponse(datos)
       },
@@ -112,6 +114,24 @@ export class DetalleTipoSaneoComponent implements OnInit  {
       this.tipo_saneo = resul
     })
   }
+
+  redirigir(id:any){
+    const idEncriptado                 = this.encriptarConAESBase64URL(this.tipo_saneo_id, 'ESTE ES JOEL');   // Encriptar el ID
+    const idEncriptadoDetalleDocumento = this.encriptarConAESBase64URL(id, 'ESTE ES JOEL');  // Encriptar el ID
+    this.router.navigate(['/tipo_saneo/', idEncriptado, idEncriptadoDetalleDocumento]);
+  }
+
+  encriptarConAESBase64URL(id:string, clave:string) {
+    const textoAEncriptar = id.toString();
+    const textoEncriptado = CryptoJS.AES.encrypt(textoAEncriptar, clave).toString();
+    const textoEnBase64URL = this.base64URL(textoEncriptado);
+    return textoEnBase64URL;
+  }
+
+  base64URL(cadena:string) {
+    return cadena.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
+  }
+
 
 }
 

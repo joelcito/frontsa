@@ -25,7 +25,7 @@ export class NewDetalleTipoSaneoComponent implements OnInit  {
 
   ngOnInit(): void {
 
-    console.log(this.data)
+    // console.log(this.data)
     this.tipos_saneos  = this.data.tipo_saneo;
     this.tipo_saneo_id = this.data.tipo_saneo_id
 
