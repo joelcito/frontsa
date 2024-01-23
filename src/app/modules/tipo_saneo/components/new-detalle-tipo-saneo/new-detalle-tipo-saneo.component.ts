@@ -16,8 +16,6 @@ export class NewDetalleTipoSaneoComponent implements OnInit  {
   private tipoSaneoService = inject(TipoSaneoService);
   private dialogRef        = inject(MatDialogRef<NewDetalleTipoSaneoComponent>)
 
-
-
   public newDetalleTipoSaneoForm!: FormGroup;
   public tipos_saneos:any;
   private tipo_saneo_id:any;

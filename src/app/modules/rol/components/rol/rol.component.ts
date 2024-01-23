@@ -86,6 +86,6 @@ export class RolComponent implements OnInit{
 }
 
 export interface RolElement{
-  id:number,
-  nombre:string
+  id    : number,
+  nombre: string
 }

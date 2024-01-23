@@ -7,6 +7,8 @@ import { SharedModule } from '../shared/shared.module';
 import { UsuarioModule } from '../usuario/usuario.module';
 import { TipoSaneoModule } from '../tipo_saneo/tipo-saneo.module';
 import { RolModule } from '../rol/rol.module';
+import { FormularioModule } from '../formulario/formulario.module';
+import { SolicitudModule } from '../solicitud/solicitud.module';
 
 
 @NgModule({
@@ -20,7 +22,9 @@ import { RolModule } from '../rol/rol.module';
     SharedModule,
     UsuarioModule,
     TipoSaneoModule,
-    RolModule
+    RolModule,
+    FormularioModule,
+    SolicitudModule
   ]
 })
 

@@ -1,0 +1,26 @@
+.alinear{
+  text-align: center;
+  margin-top: 20px;
+}
+
+ul li{
+  list-style: none;
+}
+
+.derecha{
+ margin-left: auto;
+}
+
+/* para la tabla */
+table{
+  width: 100%;
+}
+
+mat-form-field{
+  width: 140%;
+}
+
+.mat-cell:nth-child(1),
+.mat-header:nth-child(1){
+  flex: 0 0 6%;
+}
