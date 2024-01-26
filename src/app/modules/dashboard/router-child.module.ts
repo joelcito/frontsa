@@ -10,6 +10,7 @@ import { FormularioComponent } from '../formulario/components/formulario/formula
 import { PregutaFormularioComponent } from '../formulario/components/preguta-formulario/preguta-formulario.component';
 import { SolicitudComponent } from '../solicitud/components/solicitud/solicitud.component';
 import { NewTipoSolicitudComponent } from '../solicitud/components/new-tipo-solicitud/new-tipo-solicitud.component';
+import { FormularioSolicitudComponent } from '../solicitud/components/formulario-solicitud/formulario-solicitud.component';
 
 const ChildRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -35,6 +36,7 @@ const ChildRoutes: Routes = [
   // ************************* SOLICITUD *************************
   { path: 'solicitud', component: SolicitudComponent },
   { path: 'solicitud/newTipoSolicitud', component: NewTipoSolicitudComponent },
+  { path: 'solicitud/newTipoSolicitud/newFormulario/:tipo_saneo_id/:formulario_id', component: FormularioSolicitudComponent },
 
 ]
 

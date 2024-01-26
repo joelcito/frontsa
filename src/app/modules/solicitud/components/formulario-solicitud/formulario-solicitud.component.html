@@ -1,0 +1,113 @@
+<mat-card class="contenedor">
+  <h2 class="alinear">FORMULARIO DE SOLICITUD</h2>
+
+  <div class="example-card-row">
+    <ng-container >
+      <mat-card class="example-card">
+        <span class="alinear">FORM</span>
+        <!-- <mat-form-field>
+          <mat-label>FADO</mat-label>
+          <input matInput required disabled value="2"/>
+        </mat-form-field> -->
+      </mat-card>
+      <mat-card class="example-card">
+        <mat-form-field>
+          <mat-label>FADO</mat-label>
+          <input matInput required disabled value="2"/>
+        </mat-form-field>
+      </mat-card>
+    </ng-container>
+  </div>
+
+  <div class="example-card-row">
+    <!-- Primera fila -->
+    <ng-container *ngFor="let dato of datos_oficina">
+      <mat-card class="example-card">
+        <mat-form-field>
+          <mat-label>{{ dato.nombre }}</mat-label>
+          <input matInput placeholder="{{ dato.nombre }}" required/>
+        </mat-form-field>
+      </mat-card>
+    </ng-container>
+  </div>
+
+  <div class="example-card-row">
+    <ng-container *ngFor="let des of descripcion">
+      <mat-card class="example-card">
+        <mat-form-field>
+          <mat-label>{{ des.nombre }}</mat-label>
+          <input matInput placeholder="{{ des.nombre }}" required/>
+        </mat-form-field>
+      </mat-card>
+    </ng-container>
+  </div>
+
+  <div class="example-card-row">
+    <ng-container *ngFor="let dato_cui of datos_ciudadano">
+      <mat-card class="example-card">
+        <mat-form-field>
+          <mat-label>{{ dato_cui.nombre }}</mat-label>
+          <input matInput placeholder="{{ dato_cui.nombre }}" required/>
+        </mat-form-field>
+      </mat-card>
+    </ng-container>
+  </div>
+
+  <div class="example-card-row">
+    <ng-container *ngFor="let dato_com of datos_complemento">
+      <mat-card class="example-card">
+        <mat-form-field>
+          <mat-label>{{ dato_com.nombre }}</mat-label>
+          <input matInput placeholder="{{ dato_com.nombre }}" required/>
+        </mat-form-field>
+      </mat-card>
+    </ng-container>
+  </div>
+
+  <div *ngFor="let dato_masa of datos_llenar_masa; let i = index" class="example-card-row">
+    <ng-container *ngFor="let dato_m of dato_masa; let j = index">
+      <mat-card class="example-card">
+        <mat-form-field>
+          <mat-label>{{ dato_m.nombre +" for: "+ i}}</mat-label>
+          <input matInput placeholder="{{ dato_m.nombre }}" required value="{{ i }}"/>
+        </mat-form-field>
+      </mat-card>
+    </ng-container>
+    <button mat-icon-button color="accent" (click)="eliminarCard(i)" *ngIf="i != 0">
+      <mat-icon aria-label="Delete">delete</mat-icon>
+    </button>
+  </div>
+
+  <!-- <div *ngFor="let dato_masa of datos_llenar_masa; let i = index" class="example-card-row">
+    <ng-container *ngFor="let dato_m of dato_masa; let j = index">
+      <mat-card class="example-card">
+        <mat-form-field>
+          <mat-label>{{ dato_m.nombre }}</mat-label>
+          <input matInput placeholder="{{ dato_m.nombre }}" required value="{{ i }}"/>
+        </mat-form-field>
+      </mat-card>
+    </ng-container>
+    <button mat-icon-button color="accent" (click)="eliminarCard(i)" *ngIf="i != 0">
+      <mat-icon aria-label="Delete">delete</mat-icon>
+    </button>
+  </div> -->
+
+
+  <!-- Botón para agregar un nuevo elemento -->
+  <button mat-raised-button (click)="agregarCard()" class="mat-warn-custom">Agregar Item</button>
+  <br>
+
+  <div class="example-card-row">
+    <ng-container *ngFor="let dato_foo of datos_footer">
+      <mat-card class="example-card">
+        <mat-form-field>
+          <mat-label>{{ dato_foo.nombre }}</mat-label>
+          <input matInput placeholder="{{ dato_foo.nombre }}" required/>
+        </mat-form-field>
+      </mat-card>
+    </ng-container>
+  </div>
+
+
+
+</mat-card>

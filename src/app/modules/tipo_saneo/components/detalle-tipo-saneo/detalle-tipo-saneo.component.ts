@@ -22,8 +22,6 @@ export class DetalleTipoSaneoComponent implements OnInit  {
   public  dialog           = inject(MatDialog);
   private router           = inject(Router);
 
-
-
   dataSourceDetalleTipoSaneo = new MatTableDataSource<DetalleTipoSaneoElement>();
 
   displayedColumns: String[]      = ['id', 'tipo_saneo','nombre', 'acciones'];

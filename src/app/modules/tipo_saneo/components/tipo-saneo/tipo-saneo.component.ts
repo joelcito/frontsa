@@ -129,6 +129,7 @@ export interface TipoSaneoElement{
   id:number;
   nombre:string;
   description:string;
+  // formularios:any;
 }
 
 

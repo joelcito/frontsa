@@ -21,4 +21,5 @@
 
 .half-width {
   width: 48%; /* O ajusta el ancho según tu preferencia */
+  padding: 10px;;
 }

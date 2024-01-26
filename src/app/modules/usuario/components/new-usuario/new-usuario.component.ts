@@ -28,9 +28,20 @@ export class NewUsuarioComponent implements OnInit  {
   ngOnInit(): void {
 
     this.usuarioForm = this.fb.group({
-      username     : [''],                          // Puedes inicializar con un valor por defecto si es necesario
-      password     : [''],
-      switchControl: [true]
+      cedula             : [''],
+      complemento        : [''],
+      nombres            : [''],
+      primer_apellido    : [''],
+      segundo_apellido   : [''],
+      nombre_organizacion: [''],
+      nombre_dependencia : [''],
+      nombre_cargo       : [''],
+      departamento       : [''],
+
+
+      username        : [''],   // Puedes inicializar con un valor por defecto si es necesario
+      password        : [''],
+      switchControl   : [true]
     });
 
     let datos: { campo: string, formulario: string };
@@ -58,7 +69,17 @@ export class NewUsuarioComponent implements OnInit  {
       username: this.usuarioForm.get('username')?.value,
       password: this.usuarioForm.get('password')?.value,
       country : "Bolivia",
-      estado  : this.usuarioForm.get('switchControl')?.value
+      estado  : this.usuarioForm.get('switchControl')?.value,
+
+      cedula             : this.usuarioForm.get('cedula')?.value,
+      complemento        : this.usuarioForm.get('complemento')?.value,
+      nombres            : this.usuarioForm.get('nombres')?.value,
+      primer_apellido    : this.usuarioForm.get('primer_apellido')?.value,
+      segundo_apellido   : this.usuarioForm.get('segundo_apellido')?.value,
+      nombre_organizacion: this.usuarioForm.get('nombre_organizacion')?.value,
+      nombre_dependencia : this.usuarioForm.get('nombre_dependencia')?.value,
+      nombre_cargo       : this.usuarioForm.get('nombre_cargo')?.value,
+      departamento       : this.usuarioForm.get('departamento')?.value,
     }
 
     this.usuarioService.saveUsario(data).subscribe(resul => {
@@ -88,9 +109,21 @@ export class NewUsuarioComponent implements OnInit  {
     this.validatorsArray = validatorsArray;
     // Aquí se actualiza el FormGroup con los nuevos validadores
     this.usuarioForm = this.fb.group({
-      username: ['', this.validatorsArray],
-      password: ['', [Validators.required]],
+      cedula             : ['', Validators.required],
+      complemento        : ['', Validators.required],
+      nombres            : ['', Validators.required],
+      primer_apellido    : ['', Validators.required],
+      segundo_apellido   : ['', Validators.required],
+      nombre_organizacion: ['', Validators.required],
+      nombre_dependencia : ['', Validators.required],
+      nombre_cargo       : ['', Validators.required],
+      departamento       : ['', Validators.required],
+
+
+      username     : ['', this.validatorsArray],
+      password     : ['', [Validators.required]],
       switchControl: [true]
+
     });
   }
 
@@ -104,6 +137,30 @@ export class NewUsuarioComponent implements OnInit  {
   getRoles(){
     this.rolService.getRoles().subscribe(datos =>{
       this.rolElement = datos
+    })
+  }
+
+  buscarFuncionario(){
+    console.log(this.usuarioForm.get('cedula')?.value)
+    console.log(this.usuarioForm.get('complemento')?.value)
+
+    let data = {
+      cedula: this.usuarioForm.get('cedula')?.value,
+      complemento: this.usuarioForm.get('complemento')?.value,
+    }
+
+    this.usuarioService.getFuncionario(data).subscribe((result:any) => {
+      if(result != null){
+        console.log(result)
+        this.usuarioForm.get('nombres')?.setValue(result.nombres);
+        this.usuarioForm.get('primer_apellido')?.setValue(result.primer_apellido);
+        this.usuarioForm.get('segundo_apellido')?.setValue(result.segundo_apellido);
+
+        this.usuarioForm.get('nombre_organizacion')?.setValue(result.nombre_organizacion);
+        this.usuarioForm.get('nombre_dependencia')?.setValue(result.nombre_dependencia);
+        this.usuarioForm.get('nombre_cargo')?.setValue(result.nombre_cargo);
+
+      }
     })
   }
 }

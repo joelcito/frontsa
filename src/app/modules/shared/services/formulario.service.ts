@@ -13,6 +13,8 @@ export class FormularioService {
   private http         = inject(HttpClient);
   private base_url     = environment.base_url;
 
+  private _datosEnviados:any;
+
   constructor() { }
 
   private agregarAuthorizationHeader(){
@@ -32,6 +34,10 @@ export class FormularioService {
     return this.http.post(`${this.base_url}/formulario/`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
+  getFormulariosByIdTipoSaneo(id:any){
+    return this.http.get(`${this.base_url}/formulario/listadoFormulariosByIdTipoSaneo/${id}`, {headers: this.agregarAuthorizationHeader()});
+  }
+
 
 
   // ********************** PREGUNTAS FORMULAIO **********************
@@ -39,7 +45,23 @@ export class FormularioService {
     return this.http.get(`${this.base_url}/formulario/formulario_pregunta/${id}`, {headers: this.agregarAuthorizationHeader()});
   }
 
+  getFormularioPreguntaByTipoSaneoByTipoDato(formulario_id:any, order_data:any){
+    return this.http.get(`${this.base_url}/formulario/formulario_pregunta/${formulario_id}/${order_data}`, {headers: this.agregarAuthorizationHeader()});
+  }
+
   saveFormularioPregunta(body:any){
     return this.http.post(`${this.base_url}/formulario/formulario_pregunta/`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
+
+  // **************** GETTER SETTER ****************
+  // Getter para datosEnviados
+  get datosEnviados(): any {
+    return this._datosEnviados;
+  }
+
+  // Setter para datosEnviados
+  set datosEnviados(value: any) {
+    this._datosEnviados = value;
   }
 }

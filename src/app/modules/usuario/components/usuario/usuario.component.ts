@@ -66,7 +66,7 @@ export class UsuarioComponent implements OnInit{
 
   openUsuarioDialog(){
     const dialogRef = this.dialog.open( NewUsuarioComponent, {
-      width: '600px',
+      width: '1000px',
       // data: {name: this.name, animal: this.animal},
     });
 

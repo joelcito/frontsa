@@ -3,14 +3,20 @@
   <mat-card-header>
     <!-- app.component.html -->
     <div class="container">
-      <button mat-button class="box">
-        <mat-icon>home</mat-icon> <!-- Reemplaza "home" con el icono que desees -->
+      <!-- <button mat-button class="box">
+        <mat-icon>home</mat-icon>
         <span class="button-title">Casa</span>
       </button>
       <button mat-button class="box">
-        <mat-icon>work</mat-icon> <!-- Reemplaza "work" con el icono que desees -->
+        <mat-icon>work</mat-icon>
         <span class="button-title">Trabajo</span>
-      </button>
+      </button> -->
+      <ng-container *ngFor="let tipoSa of tiposSaneos">
+        <button mat-button class="box" (click)="abreModalNewSolicitud(tipoSa)">
+          <mat-icon>fingerprint</mat-icon>
+          <span class="button-title">{{ tipoSa.nombre }}</span>
+        </button>
+      </ng-container>
       <!-- Agrega más botones según sea necesario -->
     </div>
   </mat-card-header>

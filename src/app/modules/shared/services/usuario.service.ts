@@ -64,6 +64,11 @@ export class UsuarioService {
   }
 
 
+  // PARA BUSCAR EN LA BASE DE DATOS DE COMUN
+  getFuncionario(datos:any){
+    return this.http.post(`${this.base_url}/comun/datos`, datos, {headers: this.agregarAuthorizationHeader()});
+  }
+
 
 
   // *********************************  GETTER AND SETTRS *********************************
