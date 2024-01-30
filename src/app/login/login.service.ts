@@ -64,10 +64,16 @@ export class LoginService {
   }
 
   guardarUsuarioLogeuado(usuario:any){
+    // console.log(usuario)
     let datos = {
-      "username": usuario.username,
-      "roles"   : usuario.roles,
-      "id"      : usuario.id,
+      "username"           : usuario.username,
+      "roles"              : usuario.roles,
+      "id"                 : usuario.id,
+      "departamento"       : usuario.departamento,
+      "nombres"            : usuario.nombres,
+      "primer_apellido"    : usuario.primer_apellido,
+      "segundo_apellido"   : usuario.segundo_apellido,
+      "nombre_organizacion": usuario.nombre_organizacion
     }
     sessionStorage.setItem('datos', JSON.stringify(datos))
   }

@@ -38,6 +38,10 @@ export class FormularioService {
     return this.http.get(`${this.base_url}/formulario/listadoFormulariosByIdTipoSaneo/${id}`, {headers: this.agregarAuthorizationHeader()});
   }
 
+  getFormulariofindById(id:any){
+    return this.http.get(`${this.base_url}/formulario/getFormulariofindById/${id}`, {headers: this.agregarAuthorizationHeader()});
+  }
+
 
 
   // ********************** PREGUNTAS FORMULAIO **********************

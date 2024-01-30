@@ -27,4 +27,8 @@ export class SolicitudService {
   getSolicitud(){
     return this.http.get(`${this.base_url}/solicitud/listado`, {headers: this.agregarAuthorizationHeader()});
   }
+
+  saveSolicitudCambioBandeja(body:any){
+    return this.http.post(`${this.base_url}/solicitud/`, body, {headers: this.agregarAuthorizationHeader()});
+  }
 }
