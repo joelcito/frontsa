@@ -159,6 +159,7 @@ export class NewUsuarioComponent implements OnInit  {
         this.usuarioForm.get('nombre_organizacion')?.setValue(result.nombre_organizacion);
         this.usuarioForm.get('nombre_dependencia')?.setValue(result.nombre_dependencia);
         this.usuarioForm.get('nombre_cargo')?.setValue(result.nombre_cargo);
+        this.usuarioForm.get('departamento')?.setValue("LA PAZ");
 
       }
     })

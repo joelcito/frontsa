@@ -34,7 +34,24 @@ export class SolicitudComponent implements OnInit {
   }
 
   getSolicitud(){
-    this.solicitudService.getSolicitud().subscribe({
+
+    const datosRecuperadosString: string | null = sessionStorage.getItem('datos');
+
+    console.log(datosRecuperadosString)
+    var dato;
+
+    if(datosRecuperadosString !== null){
+      let ko = JSON.parse(datosRecuperadosString);
+      dato = {
+        id:ko.id
+      }
+    }else{
+      dato = {
+        id:"1"
+      }
+    }
+
+    this.solicitudService.getSolicitud(dato).subscribe({
       next: (datos:any) => {
         console.log(datos)
         this.procesarTiposSaneosResponse(datos)

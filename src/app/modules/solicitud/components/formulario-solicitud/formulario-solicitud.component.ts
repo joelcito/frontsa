@@ -222,14 +222,14 @@ export class FormularioSolicitudComponent implements OnInit{
   }
 
   guardarSolicitud(){
-    // console.log("******************************************************************************************************")
-    // console.log("========================")
-    // console.log(this.solicitudFormulario.value)
-    // console.log("========================")
-    // console.log(this.extranjeroElejido)
-    // console.log("========================")
-    // console.log(this.solicitudFormularioTramite.value)
-    // console.log("******************************************************************************************************")
+    console.log("******************************************************************************************************")
+    console.log("========================")
+    console.log(this.solicitudFormulario.value)
+    console.log("========================")
+    console.log(this.extranjeroElejido)
+    console.log("========================")
+    console.log(this.solicitudFormularioTramite.value)
+    console.log("******************************************************************************************************")
 
     let dato = {
       datosFormularioSolicitud  : this.solicitudFormulario.value,
@@ -238,11 +238,26 @@ export class FormularioSolicitudComponent implements OnInit{
     }
 
     let datosREales = {
-      funcionario_id: this.solicitudFormulario.value.funcionario_id,
-      formulario_id : this.solicitudFormulario.value.formulario_id,
+      funcionario_id             : this.solicitudFormulario.value.funcionario_id,
+      formulario_id              : this.solicitudFormulario.value.formulario_id,
+      serialDocumentoExtRegistros: this.extranjeroElejido.SerialDocumentoExtRegistros,
+      serialExtRegistros         : this.extranjeroElejido.SerialExtRegistros,
+      nroCedulaBolExtRegistros   : this.extranjeroElejido.NroCedulaBolExtRegistros,
+      tipo_solicitud             : this.solicitudFormularioTramite.value.tipo_solicitud,
+
+      // PREGUNTAS
+      tipo_solicitud_respuesta       : this.solicitudFormularioTramite.value.tipo_solicitud,
+      nombre_operador_respuesta      : this.solicitudFormularioTramite.value.nombre_operador,
+      descripcion_respuesta          : this.solicitudFormularioTramite.value.descripcion,
+      articulos_reglamentos_respuesta: this.solicitudFormularioTramite.value.articulos_reglamentos,
+      datos_procesar_respuesta       : this.solicitudFormularioTramite.value.datos_procesar,
+      dato_anterior_respuesta        : this.solicitudFormularioTramite.value.dato_anterior,
+      dato_correcto_respuesta        : this.solicitudFormularioTramite.value.dato_correcto,
+      usu_operador_id_respuesta      : this.solicitudFormularioTramite.value.usu_operador_id,
     }
 
-    this.solicitudService.saveSolicitudCambioBandeja(dato).subscribe(resul => {
+    // this.solicitudService.saveSolicitudCambioBandeja(dato).subscribe(resul => {
+    this.solicitudService.saveSolicitudCambioBandeja(datosREales).subscribe(resul => {
       console.log(resul)
     })
 
