@@ -10,7 +10,10 @@ import { FormularioComponent } from '../formulario/components/formulario/formula
 import { PregutaFormularioComponent } from '../formulario/components/preguta-formulario/preguta-formulario.component';
 import { SolicitudComponent } from '../solicitud/components/solicitud/solicitud.component';
 import { NewTipoSolicitudComponent } from '../solicitud/components/new-tipo-solicitud/new-tipo-solicitud.component';
-import { FormularioSolicitudComponent } from '../solicitud/components/formulario-solicitud/formulario-solicitud.component';
+import { FormularioSolicitudComponent } from '../solicitud/components/extranjeria/formulario-solicitud/pregunta/formulario-solicitud.component';
+import { AsignacionComponent } from '../asignacion/components/asignacion/asignacion.component';
+import { FormularioSolicitudDirectiva0082019Component } from '../solicitud/components/extranjeria/formulario-solicitud-directiva-008-2019/pregunta/formulario-solicitud-directiva-008-2019.component';
+import { FormularioSolicitudDirectiva0082019RespuestaComponent } from '../solicitud/components/extranjeria/formulario-solicitud-directiva-008-2019/respuesta/formulario-solicitud-directiva-008-2019-respuesta.component';
 
 const ChildRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -37,6 +40,12 @@ const ChildRoutes: Routes = [
   { path: 'solicitud', component: SolicitudComponent },
   { path: 'solicitud/newTipoSolicitud', component: NewTipoSolicitudComponent },
   { path: 'solicitud/newTipoSolicitud/newFormulario/:tipo_saneo_id/:formulario_id', component: FormularioSolicitudComponent },
+  { path: 'solicitud/newTipoSolicitud/newFormularioDirectiva0082019/:tipo_saneo_id/:formulario_id', component: FormularioSolicitudDirectiva0082019Component },
+  { path: 'solicitud/newTipoSolicitud/newFormularioDirectiva0082019Res/:solicitud_id', component: FormularioSolicitudDirectiva0082019RespuestaComponent },
+
+  // ************************* ASIGNACION *************************
+  { path: 'asignacion', component: AsignacionComponent},
+
 
 ]
 

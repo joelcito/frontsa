@@ -1,13 +1,15 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormularioService } from '../../../shared/services/formulario.service';
-import { ModalNewSolicitudComponent } from '../modal-new-solicitud/modal-new-solicitud.component';
+import { FormularioService } from '../../../../../shared/services/formulario.service';
+import { ModalNewSolicitudComponent } from '../../../modal-new-solicitud/modal-new-solicitud.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ExtranjeriaService } from '../../../shared/services/extranjeria.service';
+import { ExtranjeriaService } from '../../../../../shared/services/extranjeria.service';
 import { Observable, catchError, map, of } from 'rxjs';
-import { TipoSaneoService } from '../../../shared/services/tipo-saneo.service';
-import { SolicitudService } from '../../../shared/services/solicitud.service';
+import { TipoSaneoService } from '../../../../../shared/services/tipo-saneo.service';
+import { SolicitudService } from '../../../../../shared/services/solicitud.service';
+import * as CryptoJS from 'crypto-js';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-formulario-solicitud',
@@ -22,6 +24,8 @@ export class FormularioSolicitudComponent implements OnInit{
   private router             = inject(ActivatedRoute);
   private tipoSaneoService   = inject(TipoSaneoService);
   private solicitudService   = inject(SolicitudService);
+  private routerLink         = inject(Router);
+
 
   private formulario_id       : any
   private tipo_saneo_id       : any
@@ -62,67 +66,73 @@ export class FormularioSolicitudComponent implements OnInit{
   ngOnInit(): void {
     this.router.params.subscribe(params => {
 
-      this.tipo_saneo_id = params['tipo_saneo_id'];
-      this.formulario_id = params['formulario_id'];
+      const tipo_saneo_id_encry = params['tipo_saneo_id'];
+      const formulario_id_encry = params['formulario_id'];
 
-      console.log(params, "HABES")
+      this.tipo_saneo_id = this.desencriptarConAESBase64URL(tipo_saneo_id_encry, 'ESTE ES JOEL');
+      this.formulario_id = this.desencriptarConAESBase64URL(formulario_id_encry, 'ESTE ES JOEL');
 
-      this.formularioService.getFormularioPreguntaByTipoSaneoByTipoDato(this.formulario_id, "datos_oficina").subscribe(resul => {
-        this.datos_oficina = resul
-      })
+      console.log(
+        this.tipo_saneo_id,
+        this.formulario_id
+      )
+      // console.log(params, "HABES")
 
-      this.formularioService.getFormularioPreguntaByTipoSaneoByTipoDato(this.formulario_id, "descripcion").subscribe(resul => {
-        this.descripcion = resul
-      })
+      // this.formularioService.getFormularioPreguntaByTipoSaneoByTipoDato(this.formulario_id, "datos_oficina").subscribe(resul => {
+      //   this.datos_oficina = resul
+      // })
 
-      this.formularioService.getFormularioPreguntaByTipoSaneoByTipoDato(this.formulario_id, "datos_ciudadano").subscribe(resul => {
-        this.datos_ciudadano = resul
-      })
+      // this.formularioService.getFormularioPreguntaByTipoSaneoByTipoDato(this.formulario_id, "descripcion").subscribe(resul => {
+      //   this.descripcion = resul
+      // })
 
-      this.formularioService.getFormularioPreguntaByTipoSaneoByTipoDato(this.formulario_id, "datos_complemento").subscribe(resul => {
-        this.datos_complemento = resul
-      })
+      // this.formularioService.getFormularioPreguntaByTipoSaneoByTipoDato(this.formulario_id, "datos_ciudadano").subscribe(resul => {
+      //   this.datos_ciudadano = resul
+      // })
 
-      this.formularioService.getFormularioPreguntaByTipoSaneoByTipoDato(this.formulario_id, "datos_llenar").subscribe(resul => {
-        this.datos_llenar         = resul
-        this.datos_llenar_replica = resul
-        this.datos_llenar_masa    = [resul]
-      })
+      // this.formularioService.getFormularioPreguntaByTipoSaneoByTipoDato(this.formulario_id, "datos_complemento").subscribe(resul => {
+      //   this.datos_complemento = resul
+      // })
 
-      this.formularioService.getFormularioPreguntaByTipoSaneoByTipoDato(this.formulario_id, "datos_footer").subscribe(resul => {
-        this.datos_footer = resul
-      })
+      // this.formularioService.getFormularioPreguntaByTipoSaneoByTipoDato(this.formulario_id, "datos_llenar").subscribe(resul => {
+      //   this.datos_llenar         = resul
+      //   this.datos_llenar_replica = resul
+      //   this.datos_llenar_masa    = [resul]
+      // })
 
-      this.formularioService.getFormulariofindById(this.formulario_id).subscribe(result => {
-        console.log(result)
-      })
+      // this.formularioService.getFormularioPreguntaByTipoSaneoByTipoDato(this.formulario_id, "datos_footer").subscribe(resul => {
+      //   this.datos_footer = resul
+      // })
+
+      // this.formularioService.getFormulariofindById(this.formulario_id).subscribe(result => {
+      //   console.log(result)
+      // })
 
       this.tipoSaneoService.getDetalleTiposSaneo(this.tipo_saneo_id).subscribe(resulg => {
-        // console.log(resulg)
         this.lista_tipo_solicitud = resulg
       })
 
       //  **************************** DE AQUI ES EXTRANJERIA HABER ****************************
-      this.extranjeriaService.getExtranjeros().subscribe(resul => {
-        console.log(resul)
-      })
+      // this.extranjeriaService.getExtranjeros().subscribe(resul => {
+      //   console.log(resul)
+      // })
 
       this.formularioBusquedaExtranjero = this.fb.group({
         numero_cedula   : ['100398980', Validators.required],
-        complemento     : ['', Validators.required],
-        nombres         : ['', Validators.required],
-        primer_apellido : ['', Validators.required],
-        segundo_apellido: ['', Validators.required],
+        complemento     : [''],
+        nombres         : [''],
+        primer_apellido : [''],
+        segundo_apellido: [''],
       });
 
       this.solicitudFormularioTramite = this.fb.group({
-        tipo_solicitud       : ['', Validators.required],
+        tipo_solicitud       : [{value:3, disabled:true}, Validators.required],
         nombre_operador      : ['', Validators.required],
-        descripcion          : ['', Validators.required],
+        descripcion          : [''],
         articulos_reglamentos: ['', Validators.required],
         datos_procesar       : ['', Validators.required],
-        dato_anterior        : ['', Validators.required],
-        dato_correcto        : ['', Validators.required],
+        dato_anterior        : ['',],
+        dato_correcto        : ['',],
         usu_operador_id     : ['', Validators.required],
       });
 
@@ -139,10 +149,10 @@ export class FormularioSolicitudComponent implements OnInit{
       const datosRecuperados = JSON.parse(datosRecuperadosString);
       // *************** CREACION DEL FORMULARIO ***************
       this.solicitudFormulario = this.fb.group({
-        departamento      : [datosRecuperados.departamento, Validators.required],
-        oficina           : [datosRecuperados.nombre_organizacion, Validators.required],
-        nombre_funcionario: [datosRecuperados.nombres+" "+datosRecuperados.primer_apellido+" "+datosRecuperados.segundo_apellido, Validators.required],
-        fecha_solicitud   : [new Date(), Validators.required],
+        departamento      : [{value:datosRecuperados.departamento, disabled:true}, Validators.required],
+        oficina           : [{value:datosRecuperados.nombre_organizacion, disabled:true}, Validators.required],
+        nombre_funcionario: [{value:datosRecuperados.nombres+" "+datosRecuperados.primer_apellido+" "+datosRecuperados.segundo_apellido, disabled:true}, Validators.required],
+        fecha_solicitud   : [{value: new Date(), disabled:true}, Validators.required],
         funcionario_id    : [datosRecuperados.id],
         formulario_id     : [this.formulario_id]
       });
@@ -206,6 +216,7 @@ export class FormularioSolicitudComponent implements OnInit{
 
   seleccionarExtranjero(extranjero:any){
     this.solicitudFormularioTramite.get('nombre_operador')?.setValue(extranjero.NombresSegUsuarios+" "+extranjero.PaternoSegUsuarios+" "+extranjero.MaternoSegUsuarios);
+    this.solicitudFormularioTramite.get('nombre_operador')?.disable()
     this.solicitudFormularioTramite.get('usu_operador_id')?.setValue(extranjero.LoginSegUsuarios);
     this.extranjeroElejido = extranjero
     this.mostrarTabla = false
@@ -237,6 +248,9 @@ export class FormularioSolicitudComponent implements OnInit{
       solicitudFormularioTramite: this.solicitudFormularioTramite.value
     }
 
+    this.solicitudFormularioTramite.enable()
+    this.solicitudFormulario.enable()
+
     let datosREales = {
       funcionario_id             : this.solicitudFormulario.value.funcionario_id,
       formulario_id              : this.solicitudFormulario.value.formulario_id,
@@ -257,10 +271,37 @@ export class FormularioSolicitudComponent implements OnInit{
     }
 
     // this.solicitudService.saveSolicitudCambioBandeja(dato).subscribe(resul => {
-    this.solicitudService.saveSolicitudCambioBandeja(datosREales).subscribe(resul => {
+    this.solicitudService.saveSolicitudCambioBandeja(datosREales).subscribe((resul:any) => {
+      if(resul !== null){
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Se registro con exito",
+          text: "El Caso se le asigno a "+resul.usuarioAsignado.nombres+" "+resul.usuarioAsignado.primer_apellido+" "+resul.usuarioAsignado.segundo_apellido,
+          showConfirmButton: false,
+          timer: 4000,
+          allowOutsideClick: false
+        });
+
+        setTimeout(() => {
+          this.routerLink.navigate(['/solicitud']);
+        }, 4000);
+
+      }else{
+
+      }
       console.log(resul)
+
     })
 
+  }
+
+  desencriptarConAESBase64URL(textoEnBase64URL:string, clave:string) {
+    const textoEncriptado     = textoEnBase64URL.replace(/-/g, '+').replace(/_/g, '/');
+    const bytesDesencriptados = CryptoJS.AES.decrypt(textoEncriptado, clave);
+    const textoDesencriptado  = bytesDesencriptados.toString(CryptoJS.enc.Utf8);
+    return textoDesencriptado;
   }
 
   /*

@@ -6,7 +6,7 @@ import { environment } from '../../../../environment/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class SolicitudService {
+export class AsignacionService {
 
   private loginService = inject(LoginService);
   private httpHeaders  = new HttpHeaders({'Content-Type': 'application/json'});
@@ -24,20 +24,8 @@ export class SolicitudService {
     return this.httpHeaders;
   }
 
-  findByIdsolicitud(id:any){
-    return this.http.get(`${this.base_url}/solicitud/${id}`, {headers: this.agregarAuthorizationHeader()});
-  }
-
-  getSolicitud(body:any){
+  getAsignaicones(body:any){
     // return this.http.get(`${this.base_url}/solicitud/listado`, {headers: this.agregarAuthorizationHeader()});
-    return this.http.post(`${this.base_url}/solicitud/listado`, body, {headers: this.agregarAuthorizationHeader()});
-  }
-
-  saveSolicitudCambioBandeja(body:any){
-    return this.http.post(`${this.base_url}/solicitud/`, body, {headers: this.agregarAuthorizationHeader()});
-  }
-
-  saveSolicitudDesbloqueoDirectiva0082019(body:any){
-    return this.http.post(`${this.base_url}/solicitud/saveSolicitudDesbloqueoDirectiva0082019`, body, {headers: this.agregarAuthorizationHeader()});
+    return this.http.post(`${this.base_url}/solicitud/asignacion/listado`, body, {headers: this.agregarAuthorizationHeader()});
   }
 }

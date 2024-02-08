@@ -5,6 +5,9 @@ import { TipoSaneoService } from '../../../shared/services/tipo-saneo.service';
 import { FormularioService } from '../../../shared/services/formulario.service';
 import Swal from 'sweetalert2'
 import { Router } from '@angular/router';
+import * as CryptoJS from 'crypto-js';
+import { environment } from '../../../../../environment/environment';
+
 
 @Component({
   selector: 'app-modal-new-solicitud',
@@ -15,6 +18,7 @@ export class ModalNewSolicitudComponent implements OnInit{
 
   public  soliForm !   : FormGroup
   private tipo_saneo_id: any
+  private formulario_id: any
 
   public nameSolictud:string = "";
   public formularios:any     = [];
@@ -58,24 +62,52 @@ export class ModalNewSolicitudComponent implements OnInit{
 
   onSave(){
     Swal.fire({
-      title: "Estas seguro de crear la solicitud?",
-      text: "No podras reverir eso!",
+      title: "¿Estas seguro de crear la solicitud?",
+      text: "¡No podras revertir eso!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Si, crear!"
+      confirmButtonText: "Si, crear"
     }).then((result) => {
       if (result.isConfirmed) {
 
-        const tipo_saneo_id = this.soliForm.value.tipo_saneo_id;
-        const formulario_id = this.soliForm.value.formulario_id;
+        this.tipo_saneo_id = this.soliForm.value.tipo_saneo_id;
+        this.formulario_id = this.soliForm.value.formulario_id;
 
         this.dialogRef.close(1)
 
-        // console.log(this.soliForm.value)
+        const tipo_saneo_id_encry = this.encriptarConAESBase64URL(this.tipo_saneo_id, 'ESTE ES JOEL');
+        const formulario_id_encry = this.encriptarConAESBase64URL(this.formulario_id, 'ESTE ES JOEL');
+        const sistema             = "extranjeria";
+        const pregunta_respuesta  = "pregunta";
 
-        this.router.navigate(['/solicitud/newTipoSolicitud/newFormulario/', tipo_saneo_id, formulario_id]);
+        let datos = {
+          sistema            : "extranjeria",
+          pregunta_respuesta : "pregunta",
+          formulario         : this.formulario_id,
+          tipo_saneo_id_encry: tipo_saneo_id_encry,
+          formulario_id_encry: formulario_id_encry
+        }
+
+        // let res = environment.getUrlSolicitudAsignacionRespuesta(sistema,"", pregunta_respuesta, this.formulario_id, formulario_id_encry,  tipo_saneo_id_encry)
+        let res = environment.getUrlSolicitudAsignacionRespuesta(datos)
+        this.router.navigate(res);
+
+        // if(this.formulario_id === 1){ // CAMBIO DE BANDEJA
+        //   this.router.navigate(['/solicitud/newTipoSolicitud/newFormulario/', tipo_saneo_id_encry, formulario_id_encry]);
+        // }else if(this.formulario_id === 2){ // DIRECTIVA 008/2019
+        //   this.router.navigate(['/solicitud/newTipoSolicitud/newFormularioDirectiva0082019/', tipo_saneo_id_encry, formulario_id_encry]);
+        // }
+
+
+
+
+
+
+
+
+
 
         // this.router.navigate(['/solicitud/newTipoSolicitud/newFormulario', tipoSaneoId, formularioId]);
 
@@ -86,9 +118,6 @@ export class ModalNewSolicitudComponent implements OnInit{
 
         // Navegar a la ruta del componente hijo (FormularioSolicitudComponent)
         // this.router.navigate(['/solicitud/newTipoSolicitud/newFormulario'], { state: data });
-
-
-
 
 
         // const data = this.soliForm.value;
@@ -127,6 +156,17 @@ export class ModalNewSolicitudComponent implements OnInit{
 
   onCancel(){
 
+  }
+
+  encriptarConAESBase64URL(id:string, clave:string) {
+    const textoAEncriptar = id.toString();
+    const textoEncriptado = CryptoJS.AES.encrypt(textoAEncriptar, clave).toString();
+    const textoEnBase64URL = this.base64URL(textoEncriptado);
+    return textoEnBase64URL;
+  }
+
+  base64URL(cadena:string) {
+    return cadena.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
   }
 
 }

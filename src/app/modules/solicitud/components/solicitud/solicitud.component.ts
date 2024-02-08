@@ -12,14 +12,11 @@ export class SolicitudComponent implements OnInit {
 
   dataSourceSolicitud = new MatTableDataSource<SolicitudElement>();
   // displayedColumns: string[] = ['id', 'descripcion', 'solicitante', 'fechaSolicitud', 'acciones'];
-  displayedColumns: string[] = ['id', 'descripcion', 'solicitante', 'fechaSolicitud', 'acciones'];
+  displayedColumns: string[] = ['id', 'tipo_caso' , 'asignado', 'fechaSolicitud', 'estado' ,'acciones'];
   // displayedColumns: String[]           = ['id', 'descripcion','solicitante','acciones'];
 
   private solicitudService = inject(SolicitudService);
   private router           = inject(Router);
-
-
-
 
   ngOnInit(): void {
     this.getSolicitud()

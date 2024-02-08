@@ -38,6 +38,10 @@ export class UsuarioService {
     return this.http.get(`${this.base_url}/usuarios/roles_user/${user_id}`, {headers: this.agregarAuthorizationHeader()});
   }
 
+  findByIdUsuario(id:any){
+    return this.http.get(`${this.base_url}/usuarios/${id}`, {headers: this.agregarAuthorizationHeader()});
+  }
+
   // ******************** POST ********************
   // esto ira al register
   saveUsario(body:any){

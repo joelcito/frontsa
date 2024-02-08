@@ -1,5 +1,5 @@
 <mat-card>
-  <h2 class="alinear">Listado de Solicitudes</h2>
+  <h2 class="alinear">Listado de Asignaciones</h2>
   <mat-card-header>
     <div>
       <mat-form-field hintLabel="Buscar Rol" appearance="fill">
@@ -11,7 +11,7 @@
   <mat-card-header>
     <div class="derecha">
       <ul>
-        <li><button mat-raised-button color="primary" (click)="inicarSolicitud()">Iniciar Solicitud</button></li>
+        <!-- <li><button mat-raised-button color="primary" (click)="inicarSolicitud()">Iniciar Solicitud</button></li> -->
       </ul>
     </div>
   </mat-card-header>
@@ -28,47 +28,31 @@
       </ng-container>
 
       <!-- usuario -->
-      <ng-container matColumnDef="tipo_caso">
+      <ng-container matColumnDef="descripcion">
         <th mat-header-cell *matHeaderCellDef>TIPO SOLICITUD</th>
         <td mat-cell *matCellDef="let element">{{ element.formulario.tipoSaneoFormulario.nombre }}</td>
       </ng-container>
 
       <!-- usuario -->
-      <!-- <ng-container matColumnDef="caso">
-        <th mat-header-cell *matHeaderCellDef>CASO</th>
-        <td mat-cell *matCellDef="let element">{{ element.descripcion }}</td>
-      </ng-container> -->
-
-      <!-- usuario -->
-      <ng-container matColumnDef="asignado">
-        <th mat-header-cell *matHeaderCellDef>ASIGNADO</th>
-        <td mat-cell *matCellDef="let element">{{ element.usuarioAsignado?.nombres+' '+element.usuarioAsignado?.primer_apellido+' '+element.usuarioAsignado?.segundo_apellido }}</td>
+      <ng-container matColumnDef="solicitante">
+        <th mat-header-cell *matHeaderCellDef>SOLICITANTE</th>
+        <td mat-cell *matCellDef="let element">{{ element.usuarioSolicitante.nombres+' '+element.usuarioSolicitante.primer_apellido+' '+element.usuarioSolicitante.segundo_apellido }}</td>
       </ng-container>
 
       <!-- fechaSolicitud -->
       <ng-container matColumnDef="fechaSolicitud">
-        <th mat-header-cell *matHeaderCellDef>FECHA DE SOLICITUD</th>
+        <th mat-header-cell *matHeaderCellDef>FECHA DE ASIGNACION</th>
         <td mat-cell *matCellDef="let element">{{ element.fechaSolicitud | date:'dd/MM/yyyy HH:mm:ss' }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="estado">
-        <th mat-header-cell *matHeaderCellDef>ESTADO</th>
-        <td mat-cell *matCellDef="let element">
-          <mat-chip color="darker" selected="false">
-            ASIGNADO
-          </mat-chip>
-        </td>
       </ng-container>
 
       <!-- ACCIONE -->
       <ng-container matColumnDef="acciones">
         <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
         <td mat-cell *matCellDef="let element; let i=index">
-          <!-- <button mat-icon-button color="warn" (click)="edit(element)"> -->
-          <!-- <button mat-icon-button color="warn" (click)="edit(element.id, element.nombre)">
-            <mat-icon aria-label="Edit">edit</mat-icon>
+          <button mat-icon-button color="warn" (click)="tipoCasoSaneo(element)">
+            <mat-icon>send</mat-icon>
           </button>
-          <button mat-icon-button color="accent">
+          <!-- <button mat-icon-button color="accent">
             <mat-icon aria-label="Delete">delete</mat-icon>
           </button> -->
         </td>

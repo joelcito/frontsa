@@ -1,7 +1,103 @@
 <mat-card class="container">
-  <h2 class="alinear">FORMULARIO DE SOLICITUD</h2>
+  <h2 class="alinear">FORMULARIO DE SOLICITUD DIRECTIVA 008/2019 | CASO : {{ solictudNuber }}</h2>
  <mat-card-content>
-  <form [formGroup]="solicitudFormulario">
+
+  <ng-container>
+    <h3 class="alinear">DATOS OFICINA</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>DEPARTAMENTO</th>
+          <th>OFICINA</th>
+          <th>NOMBRE FUNCIONARIO</th>
+          <th>FECHA DE SOLICITUD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ datosOficina.departamento }}</td>
+          <td>{{ datosOficina.oficina }}</td>
+          <td>{{ datosOficina.nombre }}</td>
+          <td>{{ datosOficina.fecha }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+
+  <mat-divider></mat-divider>
+
+  <ng-container>
+    <h3 class="alinear">DATOS CIUDADANO</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>NUMERO CEDULA</th>
+          <th>NRO COMPLEMENTO</th>
+          <th>NOMBRES</th>
+          <th>PRI APELLIDO</th>
+          <th>SEG APELLIDO</th>
+          <th>AP CASADO</th>
+          <th>ESTADO</th>
+          <th>IMAGEN</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>100398980</td>
+          <td>1F</td>
+          <td>ISAO</td>
+          <td>RICHARDSON</td>
+          <td></td>
+          <td></td>
+          <td>RENOVADO</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+
+  <mat-divider></mat-divider>
+
+  <ng-container>
+    <h3 class="alinear">DATOS TRAMITE</h3>
+    <table>
+      <thead>
+        <tr>
+          <th colspan="2">DESCRIPCION</th>
+          <th colspan="2">ARTICULO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="2">FAVOR DE RESOLVER EL CASO</td>
+          <td colspan="2">ARTICULO DE EXTRANJERIA</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table>
+      <thead>
+        <tr>
+          <th>TIPO SOLICITUD</th>
+          <th>DATO ACTUAL</th>
+          <th>DATO CORREGIR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>DESBLOQUEO DIRECTIVA 008/2019</td>
+          <td>BLOQUEADO</td>
+          <td>DESBLOQUEADO</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="usuario-container fondo">
+      <button mat-raised-button color="primary" class="boton-largo" (click)="sanear()">Procesar</button>
+    </div>
+  </ng-container>
+
+
+  <!-- <form [formGroup]="solicitudFormulario">
     <div class="usuario-container">
       <mat-form-field appearance="fill">
         <mat-label>Departamento</mat-label>
@@ -24,20 +120,10 @@
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
     </div>
-    <!-- <div class="usuario-container">
-      <mat-form-field>
-        <mat-label>Buscar Usuarios</mat-label>
-        <input matInput placeholder="Nombre" formControlName="nombre" required />
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Buscar Usuarios</mat-label>
-        <input matInput placeholder="Nombre" formControlName="nombre" required />
-      </mat-form-field>
-    </div> -->
-  </form>
+  </form> -->
   <mat-divider></mat-divider>
-  <h3 class="alinear">Busqueda de Ciudadano</h3>
-  <form [formGroup]="formularioBusquedaExtranjero">
+  <!-- <h3 class="alinear">Busqueda de Ciudadano</h3> -->
+  <!-- <form [formGroup]="formularioBusquedaExtranjero">
     <div class="usuario-container">
       <mat-form-field appearance="fill">
         <mat-label>Numero documento</mat-label>
@@ -63,8 +149,8 @@
         <mat-icon aria-label="Buscar">search</mat-icon>
       </button>
     </div>
-  </form>
-  <ng-container *ngIf="mostrarTabla">
+  </form> -->
+  <!-- <ng-container *ngIf="mostrarTabla">
     <table>
       <thead>
         <tr>
@@ -97,10 +183,10 @@
         </tr>
       </tbody>
     </table>
-  </ng-container>
+  </ng-container> -->
 
   <mat-divider></mat-divider>
-  <ng-container *ngIf="mostrarTablaExtranjeroSeleccionado">
+  <!-- <ng-container *ngIf="mostrarTablaExtranjeroSeleccionado">
     <h3 class="alinear">Ciudadano Elegido</h3>
     <table>
       <thead>
@@ -128,24 +214,13 @@
         </tr>
       </tbody>
     </table>
-  </ng-container>
+  </ng-container> -->
 
   <mat-divider></mat-divider>
-  <ng-container *ngIf="mostrarTablaExtranjeroSeleccionado">
+  <!-- <ng-container *ngIf="mostrarTablaExtranjeroSeleccionado">
     <h3 class="alinear">Datos del tramite</h3>
     <form [formGroup]="solicitudFormularioTramite">
-      <div class="usuario-container">
-        <mat-form-field appearance="fill">
-          <mat-label>Tipo solicitud</mat-label>
-          <mat-select formControlName="tipo_solicitud">
-            <mat-option *ngFor="let tipo_saneo of lista_tipo_solicitud" [value]="tipo_saneo.id">{{ tipo_saneo.nombre }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Nombre del Operador</mat-label>
-          <input matInput placeholder="Nombre del Operador" formControlName="nombre_operador"/>
-        </mat-form-field>
-      </div>
+
       <div class="usuario-container">
         <mat-form-field appearance="fill">
           <mat-label>Descripcion</mat-label>
@@ -158,30 +233,30 @@
           </mat-select>
         </mat-form-field>
       </div>
+
       <div class="usuario-container">
-        <mat-form-field appearance="fill">
-          <mat-label>Datos a Procesar</mat-label>
-          <mat-select (selectionChange)="tipoCaso($event)" formControlName="datos_procesar">
-            <mat-option value="RENOVADO A DUPLICADO">RENOVADO A DUPLICADO</mat-option>
-            <mat-option value="RENOVADO A ENTREGADO">RENOVADO A ENTREGADO</mat-option>
-            <mat-option value="DUPLICADO A RENOVADO">DUPLICADO A RENOVADO</mat-option>
-            <mat-option value="DUPLICADO A ENTREGADO">DUPLICADO A ENTREGADO</mat-option>
-            <mat-option value="RECIBIDO A ENTREGADO">RECIBIDO A ENTREGADO</mat-option>
+        <mat-form-field>
+          <mat-label>Tipo Solicitud</mat-label>
+          <mat-select formControlName="tipo_solicitud">
+            <mat-option *ngFor="let tipo_saneo of lista_tipo_solicitud" [value]="tipo_saneo.id">{{ tipo_saneo.nombre }}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <mat-label>Dato Errado</mat-label>
-          <input matInput placeholder="Nombre del Operador" required  [value]="dato_errado" formControlName="dato_anterior"/>
+          <mat-label>ESTADO</mat-label>
+          <mat-select formControlName="api_estado" (selectionChange)="tipoCaso($event)">
+            <mat-option value="ACTIVO">BLOQUEADO</mat-option>
+          </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Dato Correcto</mat-label>
-          <input matInput placeholder="Nombre del Operador" required  [value]="dato_correcto" formControlName="dato_correcto"/>
+        <mat-form-field>
+          <mat-label>Estado a Cambiar</mat-label>
+          <input matInput placeholder="Nombre del Operador" formControlName="estado_cambiar"/>
         </mat-form-field>
       </div>
+
       <div class="usuario-container fondo">
         <button mat-raised-button color="primary" class="boton-largo"(click)="guardarSolicitud()" >Guardar</button>
       </div>
     </form>
-  </ng-container>
+  </ng-container> -->
  </mat-card-content>
 </mat-card>

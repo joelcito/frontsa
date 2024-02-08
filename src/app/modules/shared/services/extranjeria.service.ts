@@ -33,6 +33,10 @@ export class ExtranjeriaService {
     return this.http.post(`${this.base_url}/extranjeria/buscaExtranjero`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
+  buscaExtranjeroPorSerial(body:any){
+    return this.http.post(`${this.base_url}/extranjeria/buscaExtranjeroPorSerial`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
   /*
   getImagenExtranjero(body:any):Observable<HttpResponse<ArrayBuffer>>{
     return this.http.post(`${this.base_url}/extranjeria/getImagenExtranjero`, body, {headers: this.agregarAuthorizationHeader(), observe: 'response', responseType: 'arraybuffer' });

@@ -6,6 +6,8 @@ import { TipoSaneoService } from '../../../shared/services/tipo-saneo.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NewDetalleTipoSaneoComponent } from '../new-detalle-tipo-saneo/new-detalle-tipo-saneo.component';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
+import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { FlatTreeControl } from '@angular/cdk/tree';
 
 
 @Component({
@@ -28,6 +30,28 @@ export class DetalleTipoSaneoComponent implements OnInit  {
   private          tipo_saneo:any = [];
   private          tipo_saneo_id:any;
 
+  private _transformer = (node: FoodNode, level: number) => {
+    return {
+      expandable: !!node.children && node.children.length > 0,
+      name: node.name,
+      level: level,
+    };
+  };
+
+  treeControl = new FlatTreeControl<ExampleFlatNode>(
+    node => node.level,
+    node => node.expandable,
+  );
+
+  treeFlattener = new MatTreeFlattener(
+    this._transformer,
+    node => node.level,
+    node => node.expandable,
+    node => node.children,
+  );
+
+  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -46,6 +70,44 @@ export class DetalleTipoSaneoComponent implements OnInit  {
 
     this.getTiposSaneos();
   }
+
+  constructor(){
+    // this.dataSource.data = TREE_DATA;
+
+    this.dataSource.data =
+    [
+      {
+        name: 'Fruit',
+        children: [
+          {
+            name: 'Apple'
+          },
+          {
+            name: 'Banana'
+          },
+          {
+            name: 'Fruit loops'
+          }
+        ],
+      },
+      {
+        name: 'Vegetables',
+        children: [
+          {
+            name: 'Green',
+            children: [{name: 'Broccoli'}, {name: 'Brussels sprouts'}],
+          },
+          {
+            name: 'Orange',
+            children: [{name: 'Pumpkins'}, {name: 'Carrots'}],
+          },
+        ],
+      },
+    ];
+
+  }
+
+  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
   desencriptarConAESBase64URL(textoEnBase64URL:string, clave:string) {
     const textoEncriptado     = textoEnBase64URL.replace(/-/g, '+').replace(/_/g, '/');
@@ -81,9 +143,49 @@ export class DetalleTipoSaneoComponent implements OnInit  {
   getDetalleTiposSaneo(id:any){
     this.tipoSaneoService.getDetalleTiposSaneo(id).subscribe({
       next: (datos:any) => {
-        // console.log(datos)
-        // this.tipo_saneo = dato
+
         this.procesarDetalleTiposSaneosResponse(datos)
+
+        console.log(datos)
+
+        const da = datos.map((item:any) => {
+          return {
+            name    : item.nombre,
+            // children:[{name: 'Apple'},{name: 'Banana'},{name: 'Fruit loops'}]
+            children: item.tipoDetalleTipoSaneo.map((datos:any) => {
+              return {name:datos.nombre}
+            })
+
+          }
+        })
+
+      //   const da = datos.map((item: any) => {
+      //     // Verificar si 'children' está definido y es un array
+      //     // if (item.children && Array.isArray(item.children)) {
+      //     if (item.children) {
+      //         // Mapear los elementos de 'children' de acuerdo a los datos específicos de 'item'
+      //         const children = item.children.map((childItem: any) => {
+      //             return { name: childItem.nombre };
+      //         });
+
+      //         // Retornar el objeto con 'name' de 'item' y los 'children' generados dinámicamente
+      //         return {
+      //             name: item.nombre,
+      //             children: children
+      //         };
+      //     } else {
+      //         // Si 'children' no está definido o no es un array, retornar un objeto con 'name' de 'item'
+      //         return {
+      //             name: item.nombre,
+      //             children: [] // o null, dependiendo de tus necesidades
+      //         };
+      //     }
+      // });
+
+        console.log(da)
+
+        this.dataSource.data = da
+
       },
       error: (error:any) => {
 
@@ -108,9 +210,17 @@ export class DetalleTipoSaneoComponent implements OnInit  {
   }
 
   getTiposSaneos(){
-    this.tipoSaneoService.getTiposSaneos().subscribe(resul => {
-      this.tipo_saneo = resul
-    })
+    // Llama al servicio para obtener los tipos de saneos
+    this.tipoSaneoService.getTiposSaneos().subscribe(
+      (resul:any) => {
+        // Asigna los resultados a la propiedad this.tipo_saneo
+        this.tipo_saneo = resul;
+      },
+      error => {
+        // Maneja cualquier error que pueda ocurrir durante la suscripción
+        console.error('Error al obtener tipos de saneos:', error);
+      }
+    );
   }
 
   redirigir(id:any){
@@ -137,5 +247,40 @@ export interface DetalleTipoSaneoElement{
   id                : number;
   nombre            : string;
   detalle_tipo_saneo: any;
+}
+
+
+
+
+/** Flat node with expandable and level information */
+interface ExampleFlatNode {
+  expandable: boolean;
+  name: string;
+  level: number;
+}
+
+const TREE_DATA: FoodNode[] = [
+  {
+    name: 'Fruit',
+    children: [{name: 'Apple'}, {name: 'Banana'}, {name: 'Fruit loops'}],
+  },
+  {
+    name: 'Vegetables',
+    children: [
+      {
+        name: 'Green',
+        children: [{name: 'Broccoli'}, {name: 'Brussels sprouts'}],
+      },
+      {
+        name: 'Orange',
+        children: [{name: 'Pumpkins'}, {name: 'Carrots'}],
+      },
+    ],
+  },
+];
+
+interface FoodNode {
+  name: string;
+  children?: FoodNode[];
 }
 

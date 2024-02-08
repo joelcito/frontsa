@@ -9,6 +9,7 @@ import { TipoSaneoModule } from '../tipo_saneo/tipo-saneo.module';
 import { RolModule } from '../rol/rol.module';
 import { FormularioModule } from '../formulario/formulario.module';
 import { SolicitudModule } from '../solicitud/solicitud.module';
+import { AsignacionModule } from '../asignacion/asignacion.module';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { SolicitudModule } from '../solicitud/solicitud.module';
     TipoSaneoModule,
     RolModule,
     FormularioModule,
-    SolicitudModule
+    SolicitudModule,
+    AsignacionModule
   ]
 })
 
