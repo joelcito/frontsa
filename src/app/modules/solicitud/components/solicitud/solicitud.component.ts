@@ -12,7 +12,7 @@ export class SolicitudComponent implements OnInit {
 
   dataSourceSolicitud = new MatTableDataSource<SolicitudElement>();
   // displayedColumns: string[] = ['id', 'descripcion', 'solicitante', 'fechaSolicitud', 'acciones'];
-  displayedColumns: string[] = ['id', 'tipo_caso' , 'asignado', 'fechaSolicitud', 'estado' ,'acciones'];
+  displayedColumns: string[] = ['id', 'tipo_caso' , 'asignado', 'fechaSolicitud','fechaRespuesta',  'estado' ,'acciones'];
   // displayedColumns: String[]           = ['id', 'descripcion','solicitante','acciones'];
 
   private solicitudService = inject(SolicitudService);

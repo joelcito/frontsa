@@ -40,4 +40,16 @@ export class SolicitudService {
   saveSolicitudDesbloqueoDirectiva0082019(body:any){
     return this.http.post(`${this.base_url}/solicitud/saveSolicitudDesbloqueoDirectiva0082019`, body, {headers: this.agregarAuthorizationHeader()});
   }
+
+  tramitesSolicitudesByIdSolicitud(id:any){
+    return this.http.get(`${this.base_url}/solicitud/tramitesSolicitudesByIdSolicitud/${id}`, {headers: this.agregarAuthorizationHeader()});
+  }
+
+  sanearDirectiva0082019(body:any){
+    return this.http.post(`${this.base_url}/solicitud/sanearDirectiva0082019`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
+  verificaSiTieneTramatiesEnviados(body:any){
+    return this.http.post(`${this.base_url}/solicitud/verificaSiTieneTramatiesEnviados`, body, {headers: this.agregarAuthorizationHeader()});
+  }
 }

@@ -8,7 +8,7 @@ import { ModalNewSolicitudComponent } from './components/modal-new-solicitud/mod
 import { FormularioSolicitudComponent } from './components/extranjeria/formulario-solicitud/pregunta/formulario-solicitud.component';
 import { FormularioSolicitudDirectiva0082019Component } from './components/extranjeria/formulario-solicitud-directiva-008-2019/pregunta/formulario-solicitud-directiva-008-2019.component';
 import { FormularioSolicitudDirectiva0082019RespuestaComponent } from './components/extranjeria/formulario-solicitud-directiva-008-2019/respuesta/formulario-solicitud-directiva-008-2019-respuesta.component';
-import { FormularioSolicitudCorreccionCieComponent } from './extranjeria/components/extranjeria/formulario-solicitud-correccion-cie/pregunta/formulario-solicitud-correccion-cie.component';
+import { FormularioSolicitudCorreccionCieComponent } from './components/extranjeria/formulario-solicitud-correccion-cie/pregunta/formulario-solicitud-correccion-cie.component';
 
 @NgModule({
   declarations: [

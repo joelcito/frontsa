@@ -61,97 +61,43 @@ export class ModalNewSolicitudComponent implements OnInit{
   }
 
   onSave(){
-    Swal.fire({
-      title: "¿Estas seguro de crear la solicitud?",
-      text: "¡No podras revertir eso!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, crear"
-    }).then((result) => {
-      if (result.isConfirmed) {
 
-        this.tipo_saneo_id = this.soliForm.value.tipo_saneo_id;
-        this.formulario_id = this.soliForm.value.formulario_id;
+    this.tipo_saneo_id = this.soliForm.value.tipo_saneo_id;
+    this.formulario_id = this.soliForm.value.formulario_id;
 
-        this.dialogRef.close(1)
+    this.dialogRef.close(1)
 
-        const tipo_saneo_id_encry = this.encriptarConAESBase64URL(this.tipo_saneo_id, 'ESTE ES JOEL');
-        const formulario_id_encry = this.encriptarConAESBase64URL(this.formulario_id, 'ESTE ES JOEL');
-        const sistema             = "extranjeria";
-        const pregunta_respuesta  = "pregunta";
+    const tipo_saneo_id_encry = this.encriptarConAESBase64URL(this.tipo_saneo_id, 'ESTE ES JOEL');
+    const formulario_id_encry = this.encriptarConAESBase64URL(this.formulario_id, 'ESTE ES JOEL');
+    const sistema             = "extranjeria";
+    const pregunta_respuesta  = "pregunta";
 
-        let datos = {
-          sistema            : "extranjeria",
-          pregunta_respuesta : "pregunta",
-          formulario         : this.formulario_id,
-          tipo_saneo_id_encry: tipo_saneo_id_encry,
-          formulario_id_encry: formulario_id_encry
-        }
+    let datos = {
+      sistema            : "extranjeria",
+      pregunta_respuesta : "pregunta",
+      formulario         : this.formulario_id,
+      tipo_saneo_id_encry: tipo_saneo_id_encry,
+      formulario_id_encry: formulario_id_encry
+    }
 
-        // let res = environment.getUrlSolicitudAsignacionRespuesta(sistema,"", pregunta_respuesta, this.formulario_id, formulario_id_encry,  tipo_saneo_id_encry)
-        let res = environment.getUrlSolicitudAsignacionRespuesta(datos)
-        this.router.navigate(res);
+    let res = environment.getUrlSolicitudAsignacionRespuesta(datos)
+    this.router.navigate(res);
 
-        // if(this.formulario_id === 1){ // CAMBIO DE BANDEJA
-        //   this.router.navigate(['/solicitud/newTipoSolicitud/newFormulario/', tipo_saneo_id_encry, formulario_id_encry]);
-        // }else if(this.formulario_id === 2){ // DIRECTIVA 008/2019
-        //   this.router.navigate(['/solicitud/newTipoSolicitud/newFormularioDirectiva0082019/', tipo_saneo_id_encry, formulario_id_encry]);
-        // }
+    // Swal.fire({
+    //   title: "¿Estas seguro de crear la solicitud?",
+    //   text: "¡No podras revertir eso!",
+    //   icon: "warning",
+    //   showCancelButton: true,
+    //   confirmButtonColor: "#3085d6",
+    //   cancelButtonColor: "#d33",
+    //   confirmButtonText: "Si, crear"
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
 
 
 
-
-
-
-
-
-
-
-        // this.router.navigate(['/solicitud/newTipoSolicitud/newFormulario', tipoSaneoId, formularioId]);
-
-        // this.formularioService.datosEnviados = data;
-
-        // console.log('Datos enviados:', data);
-        // this.formularioEnviado.emit(data);
-
-        // Navegar a la ruta del componente hijo (FormularioSolicitudComponent)
-        // this.router.navigate(['/solicitud/newTipoSolicitud/newFormulario'], { state: data });
-
-
-        // const data = this.soliForm.value;
-        // this.formularioEnviado.emit(data);
-
-        // console.log(data)
-
-        // // Navegar a otra ruta después de emitir el evento
-        // this.router.navigate(['/solicitud/newTipoSolicitud/newFormulario']);
-
-
-
-        // console.log(this.soliForm.value)
-
-        // this.formularioEnviado.emit(this.soliForm.value);
-
-        //  // Navegar a otra ruta después de emitir el evento
-        // this.router.navigate(['/solicitud/newTipoSolicitud/newFormulario']);
-
-        // const data = { nombre: "JOEL JONATHAN", apellido: "FLORES QUISPE" };
-        // this.router.navigate(['solicitud/newTipoSolicitud/newFormulario', data]);
-
-        // const data = { nombre: "JOEL JONATHAN", apellido: "FLORES QUISPE" };
-        // this.formularioEnviado.emit(data);
-
-        // this.router.navigate(['solicitud/newTipoSolicitud/newFormulario'], { state: { nombre: "joelcito", apellido: "Flores" } });
-
-        // Swal.fire({
-        //   title: "Deleted!",
-        //   text: "Your file has been deleted.",
-        //   icon: "success"
-        // });
-      }
-    });
+    //   }
+    // });
   }
 
   onCancel(){

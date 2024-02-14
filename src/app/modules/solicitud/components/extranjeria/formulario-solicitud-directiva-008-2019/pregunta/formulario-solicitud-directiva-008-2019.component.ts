@@ -6,6 +6,8 @@ import { ExtranjeriaService } from '../../../../../shared/services/extranjeria.s
 import { SolicitudService } from '../../../../../shared/services/solicitud.service';
 import * as CryptoJS from 'crypto-js';
 import Swal from 'sweetalert2';
+import { RuisegipService } from '../../../../../shared/services/ruisegip.service';
+import { environment } from '../../../../../../../environment/environment';
 
 
 @Component({
@@ -22,11 +24,13 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
   private extranjeriaService = inject(ExtranjeriaService);
   private solicitudService   = inject(SolicitudService);
   private routerLink         = inject(Router);
+  private ruisegipService    = inject(RuisegipService);
 
 
-  private formulario_id       : any
-  private tipo_saneo_id       : any
-  public  lista_tipo_solicitud: any
+  private formulario_id        : any
+  private tipo_saneo_id        : any
+  public  lista_tipo_solicitud : any
+  public  detalle_tipo_saneo_id: any
 
 
   public formularioBusquedaExtranjero !: FormGroup
@@ -34,8 +38,11 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
   public solicitudFormulario          !: FormGroup
 
 
-  public mostrarTabla:Boolean                       = false
-  public mostrarTablaExtranjeroSeleccionado:Boolean = false
+  public mostrarTabla:boolean                       = false
+  public mostrarTablaExtranjeroSeleccionado:boolean = false
+  public mostrarAlertaPersona:boolean               = false
+
+
 
 
   public extrajerosBuscados  : any [] = []
@@ -44,9 +51,12 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
 
   public dato_errado         : string = '';
   public dato_correcto       : string = '';
+  public mostrarMensajeAlerta:string  = ""
 
 
   ngOnInit(): void {
+
+    this.detalle_tipo_saneo_id = environment.detalle_tipo_saneo_directiva_008_2019
 
     this.router.params.subscribe(params => {
 
@@ -57,8 +67,8 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
       this.formulario_id = this.desencriptarConAESBase64URL(formulario_id_encry, 'ESTE ES JOEL');
 
       console.log(
-        this.tipo_saneo_id,
-        this.formulario_id
+        "tipo_saneo_id => "+this.tipo_saneo_id,
+        "formulario_id => "+this.formulario_id
       )
 
       this.tipoSaneoService.getDetalleTiposSaneo(this.tipo_saneo_id).subscribe(resulg => {
@@ -75,7 +85,7 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
       });
 
       this.solicitudFormularioTramite = this.fb.group({
-        tipo_solicitud       : [{value:4, disabled:true}, Validators.required],
+        tipo_solicitud       : [{value: this.detalle_tipo_saneo_id, disabled:true}, Validators.required],
         descripcion          : ['',],
         articulos_reglamentos: ['', Validators.required],
         // datos_procesar       : ['', Validators.required],
@@ -83,8 +93,8 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
         // dato_correcto        : ['', Validators.required],
         usu_operador_id      : ['', Validators.required],
 
-        api_estado    : [{value :'ACTIVO', disabled:true}, Validators.required],
-        estado_cambiar: [{value:'DESBLOQUEADO', disabled:true}, Validators.required],
+        dato_actual  : [{value :'ACTIVO', disabled:true}, Validators.required],
+        dato_corregir: [{value:'DESBLOQUEADO', disabled:true}, Validators.required],
 
       });
 
@@ -125,18 +135,95 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
   buscarExtranjero(){
     let datos = this.formularioBusquedaExtranjero.value
     this.extranjeriaService.buscarExtranjero(datos).subscribe((result:any) => {
-      this.extrajerosBuscados = result
-      this.mostrarTabla = true
-      this.mostrarTablaExtranjeroSeleccionado = false;
+      if(result === null){
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "¡ALERTA!",
+          text: "El numero "+datos.numero_cedula+" ya pertenece a un ciudadano BOLIVIANO",
+          showConfirmButton: false,
+          timer: 6000,
+          allowOutsideClick: false
+        });
+        this.mostrarTabla         = false
+        this.mostrarAlertaPersona = true
+        this.mostrarMensajeAlerta = "El numero de documento ya comparte con un ciudadano Boliviano, por favor comuniquese con Base de Datos."
+      }else{
+        this.extrajerosBuscados = result
+        this.mostrarTabla = true
+        this.mostrarTablaExtranjeroSeleccionado = false;
+      }
     })
   }
 
   seleccionarExtranjero(extranjero:any){
-    this.solicitudFormularioTramite.get('nombre_operador')?.setValue(extranjero.NombresSegUsuarios+" "+extranjero.PaternoSegUsuarios+" "+extranjero.MaternoSegUsuarios);
-    this.solicitudFormularioTramite.get('usu_operador_id')?.setValue(extranjero.LoginSegUsuarios);
-    this.extranjeroElejido = extranjero
-    this.mostrarTabla = false
-    this.mostrarTablaExtranjeroSeleccionado = true;
+    let dato = extranjero.NroCedulaBolExtRegistros
+
+    this.ruisegipService.verificarSiestaBloqueado(dato).subscribe((resul:any) => {
+      let respuesta = '';
+      if(resul!==null){
+        if(resul.bloqueado){
+          let gu = {
+            serial               : extranjero.SerialExtRegistros,
+            detalle_tipo_saneo_id: this.detalle_tipo_saneo_id
+          }
+          this.solicitudService.verificaSiTieneTramatiesEnviados(gu).subscribe((result:any) => {
+            console.log(result)
+            if(result.length === 0){
+              this.solicitudFormularioTramite.get('nombre_operador')?.setValue(extranjero.NombresSegUsuarios+" "+extranjero.PaternoSegUsuarios+" "+extranjero.MaternoSegUsuarios);
+              this.solicitudFormularioTramite.get('usu_operador_id')?.setValue(extranjero.LoginSegUsuarios);
+              this.extranjeroElejido = extranjero
+              this.mostrarTabla = false
+              this.mostrarTablaExtranjeroSeleccionado = true;
+              this.mostrarAlertaPersona = false;
+            }else{
+              respuesta = "Ya existe una solicitud de DESBLOQUEO favor de verificar.";
+              this.mostrarAlertaPersona = true;
+              this.mostrarAlertValidadorAntesCrearSolicitud(respuesta, true)
+            }
+          })
+        }else{
+          respuesta = "El registro ya se encuentra DESBLOQUEADO.";
+          this.mostrarAlertaPersona = true;
+          this.mostrarMensajeAlerta = respuesta
+          this.mostrarAlertValidadorAntesCrearSolicitud(respuesta, this.mostrarAlertaPersona)
+        }
+      }else{
+        respuesta = "El registro no se encuentra en la TABLA DE BLOQUEADOS.";
+        this.mostrarAlertaPersona = true;
+        this.mostrarMensajeAlerta = respuesta
+        this.mostrarAlertValidadorAntesCrearSolicitud(respuesta, this.mostrarAlertaPersona)
+      }
+      // if(this.mostrarTabla){
+      //   Swal.fire({
+      //     position: "top-end",
+      //     icon: "warning",
+      //     title: "¡ALERTA!",
+      //     text: respuesta,
+      //     showConfirmButton: false,
+      //     timer: 4000,
+      //     allowOutsideClick: false
+      //   });
+      // }
+    })
+  }
+
+  mostrarAlertValidadorAntesCrearSolicitud(mensaje:string, mostrarTabla:boolean){
+    this.mostrarAlertaPersona = mostrarTabla;
+    this.mostrarMensajeAlerta = mensaje
+
+    if(mostrarTabla){
+      Swal.fire({
+        position: "top-end",
+        icon: "warning",
+        title: "¡ALERTA!",
+        text: mensaje,
+        showConfirmButton: false,
+        timer: 4000,
+        allowOutsideClick: false
+      });
+    }
+
   }
 
   tipoCaso(dato:any){
@@ -164,6 +251,10 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
       solicitudFormularioTramite: this.solicitudFormularioTramite.value
     }
 
+    this.solicitudFormularioTramite.get('tipo_solicitud')?.enable()
+    this.solicitudFormularioTramite.get('dato_actual')?.enable()
+    this.solicitudFormularioTramite.get('dato_corregir')?.enable()
+
     let datosREales = {
       funcionario_id             : this.solicitudFormulario.value.funcionario_id,
       formulario_id              : this.solicitudFormulario.value.formulario_id,
@@ -180,18 +271,15 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
       // datos_procesar_respuesta       : this.solicitudFormularioTramite.value.datos_procesar,
       // dato_anterior_respuesta        : this.solicitudFormularioTramite.value.dato_anterior,
       // dato_correcto_respuesta        : this.solicitudFormularioTramite.value.dato_correcto,
-      usu_operador_id_respuesta      : this.solicitudFormularioTramite.value.usu_operador_id,
+      usu_operador_id_respuesta: this.solicitudFormularioTramite.value.usu_operador_id,
 
-      api_estado_respuesta : this.solicitudFormularioTramite.value.api_estado,
-      estado_cambiar_respuesta: this.solicitudFormularioTramite.value.estado_cambiar,
-
+      dato_actual_respuesta    : this.solicitudFormularioTramite.value.dato_actual,
+      dato_corregir_respuesta: this.solicitudFormularioTramite.value.dato_corregir,
     }
 
     // this.solicitudService.saveSolicitudCambioBandeja(dato).subscribe(resul => {
     this.solicitudService.saveSolicitudDesbloqueoDirectiva0082019(datosREales).subscribe((resul:any) => {
-
       if(resul !== null){
-
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -201,139 +289,17 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
           timer: 4000,
           allowOutsideClick: false
         });
-
         setTimeout(() => {
           this.routerLink.navigate(['/solicitud']);
         }, 4000);
-
       }else{
 
       }
-      console.log(resul)
     })
   }
 
-
-
-
-  elementos: any[] = [
-  ];
-  valorSeleccionado:string = ''
-  sele1:string = ''
-
-  elemtosAseleccionar = [
-    {
-      name:"DATOS PRIMARIOS",
-      estado:true
-    },
-    {
-      name:"RECAUDACION",
-      estado:true
-    },
-    {
-      name:"ESTADOS",
-      estado:true
-    }
-  ]
-
-  datosPrimarios = [
-    {
-      name:"NOMBRES",
-      value:"JOEL JONATHAN"
-    },
-    {
-      name:"PRIMER APELLIDO",
-      value:"FLORES"
-    },
-    {
-      name:"SEGUNDO APELLIDO",
-      value:"QUISPE"
-    },
-    {
-      name:"APELLIDO DE CASADA",
-      value:""
-    },
-    {
-      name:"FECHA DE NACIMIENTO",
-      value:"01/07/2000"
-    },
-    {
-      name:"GENERO",
-      value:"MASCULINO"
-    },
-    {
-      name:"ESTADO CIVIL",
-      value:"SOLTERO"
-    },
-  ]
-
-
-  datosRecaudacion = [
-    {
-      name:"MULTAS",
-      value:"ELABORADO"
-    },
-    {
-      name:"MULTAS 2",
-      value:"PAGADO"
-    }
-  ]
-
-  datosEstados = [
-    {
-      name:"ESTADO",
-      value:"ENTREGADO"
-    }
-  ]
-
-
-  agregarBloque() {
-    // this.elementos.push({ inputValor: '', selectValor: '' }); // Agregar un nuevo objeto a la lista de elementos
-    if(this.valorSeleccionado !== ''){
-      const elemento = this.elemtosAseleccionar.find(item => item.name === this.valorSeleccionado);
-      if (elemento) {
-
-          elemento.estado = false;
-          let d = {}
-
-          if(this.valorSeleccionado === 'DATOS PRIMARIOS'){
-            d = {
-              name : this.valorSeleccionado,
-              listado : this.datosPrimarios
-            }
-          }else if(this.valorSeleccionado === 'RECAUDACION'){
-            d = {
-              name : this.valorSeleccionado,
-              listado : this.datosRecaudacion
-            }
-          }else{
-            d = {
-              name : this.valorSeleccionado,
-              listado : this.datosEstados
-            }
-          }
-
-          // this.elementos.push({ name: this.valorSeleccionado });
-          this.elementos.push(d);
-          console.log(`Estado de ${this.valorSeleccionado} cambiado a false.`);
-          this.valorSeleccionado = ''
-
-      } else {
-          console.log(`${this.valorSeleccionado} no encontrado en la lista.`);
-      }
-      console.log(this.valorSeleccionado)
-    }else{
-      console.log(this.valorSeleccionado)
-    }
-
-  }
-
-  guardar(as:any){
-    console.log(as)
-  }
-
-  verificarDato(adi:any){
-
+  volverListado(){
+    this.routerLink.navigate(['/solicitud']);
   }
 
 }

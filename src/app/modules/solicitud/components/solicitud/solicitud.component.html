@@ -1,12 +1,12 @@
 <mat-card>
   <h2 class="alinear">Listado de Solicitudes</h2>
   <mat-card-header>
-    <div>
+    <!-- <div>
       <mat-form-field hintLabel="Buscar Rol" appearance="fill">
         <mat-label>Buscar Rol</mat-label>
         <input matInput #input>
       </mat-form-field>
-    </div>
+    </div> -->
   </mat-card-header>
   <mat-card-header>
     <div class="derecha">
@@ -51,11 +51,20 @@
         <td mat-cell *matCellDef="let element">{{ element.fechaSolicitud | date:'dd/MM/yyyy HH:mm:ss' }}</td>
       </ng-container>
 
+      <!-- fechaRespuesta -->
+      <ng-container matColumnDef="fechaRespuesta">
+        <th mat-header-cell *matHeaderCellDef>FECHA DE RESPUESTA</th>
+        <td mat-cell *matCellDef="let element">{{ element.fechaRespuesta | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+      </ng-container>
+
       <ng-container matColumnDef="estado">
         <th mat-header-cell *matHeaderCellDef>ESTADO</th>
         <td mat-cell *matCellDef="let element">
-          <mat-chip color="darker" selected="false">
+          <mat-chip color="darker" selected="false" *ngIf="element.estado === 'ASIGNADO'">
             ASIGNADO
+          </mat-chip>
+          <mat-chip style="background-color: rgb(116, 213, 116); color: white;" selected="false" *ngIf="element.estado === 'PROCESADO'">
+            PROCESADO
           </mat-chip>
         </td>
       </ng-container>
@@ -79,6 +88,6 @@
 
     </table>
 
-    <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
+    <!-- <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator> -->
   </mat-card-content>
 </mat-card>

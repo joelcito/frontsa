@@ -1,5 +1,6 @@
 <mat-card class="container">
-  <h2 class="alinear">FORMULARIO DE SOLICITUD DIRECTIVA 008/2019 | CASO : {{ solictudNuber }}</h2>
+  <h2 class="alinear">FORMULARIO DE SOLICITUD DIRECTIVA 008/2019</h2><br>
+  <h2>CASO : EXTRANJERIA - {{ solictudNuber }}</h2>
  <mat-card-content>
 
   <ng-container>
@@ -34,22 +35,22 @@
           <th>NUMERO CEDULA</th>
           <th>NRO COMPLEMENTO</th>
           <th>NOMBRES</th>
-          <th>PRI APELLIDO</th>
-          <th>SEG APELLIDO</th>
-          <th>AP CASADO</th>
+          <th>PRIMER APELLIDO</th>
+          <th>SEGUNDO APELLIDO</th>
+          <th>APELLIDO CASADA</th>
           <th>ESTADO</th>
           <th>IMAGEN</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>100398980</td>
-          <td>1F</td>
-          <td>ISAO</td>
-          <td>RICHARDSON</td>
-          <td></td>
-          <td></td>
-          <td>RENOVADO</td>
+          <td>{{ datosCiudadano.NroCedulaBolExtRegistros }}</td>
+          <td>{{ datosCiudadano.HexadecimalExtRegistros }}</td>
+          <td>{{ datosCiudadano.NombresExtRegistros }}</td>
+          <td>{{ datosCiudadano.PrimerApExtRegistros }}</td>
+          <td>{{ datosCiudadano.SegundoApExtRegistros }}</td>
+          <td>{{ datosCiudadano.ApCasadaExtRegistros }}</td>
+          <td>{{ datosCiudadano.ApiEstadoExtRegistros }}</td>
           <td></td>
         </tr>
       </tbody>
@@ -58,8 +59,45 @@
 
   <mat-divider></mat-divider>
 
-  <ng-container>
+  <ng-container >
     <h3 class="alinear">DATOS TRAMITE</h3>
+    <div *ngFor="let elem of listadotramites">
+
+      <table>
+        <thead>
+          <tr>
+            <th colspan="2">DESCRIPCION</th>
+            <th colspan="2">ARTICULO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="2">FAVOR DE RESOLVER EL CASO</td>
+            <td colspan="2">ARTICULO DE EXTRANJERIA</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+          <tr>
+            <th>TIPO SOLICITUD</th>
+            <th>DATO ACTUAL</th>
+            <th>DATO CORREGIR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>DESBLOQUEO DIRECTIVA 008/2019</td>
+            <td>BLOQUEADO</td>
+            <td>DESBLOQUEADO</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+
     <table>
       <thead>
         <tr>
@@ -69,8 +107,8 @@
       </thead>
       <tbody>
         <tr>
-          <td colspan="2">FAVOR DE RESOLVER EL CASO</td>
-          <td colspan="2">ARTICULO DE EXTRANJERIA</td>
+          <td colspan="2">{{ datosTramite.descripcion_respuesta }}</td>
+          <td colspan="2">{{ datosTramite.articulos_reglamentos_respuesta }}</td>
         </tr>
       </tbody>
     </table>
@@ -91,6 +129,8 @@
         </tr>
       </tbody>
     </table>
+
+
     <div class="usuario-container fondo">
       <button mat-raised-button color="primary" class="boton-largo" (click)="sanear()">Procesar</button>
     </div>

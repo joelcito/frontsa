@@ -15,7 +15,7 @@ import * as CryptoJS from 'crypto-js';
 export class AsignacionComponent implements OnInit {
 
   dataSourceSolicitud = new MatTableDataSource<AsignacionElemnt>();
-  displayedColumns: string[] = ['id', 'descripcion', 'solicitante', 'fechaSolicitud', 'acciones'];
+  displayedColumns: string[] = ['id', 'descripcion', 'solicitante', 'fechaSolicitud', 'fechaRespuesta', 'estado', 'acciones'];
 
   private asignacionService = inject(AsignacionService);
   private router            = inject(Router);

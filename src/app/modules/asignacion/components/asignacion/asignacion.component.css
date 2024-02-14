@@ -24,3 +24,13 @@ mat-form-field{
 .mat-header:nth-child(1){
   flex: 0 0 6%;
 }
+
+.mat-chip.processed-chip {
+  background-color: #4caf50; /* Verde */
+  color: white; /* Texto en blanco para mayor contraste */
+}
+
+.colorProcesado{
+  background-color:#4caf50;
+  color:white
+}
