@@ -64,7 +64,6 @@ export class LoginService {
   }
 
   guardarUsuarioLogeuado(usuario:any){
-    // console.log(usuario)
     let datos = {
       "username"           : usuario.username,
       "roles"              : usuario.roles,

@@ -9,6 +9,7 @@ import { FormularioSolicitudComponent } from './components/extranjeria/formulari
 import { FormularioSolicitudDirectiva0082019Component } from './components/extranjeria/formulario-solicitud-directiva-008-2019/pregunta/formulario-solicitud-directiva-008-2019.component';
 import { FormularioSolicitudDirectiva0082019RespuestaComponent } from './components/extranjeria/formulario-solicitud-directiva-008-2019/respuesta/formulario-solicitud-directiva-008-2019-respuesta.component';
 import { FormularioSolicitudCorreccionCieComponent } from './components/extranjeria/formulario-solicitud-correccion-cie/pregunta/formulario-solicitud-correccion-cie.component';
+import { FormularioSolicitudRespuestaComponent } from './components/extranjeria/formulario-solicitud/respuesta/formulario-solicitud-respuesta.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { FormularioSolicitudCorreccionCieComponent } from './components/extranje
     FormularioSolicitudComponent,
     FormularioSolicitudDirectiva0082019Component,
     FormularioSolicitudDirectiva0082019RespuestaComponent,
-    FormularioSolicitudCorreccionCieComponent
+    FormularioSolicitudCorreccionCieComponent,
+    FormularioSolicitudRespuestaComponent
   ],
   imports: [
     CommonModule,

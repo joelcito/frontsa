@@ -45,7 +45,6 @@ export class AsignacionComponent implements OnInit {
 
     this.asignacionService.getAsignaicones(dato).subscribe({
       next: (datos:any) => {
-        console.log(datos)
         this.procesarTiposSaneosResponse(datos)
       },
       error: (error:any) => {
@@ -64,7 +63,6 @@ export class AsignacionComponent implements OnInit {
   }
 
   tipoCasoSaneo(dato:any){
-    console.log(dato)
     let sistema            = "extranjeria"
     let pregunta_respuesta = "respuesta"
     let formulario         = dato.formulario.id
@@ -77,8 +75,8 @@ export class AsignacionComponent implements OnInit {
       formulario : dato.formulario.id,
       solicitud : idEncriptado
     }
+
     let da = environment.getUrlSolicitudAsignacionRespuesta(datos)
-    // console.log(da)
     this.router.navigate(da);
 
   }

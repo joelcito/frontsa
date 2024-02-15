@@ -49,6 +49,10 @@ export class SolicitudService {
     return this.http.post(`${this.base_url}/solicitud/sanearDirectiva0082019`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
+  saneoCambioBandeja(body:any){
+    return this.http.post(`${this.base_url}/solicitud/saneoCambioBandeja`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
   verificaSiTieneTramatiesEnviados(body:any){
     return this.http.post(`${this.base_url}/solicitud/verificaSiTieneTramatiesEnviados`, body, {headers: this.agregarAuthorizationHeader()});
   }

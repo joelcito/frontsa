@@ -70,34 +70,8 @@ td button {
   width: 100%;
 }
 
-/* PARA EL ALERT */
-.alert-container {
-  position: relative;
-  margin-top: 5px;
-  z-index: 1000;
-  /*display: flex; /* Usar flexbox para alinear los elementos */
-  align-items: center; /* Centrar verticalmente los elementos */
-}
 
-.alert {
-  flex: 1; /* Ocupar el 50% del ancho del contenedor */
-  padding: 15px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  color: #721c24;
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
-}
 
-.alert-danger {
-  color: #721c24;
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
-}
 
-.button-container {
-  flex: 1; /* Ocupar el otro 50% del ancho del contenedor */
-  text-align: center; /* Centrar el botón horizontalmente */
-}
 
 

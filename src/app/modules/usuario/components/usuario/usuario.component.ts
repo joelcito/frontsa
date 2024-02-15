@@ -23,7 +23,8 @@ export class UsuarioComponent implements OnInit{
   private snackBar       = inject(MatSnackBar);
   private rolService     = inject(RolService);
 
-  displayedColumns: String[]       = ['id', 'usuario','activo', 'acciones'];
+  // displayedColumns: String[]       = ['id', 'usuario','activo', 'acciones'];
+  displayedColumns: String[]       = ['nombres', 'primer_apellido', 'segundo_apellido', 'usuario','activo', 'acciones'];
                    dataSource      = new MatTableDataSource<UsuarioElement>();
 
   private menuNav : any[] = [];
@@ -87,10 +88,23 @@ export class UsuarioComponent implements OnInit{
     });
   }
 
-  edit(id:string, username:string, estado:string){
+  edit(id:string, cedula:string, complemento:string, departamento:string, estado:string, nombre_cargo:string, nombre_dependencia:string, nombre_organizacion:string, nombres:string, primer_apellido:string, segundo_apellido:string, username:string){
     const dialogRef = this.dialog.open( NewUsuarioComponent, {
-      width: '405px',
-      data: {id: id, username:username, estado:estado},
+      width: '1000px',
+      data: {
+        id                 : id,
+        cedula             : cedula,
+        complemento        : complemento,
+        departamento       : departamento,
+        nombre_cargo       : nombre_cargo,
+        nombre_dependencia : nombre_dependencia,
+        nombre_organizacion: nombre_organizacion,
+        nombres            : nombres,
+        primer_apellido    : primer_apellido,
+        segundo_apellido   : segundo_apellido,
+        username           : username,
+        estado             : estado
+      },
     });
 
     dialogRef.afterClosed().subscribe((result:any) => {

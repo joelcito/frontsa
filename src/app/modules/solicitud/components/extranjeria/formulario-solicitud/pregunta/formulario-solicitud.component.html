@@ -99,6 +99,18 @@
     </table>
   </ng-container>
 
+  <ng-container *ngIf="mostrarAlertaPersona">
+    <div class="alert-container">
+      <div class="alert alert-danger" role="alert">
+        {{ mostrarMensajeAlerta }}
+      </div>
+      <br>
+      <div class="button-container">
+        <button mat-raised-button color="primary" class="boton-largo" (click)="volverListado()">Volver</button>
+      </div>
+    </div>
+  </ng-container>
+
   <mat-divider></mat-divider>
   <ng-container *ngIf="mostrarTablaExtranjeroSeleccionado">
     <h3 class="alinear">Ciudadano Elegido</h3>
@@ -174,11 +186,11 @@
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Dato Anterior</mat-label>
-          <input matInput placeholder="Nombre del Operador"  [value]="dato_errado" formControlName="dato_anterior"/>
+          <input matInput placeholder="Nombre del Operador" formControlName="dato_anterior"/>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Dato Correcto</mat-label>
-          <input matInput placeholder="Nombre del Operador"  [value]="dato_correcto" formControlName="dato_correcto"/>
+          <input matInput placeholder="Nombre del Operador" formControlName="dato_correcto"/>
         </mat-form-field>
       </div>
       <div class="usuario-container fondo">

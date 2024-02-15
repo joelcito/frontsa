@@ -10,6 +10,7 @@ import { TipoSaneoService } from '../../../../../shared/services/tipo-saneo.serv
 import { SolicitudService } from '../../../../../shared/services/solicitud.service';
 import * as CryptoJS from 'crypto-js';
 import Swal from 'sweetalert2';
+import { environment } from '../../../../../../../environment/environment';
 
 @Component({
   selector: 'app-formulario-solicitud',
@@ -27,29 +28,32 @@ export class FormularioSolicitudComponent implements OnInit{
   private routerLink         = inject(Router);
 
 
-  private formulario_id       : any
-  private tipo_saneo_id       : any
-  public  datos_oficina       : any
-  public  descripcion         : any
-  public  datos_ciudadano     : any
-  public  datos_complemento   : any
-  public  datos_llenar        : any
-  public  datos_llenar_replica: any
-  public  datos_footer        : any
-  public  lista_tipo_solicitud: any
+  private formulario_id        : any
+  private tipo_saneo_id        : any
+  public  datos_oficina        : any
+  public  descripcion          : any
+  public  datos_ciudadano      : any
+  public  datos_complemento    : any
+  public  datos_llenar         : any
+  public  datos_llenar_replica : any
+  public  datos_footer         : any
+  public  lista_tipo_solicitud : any
+  public  detalle_tipo_saneo_id: any
 
   public datos_llenar_masa   : any []  = []
   public extrajerosBuscados  : any []  = []
   public extranjeroElejido   : any = {};
 
-  public nombre           : string      = '';
-  public nombre_operador  : string      = '';
-  public apellido         : string      = '';
-  public dato_errado         : string   = '';
-  public dato_correcto         : string = '';
+  public nombre           : string   = '';
+  public nombre_operador  : string   = '';
+  public apellido         : string   = '';
+  public mostrarMensajeAlerta:string = ""
+
 
   public mostrarTabla:Boolean                       = false
   public mostrarTablaExtranjeroSeleccionado:Boolean = false
+  public mostrarAlertaPersona:boolean               = false
+
 
   public dato:number                                = 0
 
@@ -59,11 +63,10 @@ export class FormularioSolicitudComponent implements OnInit{
 
   public image: ArrayBuffer | undefined;
 
-  public longText = `The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog
-                      from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was
-                      originally bred for hunting.`;
-
   ngOnInit(): void {
+
+    this.detalle_tipo_saneo_id = environment.detalle_tipo_saneo_cambio_bandeja
+
     this.router.params.subscribe(params => {
 
       const tipo_saneo_id_encry = params['tipo_saneo_id'];
@@ -72,10 +75,10 @@ export class FormularioSolicitudComponent implements OnInit{
       this.tipo_saneo_id = this.desencriptarConAESBase64URL(tipo_saneo_id_encry, 'ESTE ES JOEL');
       this.formulario_id = this.desencriptarConAESBase64URL(formulario_id_encry, 'ESTE ES JOEL');
 
-      console.log(
-        this.tipo_saneo_id,
-        this.formulario_id
-      )
+      // console.log(
+      //   this.tipo_saneo_id,
+      //   this.formulario_id
+      // )
       // console.log(params, "HABES")
 
       // this.formularioService.getFormularioPreguntaByTipoSaneoByTipoDato(this.formulario_id, "datos_oficina").subscribe(resul => {
@@ -113,10 +116,6 @@ export class FormularioSolicitudComponent implements OnInit{
       })
 
       //  **************************** DE AQUI ES EXTRANJERIA HABER ****************************
-      // this.extranjeriaService.getExtranjeros().subscribe(resul => {
-      //   console.log(resul)
-      // })
-
       this.formularioBusquedaExtranjero = this.fb.group({
         numero_cedula   : ['100398980', Validators.required],
         complemento     : [''],
@@ -126,7 +125,7 @@ export class FormularioSolicitudComponent implements OnInit{
       });
 
       this.solicitudFormularioTramite = this.fb.group({
-        tipo_solicitud       : [{value:3, disabled:true}, Validators.required],
+        tipo_solicitud       : [{value:this.detalle_tipo_saneo_id, disabled:true}, Validators.required],
         nombre_operador      : ['', Validators.required],
         descripcion          : [''],
         articulos_reglamentos: ['', Validators.required],
@@ -160,50 +159,16 @@ export class FormularioSolicitudComponent implements OnInit{
       // No se encontraron datos en sessionStorage
       console.log('No se encontraron datos en sessionStorage');
     }
-
-
   }
 
   agregarCard(){
-    // // console.log(this.datos_llenar_replica[0].nombre)
-    // this.dato++;
-    // const dar = this.datos_llenar_replica[0].nombre+" => "+this.dato;
-    // this.datos_llenar_replica[0].nombre = dar
-    // // this.datos_llenar_masa.push(this.datos_llenar_replica[0].nombre+" => "+this.dato)
     this.datos_llenar_masa.push(this.datos_llenar_replica)
   }
 
   eliminarCard(index: number) {
-
-
-    // console.log(index)
-    // console.log(this.datos_llenar_masa)
-    // this.datos_llenar_masa.splice(index, 1);
-
-
-    console.log(index);
-    console.log(this.datos_llenar_masa);
-
-    // Crea un nuevo array sin el elemento en el índice proporcionado
     this.datos_llenar_masa = this.datos_llenar_masa.filter((_, i) => i !== index);
-
-
-  //   console.log(index);
-  // console.log(this.datos_llenar_masa);
-
-  // // Crea una copia del array antes de modificarlo
-  // const copiaDatos = this.datos_llenar_masa;
-
-  // // Elimina el elemento en el índice proporcionado de la copia
-  // copiaDatos.splice(index, 1);
-
-  // // Actualiza la referencia del array original
-  // this.datos_llenar_masa = copiaDatos;
   }
 
-  // trackByFn(index: number, item: any): any {
-  //   return index; // O podría ser un identificador único del elemento si lo tienes
-  // }
 
   buscarExtranjero(){
     let datos = this.formularioBusquedaExtranjero.value
@@ -215,21 +180,60 @@ export class FormularioSolicitudComponent implements OnInit{
   }
 
   seleccionarExtranjero(extranjero:any){
-    this.solicitudFormularioTramite.get('nombre_operador')?.setValue(extranjero.NombresSegUsuarios+" "+extranjero.PaternoSegUsuarios+" "+extranjero.MaternoSegUsuarios);
-    this.solicitudFormularioTramite.get('nombre_operador')?.disable()
-    this.solicitudFormularioTramite.get('usu_operador_id')?.setValue(extranjero.LoginSegUsuarios);
-    this.extranjeroElejido = extranjero
-    this.mostrarTabla = false
-    this.mostrarTablaExtranjeroSeleccionado = true;
+    if(
+      extranjero.ApiEstadoExtRegistros === "RENOVADO"  ||
+      extranjero.ApiEstadoExtRegistros === "DUPLICADO" ||
+      extranjero.ApiEstadoExtRegistros === "RECIBIDO"
+      ){
+        let gu = {
+          serial               : extranjero.SerialExtRegistros,
+          detalle_tipo_saneo_id: this.detalle_tipo_saneo_id
+        }
+        this.solicitudService.verificaSiTieneTramatiesEnviados(gu).subscribe((resul:any) => {
+          if(resul.length === 0){
+            this.solicitudFormularioTramite.get('nombre_operador')?.setValue(extranjero.NombresSegUsuarios+" "+extranjero.PaternoSegUsuarios+" "+extranjero.MaternoSegUsuarios);
+            this.solicitudFormularioTramite.get('nombre_operador')?.disable()
+            this.solicitudFormularioTramite.get('usu_operador_id')?.setValue(extranjero.LoginSegUsuarios);
+            this.extranjeroElejido                  = extranjero
+            this.mostrarTabla                       = false
+            this.mostrarTablaExtranjeroSeleccionado = true;
+            this.mostrarAlertaPersona = false
+          }else{
+            Swal.fire({
+              position: "top-end",
+              icon: "warning",
+              title: "¡ALERTA!",
+              text: "Ya existe una solicitud de CAMBIO DE BANDEJA para el ciudadano favor de verificar.",
+              showConfirmButton: false,
+              timer: 6000,
+              allowOutsideClick: false
+            });
+            this.mostrarAlertaPersona = true
+            this.mostrarMensajeAlerta = "Ya existe una solicitud de CAMBIO DE BANDEJA para el ciudadano favor de verificar."
+          }
+        })
+    }else{
+      Swal.fire({
+        position: "top-end",
+        icon: "warning",
+        title: "¡ALERTA!",
+        text: "El ciudadano debe estar con un estado de ( RENOVADO, DUPLICADO o RECIBIDO )",
+        showConfirmButton: false,
+        timer: 6000,
+        allowOutsideClick: false
+      });
+
+      // this.mostrarTabla         = false
+      this.mostrarAlertaPersona = true
+      this.mostrarMensajeAlerta = "El ciudadano debe estar con un estado de ( RENOVADO, DUPLICADO o RECIBIDO ) para contiuar con el tramite."
+    }
   }
 
   tipoCaso(dato:any){
-    console.log(dato, "haber",dato.value )
     let hauy                    = dato.value.toString()
     let arraySeparado: string[] = hauy.split(' ');
-        this.dato_errado        = arraySeparado[0]
-        this.dato_correcto      = arraySeparado[2]
-    console.log(arraySeparado);
+    this.solicitudFormularioTramite.get('dato_anterior')?.setValue(arraySeparado[0])
+    this.solicitudFormularioTramite.get('dato_correcto')?.setValue(arraySeparado[2])
   }
 
   guardarSolicitud(){
@@ -304,32 +308,8 @@ export class FormularioSolicitudComponent implements OnInit{
     return textoDesencriptado;
   }
 
-  /*
-  loadImage(serial: string): Observable<string> {
-    // Esta función retorna directamente el Observable con la URL base64 de la imagen
-    return this.extranjeriaService.getImagenExtranjero(serial).pipe(
-      map((response) => {
-        const headers = response.headers;
-        const contentType = headers.get('content-type');
+  volverListado(){
 
-        if (contentType && contentType.startsWith('image/')) {
-          const arrayBuffer = response.body as ArrayBuffer;
-          const uint8Array = new Uint8Array(arrayBuffer);
-          const byteArray = Array.from(uint8Array);
-
-          const base64String = btoa(String.fromCharCode.apply(null, byteArray));
-          return `data:image/jpeg;base64,${base64String}`;
-        } else {
-          console.error(`El tipo de contenido para ${serial} no es compatible con imágenes.`);
-          return ''; // Puedes retornar un valor por defecto o manejar de otra manera según tus necesidades
-        }
-      }),
-      catchError((error) => {
-        console.error(`Error al cargar la imagen para ${serial}`, error);
-        return of(''); // Puedes retornar un valor por defecto o manejar de otra manera según tus necesidades
-      })
-    );
   }
- */
 
 }

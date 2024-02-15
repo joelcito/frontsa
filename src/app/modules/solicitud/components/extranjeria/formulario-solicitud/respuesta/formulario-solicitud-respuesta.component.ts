@@ -1,27 +1,31 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DatePipe } from '@angular/common';
-import * as CryptoJS from 'crypto-js';
 import { SolicitudService } from '../../../../../shared/services/solicitud.service';
-import { UsuarioService } from '../../../../../shared/services/usuario.service';
+import { DatePipe } from '@angular/common';
 import { ExtranjeriaService } from '../../../../../shared/services/extranjeria.service';
+import * as CryptoJS from 'crypto-js';
+import { environment } from '../../../../../../../environment/environment';
 import Swal from 'sweetalert2';
-import { RuisegipService } from '../../../../../shared/services/ruisegip.service';
+
+
 
 @Component({
-  selector: 'app-formulario-solicitud-directiva-008-2019-respuesta',
-  templateUrl: './formulario-solicitud-directiva-008-2019-respuesta.component.html',
-  styleUrl: './formulario-solicitud-directiva-008-2019-respuesta.component.css'
+  selector: 'app-formulario-solicitud-respuesta',
+  templateUrl: './formulario-solicitud-respuesta.component.html',
+  styleUrl: './formulario-solicitud-respuesta.component.css'
 })
-export class FormularioSolicitudDirectiva0082019RespuestaComponent implements OnInit{
+
+export class FormularioSolicitudRespuestaComponent implements OnInit{
 
   private route              = inject(ActivatedRoute);
   private solicitudService   = inject(SolicitudService);
   private datePipe           = inject(DatePipe);
-  private extranjeriaService = inject(ExtranjeriaService)
-  private ruisegipService    = inject(RuisegipService)
+  private extranjeriaService = inject(ExtranjeriaService);
   private routerLink         = inject(Router);
 
+
+  private solicitud_id : any
+  public  solictudNuber: any
 
   public datosOficina:any = {
     departamento: "",
@@ -33,12 +37,7 @@ export class FormularioSolicitudDirectiva0082019RespuestaComponent implements On
   public datosCiudadano:any = {};
   public datosTramite:any   = {};
 
-  public  solictudNuber: any
-  private solicitud_id : any
-  public  usuario      : any;
-
-
-  public  listadotramites: any = []
+  public usuario:any;
 
   ngOnInit(): void {
     this.usuario = sessionStorage.getItem('datos');
@@ -95,18 +94,16 @@ export class FormularioSolicitudDirectiva0082019RespuestaComponent implements On
   }
 
   sanear(){
-
-    let datos = {
-      cie:this.datosCiudadano.NroCedulaBolExtRegistros
+    let da = {
+      tipo_cambio       : 1,
+      solicitud         : this.solicitud_id,
+      serialExtRegistros: this.datosCiudadano.SerialExtRegistros,
+      nro_cedula        : this.datosCiudadano.NroCedulaBolExtRegistros,
+      id_unico_extr     : this.datosCiudadano.IdUnicoExtRegistros,
+      usuario           : JSON.parse(this.usuario).id
     }
-
-    this.ruisegipService.liberarPciExtranjero(datos).subscribe((resul:any) => {
-
-      if(resul.r === "DESBLOQUEDO" || resul.r === "BLOQUEDO"){
-        let da = {
-        solicitud: this.solicitud_id,
-        usuario  : JSON.parse(this.usuario).id
-        }
+    this.extranjeriaService.saneoCambioBandejaSqlServer(da).subscribe((result:any) => {
+      if(result.Resultado){
         this.solicitudService.sanearDirectiva0082019(da).subscribe((resul:any) => {
           Swal.fire({
             position: "top-end",
@@ -117,25 +114,20 @@ export class FormularioSolicitudDirectiva0082019RespuestaComponent implements On
             timer: 5000,
             allowOutsideClick: false
           });
-
           setTimeout(() => {
             this.routerLink.navigate(['/asignacion']);
           }, 5000);
-
-
-        })
+        });
       }else{
-
         Swal.fire({
           position: "top-end",
           icon: "warning",
           title: "¡ALERTA!",
-          text: "EL ESTADO DEL CASO ES "+resul.r,
+          text: "ALGO OCURRIO POR FAVOR REVISAR",
           showConfirmButton: false,
           timer: 5000,
           allowOutsideClick: false
         });
-
       }
     })
   }

@@ -128,9 +128,24 @@ export class NewUsuarioComponent implements OnInit  {
   }
 
   updateForm(data:any){
+
     this.usuarioForm = this.fb.group({
-      username     : [data.username, Validators.required],
-      estado: [data.estado, Validators.required]
+
+      cedula             : [data.cedula],
+      complemento        : [data.complemento],
+      nombres            : [data.nombres],
+      primer_apellido    : [data.primer_apellido],
+      segundo_apellido   : [data.segundo_apellido],
+      nombre_organizacion: [data.nombre_organizacion],
+      nombre_dependencia : [data.nombre_dependencia],
+      nombre_cargo       : [data.nombre_cargo],
+      departamento       : [data.departamento],
+
+
+      username: [data.username, Validators.required],
+      switchControl  : [data.estado, Validators.required],
+      password     : [''],
+
     });
   }
 

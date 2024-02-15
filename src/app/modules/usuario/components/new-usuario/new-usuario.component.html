@@ -6,7 +6,7 @@
               <input matInput placeholder="Cedula" formControlName="cedula" required (change)="buscarFuncionario()" />
           </mat-form-field>
           <mat-form-field class="half-width">
-              <input matInput placeholder="complemento" formControlName="complemento" required (change)="buscarFuncionario()"/>
+              <input matInput placeholder="complemento" formControlName="complemento" (change)="buscarFuncionario()"/>
           </mat-form-field>
       </div>
 
@@ -15,22 +15,22 @@
             <input matInput placeholder="Nombres" formControlName="nombres" required />
         </mat-form-field>
         <mat-form-field class="half-width">
-            <input matInput placeholder="primer_apellido" formControlName="primer_apellido" required />
+            <input matInput placeholder="Primer Apellido" formControlName="primer_apellido" required />
         </mat-form-field>
         <mat-form-field class="half-width">
-            <input matInput placeholder="segundo_apellido" formControlName="segundo_apellido" required />
+            <input matInput placeholder="Segundo Apellido" formControlName="segundo_apellido" required />
         </mat-form-field>
       </div>
 
       <div class="usuario-container">
         <mat-form-field class="half-width">
-            <input matInput placeholder="nombre_organizacion" formControlName="nombre_organizacion" required />
+            <input matInput placeholder="Nombre Organizacion" formControlName="nombre_organizacion" required />
         </mat-form-field>
         <mat-form-field class="half-width">
-            <input matInput placeholder="nombre_dependencia" formControlName="nombre_dependencia" required />
+            <input matInput placeholder="Nombre Dependencia" formControlName="nombre_dependencia" required />
         </mat-form-field>
         <mat-form-field class="half-width">
-            <input matInput placeholder="nombre_cargo" formControlName="nombre_cargo" required />
+            <input matInput placeholder="Nombre Cargo" formControlName="nombre_cargo" required />
         </mat-form-field>
         <mat-form-field class="half-width">
           <input matInput placeholder="Departamento" formControlName="departamento" required />
