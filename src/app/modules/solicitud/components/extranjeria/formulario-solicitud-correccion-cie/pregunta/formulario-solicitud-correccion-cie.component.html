@@ -124,96 +124,47 @@
   <mat-divider></mat-divider>
   <ng-container *ngIf="mostrarTablaExtranjeroSeleccionado">
     <h3 class="alinear">Datos del tramite</h3>
-
-    <!-- <select name="" id="" (change)="verificarDato()"> -->
-    <!-- <select (change)="verificarDato($event.target)"> -->
-
-
-    <div *ngFor="let elemento of elementos">
-
-      <table>
-        <thead>
-          <tr>
-            <th colspan="4">{{ elemento.name }}</th>
-          </tr>
-          <tr>
-            <th>Check</th>
-            <th>Campo</th>
-            <th>Dato Actual</th>
-            <th>Dato Nuevo</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let dar of elemento.listado">
-            <td><input type="checkbox"></td>
-            <td>{{ dar.name }}</td>
-            <td><input type="text" disabled value="{{ dar.value }}"></td>
-            <td><input type="text"></td>
-          </tr>
-        </tbody>
-      </table>
-      <hr>
-
-      <!-- <input type="text" [(ngModel)]="elemento.inputValor" placeholder="Ingrese un valor">
-
-      <button (click)="guardar(elemento)">Guardar</button>
-
-      <select [(ngModel)]="elemento.selectValor">
-        <option value="opcion1">Opción 1</option>
-        <option value="opcion2">Opción 2</option>
-        <option value="opcion3">Opción 3</option>
-      </select> -->
-
-    </div>
-
+    <form [formGroup]="formularioCoreccionCIE">
+      <div *ngFor="let elemento of elementos">
+        <table>
+          <thead>
+            <tr>
+              <th colspan="4">{{ elemento.name }}</th>
+            </tr>
+            <tr>
+              <th>Check</th>
+              <th>Campo</th>
+              <th>Dato Actual</th>
+              <th>Dato Nuevo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dar of elemento.listado">
+              <td><input type="checkbox" formControlName="check_{{ dar.nombre_campo }}" (change)="habilitarCampos(dar)"></td>
+              <td>{{ dar.name }}</td>
+              <td><input type="text" formControlName="actual_{{ dar.nombre_campo }}"></td>
+              <!-- <td><input id="nuevo_{{ dar.nombre_campo }}" type="text" formControlName="nuevo_{{ dar.nombre_campo }}"></td> -->
+              <td id="contenedorInput_{{ dar.nombre_campo }}"><input id="nuevo_{{ dar.nombre_campo }}" type="text" formControlName="nuevo_{{ dar.nombre_campo }}"></td>
+            </tr>
+          </tbody>
+        </table>
+        <hr>
+      </div>
+    </form>
     <select [(ngModel)]="valorSeleccionado">
       <option value="">SELECCIONE</option>
       <ng-container *ngFor="let ele of elemtosAseleccionar">
         <option value="{{ ele.name }}" *ngIf="ele.estado">{{ ele.name }}</option>
       </ng-container>
     </select>
-    <!-- Botón para agregar un nuevo bloque -->
     <button (click)="agregarBloque()">Agregar Campos</button>
 
+    <br>
+    <br>
 
-
-
-
-    <!-- <form [formGroup]="solicitudFormularioTramite">
-      <div class="usuario-container">
-        <mat-form-field appearance="fill">
-          <mat-label>Descripcion</mat-label>
-          <textarea matInput rows="1" placeholder="Descripcion" formControlName="descripcion"></textarea>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Articulos del Reglamento</mat-label>
-          <mat-select formControlName="articulos_reglamentos">
-            <mat-option value="SOPORTE EXTRANJERIA">SOPORTE EXTRANJERIA</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="usuario-container">
-        <mat-form-field>
-          <mat-label>Tipo Solicitud</mat-label>
-          <mat-select formControlName="tipo_solicitud">
-            <mat-option *ngFor="let tipo_saneo of lista_tipo_solicitud" [value]="tipo_saneo.id">{{ tipo_saneo.nombre }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Estado Anterior</mat-label>
-          <mat-select formControlName="api_estado" (selectionChange)="tipoCaso($event)">
-            <mat-option value="ACTIVO">BLOQUEADO</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Estado a Cambiar</mat-label>
-          <input matInput placeholder="Nombre del Operador" formControlName="estado_cambiar"/>
-        </mat-form-field>
-      </div>
-      <div class="usuario-container fondo">
-        <button mat-raised-button color="primary" class="boton-largo"(click)="guardarSolicitud()" [disabled]="solicitudFormularioTramite.invalid">Guardar</button>
-      </div>
-    </form> -->
+    <div class="usuario-container fondo">
+      <button mat-raised-button color="primary" class="boton-largo" (click)="guardarSolicitud()">Guardar</button>
+    </div>
   </ng-container>
  </mat-card-content>
 </mat-card>

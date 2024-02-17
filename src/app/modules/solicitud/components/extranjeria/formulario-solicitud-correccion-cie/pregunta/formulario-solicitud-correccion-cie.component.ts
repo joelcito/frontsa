@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ExtranjeriaService } from '../../../../../shared/services/extranjeria.service';
 import { ActivatedRoute } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
-
+import { TipoSaneoService } from '../../../../../shared/services/tipo-saneo.service';
 
 @Component({
   selector: 'app-formulario-solicitud-correccion-cie',
@@ -13,6 +13,7 @@ import * as CryptoJS from 'crypto-js';
 export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
   private extranjeriaService = inject(ExtranjeriaService);
+  private tipoSaneoService   = inject(TipoSaneoService);
   private fb                 = inject(FormBuilder);
   private router             = inject(ActivatedRoute);
 
@@ -20,6 +21,7 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
   public solicitudFormulario          !: FormGroup
   public formularioBusquedaExtranjero !: FormGroup
   public solicitudFormularioTramite   !: FormGroup
+  public formularioCoreccionCIE   !    : FormGroup
 
 
   public mostrarTabla:Boolean                       = false
@@ -90,78 +92,103 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
       // No se encontraron datos en sessionStorage
       console.log('No se encontraron datos en sessionStorage');
     }
+
+
+    // ***************** PARA EL FORMULARIO CORRECION CIE *****************
+    this.formularioCoreccionCIE = this.fb.group({});
+
+
+    // ***************** TIPO DETALLE TIPO SANEO *****************
+    this.tipoSaneoService.getTiposDetallesTipoSaneo().subscribe((result:any) => {
+      var array:any   = []
+      var cont:number = 1;
+      result.forEach((item:any) => {
+        if(!array.includes(item.nombre_grupo)){
+          this.elemtosAseleccionar.push({
+            id    : item.nombre_grupo,
+            name  : (item.nombre_grupo === "1")? "DATOS PRIMARIOS" : ((item.nombre_grupo === "2")? "DATOS SECUNDARIOS" : "DATOS COMPLEMENTARIOS "+cont++),
+            estado: true,
+            hijo: [{
+              padre: item.nombre_grupo,
+              name : item.nombre,
+              value:"",
+              nombre_campo: item.nombre_campo,
+              tipo_campo: item.tipo_campo,
+              tabla: item.tabla
+            }]
+          })
+          array.push(item.nombre_grupo)
+        }else{
+          const nodo = this.elemtosAseleccionar.find((elem:any) => elem.id === item.nombre_grupo);
+          var dar =  nodo.hijo;
+          dar.push({
+            padre: item.nombre_grupo,
+            name : item.nombre,
+            value:"",
+            nombre_campo: item.nombre_campo,
+            tipo_campo: item.tipo_campo,
+            tabla: item.tabla
+          })
+          nodo.hijo = dar
+        }
+      });
+    })
   }
 
+  elementos           : any[] = [];
+  valorSeleccionado  :string  = ''
+  sele1               :string = ''
+  elemtosAseleccionar:any     = []
 
-  elementos: any[] = [
-  ];
-  valorSeleccionado:string = ''
-  sele1:string = ''
-
-  elemtosAseleccionar = [
-    {
-      name:"DATOS PRIMARIOS",
-      estado:true
-    },
-    {
-      name:"RECAUDACION",
-      estado:true
-    },
-    {
-      name:"ESTADOS",
-      estado:true
-    }
-  ]
-
-  datosPrimarios = [
-    {
-      name:"NOMBRES",
-      value:"JOEL JONATHAN"
-    },
-    {
-      name:"PRIMER APELLIDO",
-      value:"FLORES"
-    },
-    {
-      name:"SEGUNDO APELLIDO",
-      value:"QUISPE"
-    },
-    {
-      name:"APELLIDO DE CASADA",
-      value:""
-    },
-    {
-      name:"FECHA DE NACIMIENTO",
-      value:"01/07/2000"
-    },
-    {
-      name:"GENERO",
-      value:"MASCULINO"
-    },
-    {
-      name:"ESTADO CIVIL",
-      value:"SOLTERO"
-    },
-  ]
+  // datosPrimarios = [
+  //   {
+  //     name:"NOMBRES",
+  //     value:"JOEL JONATHAN"
+  //   },
+  //   {
+  //     name:"PRIMER APELLIDO",
+  //     value:"FLORES"
+  //   },
+  //   {
+  //     name:"SEGUNDO APELLIDO",
+  //     value:"QUISPE"
+  //   },
+  //   {
+  //     name:"APELLIDO DE CASADA",
+  //     value:""
+  //   },
+  //   {
+  //     name:"FECHA DE NACIMIENTO",
+  //     value:"01/07/2000"
+  //   },
+  //   {
+  //     name:"GENERO",
+  //     value:"MASCULINO"
+  //   },
+  //   {
+  //     name:"ESTADO CIVIL",
+  //     value:"SOLTERO"
+  //   },
+  // ]
 
 
-  datosRecaudacion = [
-    {
-      name:"MULTAS",
-      value:"ELABORADO"
-    },
-    {
-      name:"MULTAS 2",
-      value:"PAGADO"
-    }
-  ]
+  // datosRecaudacion = [
+  //   {
+  //     name:"MULTAS",
+  //     value:"ELABORADO"
+  //   },
+  //   {
+  //     name:"MULTAS 2",
+  //     value:"PAGADO"
+  //   }
+  // ]
 
-  datosEstados = [
-    {
-      name:"ESTADO",
-      value:"ENTREGADO"
-    }
-  ]
+  // datosEstados = [
+  //   {
+  //     name:"ESTADO",
+  //     value:"ENTREGADO"
+  //   }
+  // ]
 
 
 
@@ -191,44 +218,33 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
 
   agregarBloque() {
-    // this.elementos.push({ inputValor: '', selectValor: '' }); // Agregar un nuevo objeto a la lista de elementos
     if(this.valorSeleccionado !== ''){
-      const elemento = this.elemtosAseleccionar.find(item => item.name === this.valorSeleccionado);
+      const elemento = this.elemtosAseleccionar.find((item:any) => item.name === this.valorSeleccionado);
       if (elemento) {
+        elemento.estado = false;
+        let d = elemento.hijo
+        d = {
+          name   : elemento.name,
+          listado: elemento.hijo
+        }
+        this.elementos.push(d);
 
-          elemento.estado = false;
-          let d = {}
+        (elemento.hijo).forEach((item:any) =>{
 
-          if(this.valorSeleccionado === 'DATOS PRIMARIOS'){
-            d = {
-              name : this.valorSeleccionado,
-              listado : this.datosPrimarios
-            }
-          }else if(this.valorSeleccionado === 'RECAUDACION'){
-            d = {
-              name : this.valorSeleccionado,
-              listado : this.datosRecaudacion
-            }
-          }else{
-            d = {
-              name : this.valorSeleccionado,
-              listado : this.datosEstados
-            }
-          }
+          this.formularioCoreccionCIE.addControl("check_"+item.nombre_campo, this.fb.control(false));
+          this.formularioCoreccionCIE.addControl("actual_"+item.nombre_campo, this.fb.control({ value: item.value, disabled: true }));
+          this.formularioCoreccionCIE.addControl("nuevo_"+item.nombre_campo, this.fb.control(''));
 
-          // this.elementos.push({ name: this.valorSeleccionado });
-          this.elementos.push(d);
-          console.log(`Estado de ${this.valorSeleccionado} cambiado a false.`);
-          this.valorSeleccionado = ''
+        });
 
+        this.valorSeleccionado = ''
       } else {
-          console.log(`${this.valorSeleccionado} no encontrado en la lista.`);
+        // console.log(`${this.valorSeleccionado} no encontrado en la lista.`);
       }
-      console.log(this.valorSeleccionado)
+      // console.log(this.valorSeleccionado)
     }else{
-      console.log(this.valorSeleccionado)
+      // console.log(this.valorSeleccionado)
     }
-
   }
 
   guardar(as:any){
@@ -239,6 +255,80 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
   }
 
+  guardarSolicitud(){
+    console.log(this.formularioCoreccionCIE.value)
+  }
+
+  habilitarCampos(datos:any){
+    if(datos.tipo_campo === "texto"){
+      const valor = this.formularioCoreccionCIE.value["check_"+datos.nombre_campo]
+      this.formularioCoreccionCIE.get("actual_"+datos.nombre_campo)?.setValue(((valor)? this.extranjeroElejido[datos.nombre_campo] : ""))
+    }else if(datos.tipo_campo === "fecha"){
+      const nuevoTipo = 'date';
+      const inputElement = document.getElementById('nuevo_'+datos.nombre_campo) as HTMLInputElement;
+      if (inputElement)
+        inputElement.setAttribute('type', nuevoTipo);
+    }else if(datos.tipo_campo === "combo"){
+      let datosRe = {
+        tabla:datos.tabla
+      }
+      this.extranjeriaService.getDatosParametricas(datosRe).subscribe((result:any) => {
+
+        // const options = result.map((item: any) => ({
+        //     value: item['Codigo' + datos.tabla],
+        //     label: item['Descripcion' + datos.tabla]
+        // }));
+
+        // const contenedor = document.getElementById('contenedorInput_' + datos.nombre_campo) as HTMLElement;
+        // contenedor.innerHTML = ''; // Limpiamos el contenido existente
+
+        // // Creamos el elemento <select>
+        // const select = document.createElement('select');
+        // select.setAttribute('formControlName', 'nuevo_' + datos.nombre_campo);
+
+        // // Agregamos las opciones al <select>
+        // options.forEach((option: any) => {
+        //     const optionElement = document.createElement('option');
+        //     optionElement.value = option.value;
+        //     optionElement.textContent = option.label;
+        //     select.appendChild(optionElement);
+        // });
+
+        // // Reemplazamos el elemento <input> con el <select>
+        // contenedor.appendChild(select);
+
+          // Setear el valor seleccionado después de crear el select
+          // this.formularioCoreccionCIE.get("nuevo_" + datos.nombre_campo)?.setValue((paisCod ? paisCod['Codigo'+datos.tabla] : ''));
 
 
+
+
+        let options = '<option value="">SELECCIONE</option>';
+        let paisCod: any
+        result.forEach((item:any) => {
+          // options += `<option value="JOEL">${item['Descripcion'+datos.tabla]}</option>`;
+          options += '<option value="'+item['Codigo'+datos.tabla]+'">'+item['Descripcion'+datos.tabla]+'</option>';
+          if(this.extranjeroElejido[datos.nombre_campo] === item['Codigo'+datos.tabla])
+            paisCod = item
+        });
+        const contenedor           = document.getElementById('contenedorInput_'+datos.nombre_campo) as HTMLElement;
+              contenedor.innerHTML = '';
+        const select               = document.createElement('select');
+        select.setAttribute('formControlName', 'nuevo_' + datos.nombre_campo);
+        select.innerHTML = options;
+        // Agregar un listener de eventos change que llame a una función para manejar el cambio de selección
+        select.addEventListener('change', (event:any) => {
+          this.handleSelectChange(event.target.value, datos.nombre_campo); // Llama a una función para manejar el cambio de selección y pasa el valor seleccionado
+          // this.handleSelectChange(event.target,); // Llama a una función para manejar el cambio de selección y pasa el valor seleccionado
+        });
+        contenedor.appendChild(select);
+        this.formularioCoreccionCIE.get("actual_"+datos.nombre_campo)?.setValue(paisCod['Descripcion'+datos.tabla])
+      })
+    }
+  }
+
+  handleSelectChange(datos:any, campo:string){
+    // console.log(datos, campo)
+    this.formularioCoreccionCIE.get("nuevo_"+campo)?.setValue(datos);
+  }
 }

@@ -55,4 +55,9 @@ export class TipoSaneoService {
     return this.http.post(`${this.base_url}/tipoSaneos/documento_detalle_tipo_saneo/`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
+  // ***************** TIPO DETALLE TIPO SANEO *****************
+  getTiposDetallesTipoSaneo(){
+    return this.http.get(`${this.base_url}/tipoSaneos/getTiposDetallesTipoSaneo/`, {headers: this.agregarAuthorizationHeader()})
+  }
+
 }
