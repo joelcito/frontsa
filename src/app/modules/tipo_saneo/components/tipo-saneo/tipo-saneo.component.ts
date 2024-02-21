@@ -7,6 +7,7 @@ import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/s
 import { sha256 } from 'js-sha256';
 import * as CryptoJS from 'crypto-js';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tipo-saneo',
@@ -28,11 +29,6 @@ export class TipoSaneoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTiposSaneo()
-    // this.getTiposSaneo(); // Tu lógica para obtener los tipos de saneo
-
-    // setTimeout(() => {
-    //   this.cdRef.detectChanges(); // Forzar detección de cambios
-    // });
   }
 
   getTiposSaneo(){
@@ -121,6 +117,37 @@ export class TipoSaneoComponent implements OnInit {
 
   base64URL(cadena:string) {
     return cadena.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
+  }
+
+  eliminar(datos:any){
+    Swal.fire({
+      title: "Estas seguro que deseas eliminar "+datos.nombre+"?",
+      text: "¡No podras revertir eso!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, eliminar!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.tipoSaneoService.deleteTipoSaneo(datos.id).subscribe((result) => {
+          console.log(result)
+        })
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "¡EXITO!",
+          text: "¡Se elimino con Extio!",
+          showConfirmButton: false,
+          timer: 3000,
+          allowOutsideClick: false
+        });
+        setTimeout(() => {
+          this.getTiposSaneo()
+        }, 2000);
+      }
+    });
   }
 
 }

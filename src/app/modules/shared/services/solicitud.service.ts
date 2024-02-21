@@ -33,6 +33,16 @@ export class SolicitudService {
     return this.http.post(`${this.base_url}/solicitud/listado`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
+  tramitesSolicitudesByIdSolicitud(id:any){
+    return this.http.get(`${this.base_url}/solicitud/tramitesSolicitudesByIdSolicitud/${id}`, {headers: this.agregarAuthorizationHeader()});
+  }
+
+  verificaSiTieneTramatiesEnviados(body:any){
+    return this.http.post(`${this.base_url}/solicitud/verificaSiTieneTramatiesEnviados`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
+
+  // ********************* SAVE SOLICICTUD *********************
   saveSolicitudCambioBandeja(body:any){
     return this.http.post(`${this.base_url}/solicitud/`, body, {headers: this.agregarAuthorizationHeader()});
   }
@@ -41,19 +51,16 @@ export class SolicitudService {
     return this.http.post(`${this.base_url}/solicitud/saveSolicitudDesbloqueoDirectiva0082019`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
-  tramitesSolicitudesByIdSolicitud(id:any){
-    return this.http.get(`${this.base_url}/solicitud/tramitesSolicitudesByIdSolicitud/${id}`, {headers: this.agregarAuthorizationHeader()});
+  saveCorreccionesCIE(body:any){
+    return this.http.post(`${this.base_url}/solicitud/saveCorreccionesCIE`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
+  // ********************* SANEAMIENTO EXTRANJERIA *********************
   sanearDirectiva0082019(body:any){
     return this.http.post(`${this.base_url}/solicitud/sanearDirectiva0082019`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
   saneoCambioBandeja(body:any){
     return this.http.post(`${this.base_url}/solicitud/saneoCambioBandeja`, body, {headers: this.agregarAuthorizationHeader()});
-  }
-
-  verificaSiTieneTramatiesEnviados(body:any){
-    return this.http.post(`${this.base_url}/solicitud/verificaSiTieneTramatiesEnviados`, body, {headers: this.agregarAuthorizationHeader()});
   }
 }

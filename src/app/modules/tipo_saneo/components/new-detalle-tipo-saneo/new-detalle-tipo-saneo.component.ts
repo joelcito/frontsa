@@ -51,7 +51,7 @@ export class NewDetalleTipoSaneoComponent implements OnInit  {
   }
 
   onCancel(){
-
+    this.dialogRef.close(3)
   }
 
 }

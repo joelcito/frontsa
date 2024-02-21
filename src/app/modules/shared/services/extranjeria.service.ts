@@ -37,13 +37,19 @@ export class ExtranjeriaService {
     return this.http.post(`${this.base_url}/extranjeria/buscaExtranjeroPorSerial`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
+  getDatosParametricas(body:any){
+    return this.http.post(`${this.base_url}/extranjeria/getDatosParametricas`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
+  // ********************* SANEAMIENTO EXTRANJERIA *********************
   saneoCambioBandejaSqlServer(body:any){
     return this.http.post(`${this.base_url}/extranjeria/saneoCambioBandeja`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
-  getDatosParametricas(body:any){
-    return this.http.post(`${this.base_url}/extranjeria/getDatosParametricas`, body, {headers: this.agregarAuthorizationHeader()});
+  saneoCorrecionCIESqlServer(body:any){
+    return this.http.post(`${this.base_url}/extranjeria/saneoCorrecionCIESqlServer`, body, {headers: this.agregarAuthorizationHeader()});
   }
+
 
   /*
   getImagenExtranjero(body:any):Observable<HttpResponse<ArrayBuffer>>{

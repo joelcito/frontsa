@@ -37,6 +37,10 @@ export class TipoSaneoService {
     return this.http.put(`${this.base_url}/tipoSaneos/${id}`, body , {headers: this.agregarAuthorizationHeader()});
   }
 
+  deleteTipoSaneo(id:any){
+    return this.http.delete(`${this.base_url}/tipoSaneos/deleteTipoSaneo/${id}`, {headers: this.agregarAuthorizationHeader()});
+  }
+
   // ******************************** DETALLE TIPO SANEO ********************************
   getDetalleTiposSaneo(id:any){
     return this.http.get(`${this.base_url}/tipoSaneos/detalle_tipo_saneo/${id}`, {headers: this.agregarAuthorizationHeader()});

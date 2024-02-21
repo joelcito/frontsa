@@ -101,7 +101,7 @@ export class ModalNewSolicitudComponent implements OnInit{
   }
 
   onCancel(){
-
+    this.dialogRef.close(3)
   }
 
   encriptarConAESBase64URL(id:string, clave:string) {

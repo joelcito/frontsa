@@ -28,6 +28,10 @@ export class RolService {
     return this.http.get(`${this.base_url}/rol/listado`, {headers: this.agregarAuthorizationHeader()});
   }
 
+  deleteRol(id:any){
+    return this.http.delete(`${this.base_url}/rol/deleteRol/${id}`, {headers: this.agregarAuthorizationHeader()});
+  }
+
   updateRolesUser(id:any, body:any){
     return this.http.post(`${this.base_url}/rol/user_rol/${id}`, body, {headers: this.agregarAuthorizationHeader()})
   }

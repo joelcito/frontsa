@@ -4,6 +4,7 @@ import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/s
 import { MatTableDataSource } from '@angular/material/table';
 import { RolService } from '../../../shared/services/rol.service';
 import { NewRolComponent } from '../new-rol/new-rol.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-rol',
@@ -80,6 +81,37 @@ export class RolComponent implements OnInit{
   openSnackBar(message:string, action:string): MatSnackBarRef<SimpleSnackBar>{
     return this.snackBar.open(message, action,{
       duration:2000
+    });
+  }
+
+  eliminar(datos:any){
+    Swal.fire({
+      title: "Estas seguro que deseas eliminar el rol "+datos.nombre+"?",
+      text: "¡No podras revertir eso!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, eliminar!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.rolService.deleteRol(datos.id).subscribe((result) => {
+          console.log(result)
+        })
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "¡EXITO!",
+          text: "¡Se elimino con Extio!",
+          showConfirmButton: false,
+          timer: 3000,
+          allowOutsideClick: false
+        });
+        setTimeout(() => {
+          this.getRol()
+        }, 2000);
+      }
     });
   }
 

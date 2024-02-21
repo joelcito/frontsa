@@ -148,6 +148,7 @@ export class FormularioSolicitudComponent implements OnInit{
       const datosRecuperados = JSON.parse(datosRecuperadosString);
       // *************** CREACION DEL FORMULARIO ***************
       this.solicitudFormulario = this.fb.group({
+        pais              : [{value:"Bolivia", disabled:true}, Validators.required],
         departamento      : [{value:datosRecuperados.departamento, disabled:true}, Validators.required],
         oficina           : [{value:datosRecuperados.nombre_organizacion, disabled:true}, Validators.required],
         nombre_funcionario: [{value:datosRecuperados.nombres+" "+datosRecuperados.primer_apellido+" "+datosRecuperados.segundo_apellido, disabled:true}, Validators.required],

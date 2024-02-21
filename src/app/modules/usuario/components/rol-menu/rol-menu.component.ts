@@ -11,7 +11,12 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 })
 export class RolMenuComponent implements OnInit{
 
-  private dialogRefRolMenu = inject(MatDialogRef<UserRolComponent>)
+  // private dialogRefRolMenu = inject(MatDialogRef<UserRolComponent>)
+  // private dialogRefUsurioRol = inject(MatDialogRef<RolMenuComponent>)
+
+  private dialogRefRolMenu   = inject(MatDialogRef<RolMenuComponent>)
+  // private dialogRefUsurioRol = inject(MatDialogRef<UserRolComponent>)
+
   public  data             = inject(MAT_DIALOG_DATA);
   private usuarioService   = inject(UsuarioService);
   private formBuilder      = inject(FormBuilder);
@@ -54,8 +59,6 @@ export class RolMenuComponent implements OnInit{
 
     this.generaFormuarlio();
 
-    // console.log(this.menuFormRolMenu.value)
-    console.log(this.data)
   }
 
   getRolesUser(){
@@ -67,11 +70,7 @@ export class RolMenuComponent implements OnInit{
   }
 
   generaFormuarlio(){
-
-    // console.log(JSON.stringify(this.menuNav))
-
       this.menuNav.forEach((menu, index) => {
-
           let sinEspa  = (menu.name).replaceAll(" ","")
           let submenus = menu.subMenus
           this.menuFormRolMenu.addControl(`${sinEspa}_${index}_padre`, new FormControl(menu.active));
@@ -93,7 +92,6 @@ export class RolMenuComponent implements OnInit{
             formattedMenu.submenus.push(formattedSubmenu);
           })
           this.arrayFormVista.push(formattedMenu)
-          // console.log("-----------------------------
       });
   }
 
@@ -101,10 +99,13 @@ export class RolMenuComponent implements OnInit{
     this.menuFormRolMenu.addControl('usuariorol', this.formBuilder.control(this.menuRolUser));
     this.menuFormRolMenu.addControl('rolid', this.formBuilder.control(this.rol));
     this.menuFormRolMenu.addControl('userid', this.formBuilder.control(this.usuario));
-    console.log(this.menuFormRolMenu.value)
     this.usuarioService.saveMenuUserById(this.menuFormRolMenu.value).subscribe(resul => {
-      console.log(resul)
+      this.dialogRefRolMenu.close(3)
     })
+  }
+
+  onCancel(){
+    this.dialogRefRolMenu.close(3)
   }
 
 }

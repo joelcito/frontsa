@@ -1,9 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ExtranjeriaService } from '../../../../../shared/services/extranjeria.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
 import { TipoSaneoService } from '../../../../../shared/services/tipo-saneo.service';
+import { SolicitudService } from '../../../../../shared/services/solicitud.service';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-formulario-solicitud-correccion-cie',
@@ -16,25 +19,32 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
   private tipoSaneoService   = inject(TipoSaneoService);
   private fb                 = inject(FormBuilder);
   private router             = inject(ActivatedRoute);
-
+  private solicitudService   = inject(SolicitudService);
+  private routerLink         = inject(Router);
 
   public solicitudFormulario          !: FormGroup
   public formularioBusquedaExtranjero !: FormGroup
   public solicitudFormularioTramite   !: FormGroup
-  public formularioCoreccionCIE   !    : FormGroup
+  public formularioCoreccionCIE       !: FormGroup
+
+  public mostrarTabla:Boolean                        = false
+  public mostrarFormularioBusquedaExtranjero:Boolean = true
+  public mostrarTablaExtranjeroSeleccionado:Boolean  = false
+
+  public botonGuardara:boolean   = true
 
 
-  public mostrarTabla:Boolean                       = false
-  public mostrarTablaExtranjeroSeleccionado:Boolean = false
+  public  extrajerosBuscados  : any [] = [];
+  private camposSeleccionados : any [] = [];
+  public  elementos           : any [] = [];
+  public  elemtosAseleccionar : any [] = []
+  public  extranjeroElejido   : any    = {};
 
+  private formulario_id       : any;
+  private tipo_saneo_id       : any;
 
-  public extrajerosBuscados  : any [] = []
-  public extranjeroElejido   : any    = {};
-
-  private formulario_id       : any
-  private tipo_saneo_id       : any
-
-
+  public valorSeleccionado  :string = ''
+  public sele1              :string = ''
 
   ngOnInit(): void {
 
@@ -47,7 +57,7 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
       //  **************************** DE AQUI ES EXTRANJERIA HABER ****************************
       this.formularioBusquedaExtranjero = this.fb.group({
-        numero_cedula   : ['100398980', Validators.required],
+        numero_cedula   : ['10131544', Validators.required],
         complemento     : ['',],
         nombres         : ['',],
         primer_apellido : ['',],
@@ -68,7 +78,7 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
       });
 
-      //  **************************** DE AQUI ES EXTRANJERIA HABER FIN ****************************
+      //  **************************** DE AQUI ES EXTRANJERIA HABER FIN **********************  ******
 
     });
 
@@ -81,6 +91,7 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
       const datosRecuperados = JSON.parse(datosRecuperadosString);
       // *************** CREACION DEL FORMULARIO ***************
       this.solicitudFormulario = this.fb.group({
+        pais              : [{value:"Bolivia", disabled:true}, Validators.required],
         departamento      : [{value:datosRecuperados.departamento, disabled:true}, Validators.required],
         oficina           : [{value:datosRecuperados.nombre_organizacion, disabled:true}, Validators.required],
         nombre_funcionario: [{value:datosRecuperados.nombres+" "+datosRecuperados.primer_apellido+" "+datosRecuperados.segundo_apellido, disabled:true}, Validators.required],
@@ -96,6 +107,8 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
     // ***************** PARA EL FORMULARIO CORRECION CIE *****************
     this.formularioCoreccionCIE = this.fb.group({});
+    // Agregar el validador al formulario
+    // this.formularioCoreccionCIE.setValidators(Validators.required); // O cualquier otro validador que desees agregar
 
 
     // ***************** TIPO DETALLE TIPO SANEO *****************
@@ -114,7 +127,8 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
               value:"",
               nombre_campo: item.nombre_campo,
               tipo_campo: item.tipo_campo,
-              tabla: item.tabla
+              tabla: item.tabla,
+              requerid: item.requerido,
             }]
           })
           array.push(item.nombre_grupo)
@@ -127,7 +141,8 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
             value:"",
             nombre_campo: item.nombre_campo,
             tipo_campo: item.tipo_campo,
-            tabla: item.tabla
+            tabla: item.tabla,
+            requerid: item.requerido,
           })
           nodo.hijo = dar
         }
@@ -135,69 +150,28 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
     })
   }
 
-  elementos           : any[] = [];
-  valorSeleccionado  :string  = ''
-  sele1               :string = ''
-  elemtosAseleccionar:any     = []
-
-  // datosPrimarios = [
-  //   {
-  //     name:"NOMBRES",
-  //     value:"JOEL JONATHAN"
-  //   },
-  //   {
-  //     name:"PRIMER APELLIDO",
-  //     value:"FLORES"
-  //   },
-  //   {
-  //     name:"SEGUNDO APELLIDO",
-  //     value:"QUISPE"
-  //   },
-  //   {
-  //     name:"APELLIDO DE CASADA",
-  //     value:""
-  //   },
-  //   {
-  //     name:"FECHA DE NACIMIENTO",
-  //     value:"01/07/2000"
-  //   },
-  //   {
-  //     name:"GENERO",
-  //     value:"MASCULINO"
-  //   },
-  //   {
-  //     name:"ESTADO CIVIL",
-  //     value:"SOLTERO"
-  //   },
-  // ]
-
-
-  // datosRecaudacion = [
-  //   {
-  //     name:"MULTAS",
-  //     value:"ELABORADO"
-  //   },
-  //   {
-  //     name:"MULTAS 2",
-  //     value:"PAGADO"
-  //   }
-  // ]
-
-  // datosEstados = [
-  //   {
-  //     name:"ESTADO",
-  //     value:"ENTREGADO"
-  //   }
-  // ]
-
-
-
   seleccionarExtranjero(extranjero:any){
-    this.solicitudFormularioTramite.get('nombre_operador')?.setValue(extranjero.NombresSegUsuarios+" "+extranjero.PaternoSegUsuarios+" "+extranjero.MaternoSegUsuarios);
-    this.solicitudFormularioTramite.get('usu_operador_id')?.setValue(extranjero.LoginSegUsuarios);
-    this.extranjeroElejido = extranjero
-    this.mostrarTabla = false
-    this.mostrarTablaExtranjeroSeleccionado = true;
+
+    Swal.fire({
+      title             : "¡ALERTA!",
+      text              : "Estas seguro que deseas iniciar el tramite con el ciudadano "+extranjero.NombresExtRegistros+"?",
+      icon              : "warning",
+      showCancelButton  : true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor : "#d33",
+      confirmButtonText : "Si",
+      cancelButtonText  : "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.solicitudFormularioTramite.get('nombre_operador')?.setValue(extranjero.NombresSegUsuarios+" "+extranjero.PaternoSegUsuarios+" "+extranjero.MaternoSegUsuarios);
+        this.solicitudFormularioTramite.get('usu_operador_id')?.setValue(extranjero.LoginSegUsuarios);
+        this.extranjeroElejido                   = extranjero
+        this.mostrarTabla                        = false
+        this.mostrarTablaExtranjeroSeleccionado  = true;
+        this.mostrarFormularioBusquedaExtranjero = false;
+      }
+    });
   }
 
   buscarExtranjero(){
@@ -231,78 +205,91 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
         (elemento.hijo).forEach((item:any) =>{
 
+          console.log(item.requerid)
+
           this.formularioCoreccionCIE.addControl("check_"+item.nombre_campo, this.fb.control(false));
           this.formularioCoreccionCIE.addControl("actual_"+item.nombre_campo, this.fb.control({ value: item.value, disabled: true }));
-          this.formularioCoreccionCIE.addControl("nuevo_"+item.nombre_campo, this.fb.control(''));
+          this.formularioCoreccionCIE.addControl("nuevo_"+item.nombre_campo, this.fb.control({ value: '', disabled: true }, ((item.requerid) ? Validators.required : null) ));
 
         });
 
         this.valorSeleccionado = ''
       } else {
-        // console.log(`${this.valorSeleccionado} no encontrado en la lista.`);
       }
-      // console.log(this.valorSeleccionado)
     }else{
-      // console.log(this.valorSeleccionado)
     }
   }
 
-  guardar(as:any){
-    console.log(as)
-  }
-
-  verificarDato(adi:any){
-
+  validaFormulario(formulario: FormGroup):boolean{
+    const keys = Object.keys(formulario.controls);
+    return ((keys.length === 0)? true : ((keys.some(key => key.startsWith('check_') && this.formularioCoreccionCIE.get(key)?.value))? formulario.invalid : true));
   }
 
   guardarSolicitud(){
-    console.log(this.formularioCoreccionCIE.value)
+
+    // console.log(this.formularioCoreccionCIE.value)
+
+    this.camposSeleccionados.forEach((item:any) => {
+      this.formularioCoreccionCIE.get("actual_"+item)?.enable()
+    })
+    let datos                            = this.formularioCoreccionCIE.value
+    datos['serialExtRegistros']          = this.extranjeroElejido.SerialExtRegistros;
+    datos['serialDocumentoExtRegistros'] = this.extranjeroElejido.SerialDocumentoExtRegistros;
+    datos['nroCedulaBolExtRegistros']    = this.extranjeroElejido.NroCedulaBolExtRegistros;
+    datos['formulario_id']               = this.formulario_id;
+    datos['funcionario_id']              = this.solicitudFormulario.value.funcionario_id;
+    datos['tipo_solicitud']              = this.tipo_saneo_id;
+    this.solicitudService.saveCorreccionesCIE(datos).subscribe((result:any) => {
+      if(result !== null){
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Se registro con exito",
+          text: "El Caso se le asigno a "+result.usuarioAsignado.nombres+" "+result.usuarioAsignado.primer_apellido+" "+result.usuarioAsignado.segundo_apellido,
+          showConfirmButton: false,
+          timer: 4000,
+          allowOutsideClick: false
+        });
+        setTimeout(() => {
+          this.routerLink.navigate(['/solicitud']);
+        }, 4000);
+      }
+    })
   }
 
   habilitarCampos(datos:any){
+
+    const valor = this.formularioCoreccionCIE.value["check_"+datos.nombre_campo]
+    if(valor){
+      this.camposSeleccionados.push(datos.nombre_campo)
+      this.formularioCoreccionCIE.get('nuevo_'+datos.nombre_campo)?.enable()
+    }else{
+      this.camposSeleccionados = this.camposSeleccionados.filter(item => item !== datos.nombre_campo);
+      this.formularioCoreccionCIE.get('nuevo_'+datos.nombre_campo)?.setValue('')
+      this.formularioCoreccionCIE.get('nuevo_'+datos.nombre_campo)?.disable()
+    }
+
     if(datos.tipo_campo === "texto"){
-      const valor = this.formularioCoreccionCIE.value["check_"+datos.nombre_campo]
       this.formularioCoreccionCIE.get("actual_"+datos.nombre_campo)?.setValue(((valor)? this.extranjeroElejido[datos.nombre_campo] : ""))
     }else if(datos.tipo_campo === "fecha"){
       const nuevoTipo = 'date';
       const inputElement = document.getElementById('nuevo_'+datos.nombre_campo) as HTMLInputElement;
-      if (inputElement)
+      if (inputElement){
         inputElement.setAttribute('type', nuevoTipo);
+        const fecha = new Date(this.extranjeroElejido[datos.nombre_campo]);
+        const fechaFormateada = fecha.toLocaleDateString('es-ES'); // Formatear la fecha al formato 'dd/mm/yyyy'
+        this.formularioCoreccionCIE.get("actual_" + datos.nombre_campo)?.setValue(valor ? fechaFormateada : '');
+        // Establecer el atributo min
+        const minDate = new Date(); // Utiliza la fecha actual como mínimo
+        const minDateFormatted = minDate.toISOString().split('T')[0]; // Formato ISO (yyyy-mm-dd)
+        inputElement.setAttribute('max', minDateFormatted);
+        inputElement.setAttribute('min', '1950-01-01');
+      }
     }else if(datos.tipo_campo === "combo"){
       let datosRe = {
         tabla:datos.tabla
       }
       this.extranjeriaService.getDatosParametricas(datosRe).subscribe((result:any) => {
-
-        // const options = result.map((item: any) => ({
-        //     value: item['Codigo' + datos.tabla],
-        //     label: item['Descripcion' + datos.tabla]
-        // }));
-
-        // const contenedor = document.getElementById('contenedorInput_' + datos.nombre_campo) as HTMLElement;
-        // contenedor.innerHTML = ''; // Limpiamos el contenido existente
-
-        // // Creamos el elemento <select>
-        // const select = document.createElement('select');
-        // select.setAttribute('formControlName', 'nuevo_' + datos.nombre_campo);
-
-        // // Agregamos las opciones al <select>
-        // options.forEach((option: any) => {
-        //     const optionElement = document.createElement('option');
-        //     optionElement.value = option.value;
-        //     optionElement.textContent = option.label;
-        //     select.appendChild(optionElement);
-        // });
-
-        // // Reemplazamos el elemento <input> con el <select>
-        // contenedor.appendChild(select);
-
-          // Setear el valor seleccionado después de crear el select
-          // this.formularioCoreccionCIE.get("nuevo_" + datos.nombre_campo)?.setValue((paisCod ? paisCod['Codigo'+datos.tabla] : ''));
-
-
-
-
         let options = '<option value="">SELECCIONE</option>';
         let paisCod: any
         result.forEach((item:any) => {
@@ -324,11 +311,32 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
         contenedor.appendChild(select);
         this.formularioCoreccionCIE.get("actual_"+datos.nombre_campo)?.setValue(paisCod['Descripcion'+datos.tabla])
       })
+    }else if(datos.tipo_campo === "comboGenero"){
+      console.log(datos, this.extranjeroElejido[datos.nombre_campo])
+      this.formularioCoreccionCIE.get("actual_" + datos.nombre_campo)?.setValue(valor ? ((this.extranjeroElejido[datos.nombre_campo])? "MASCULINO": "FEMENINO") : '');
+      let options = '<option value="">SELECCIONE</option><option value="1">MASCULINO</option><option value="0">FEMENINO</option>';
+      const contenedor           = document.getElementById('contenedorInput_'+datos.nombre_campo) as HTMLElement;
+              contenedor.innerHTML = '';
+
+        const select               = document.createElement('select');
+        select.setAttribute('formControlName', 'nuevo_' + datos.nombre_campo);
+        select.innerHTML = options;
+        // Agregar un listener de eventos change que llame a una función para manejar el cambio de selección
+        select.addEventListener('change', (event:any) => {
+          this.handleSelectChange(event.target.value, datos.nombre_campo); // Llama a una función para manejar el cambio de selección y pasa el valor seleccionado
+        });
+        contenedor.appendChild(select);
+    }else if(datos.tipo_campo === "numero"){
+      const nuevoTipo = 'number';
+      const inputElement = document.getElementById('nuevo_'+datos.nombre_campo) as HTMLInputElement;
+      if (inputElement){
+        inputElement.setAttribute('type', nuevoTipo);
+        this.formularioCoreccionCIE.get("actual_" + datos.nombre_campo)?.setValue(this.extranjeroElejido[datos.nombre_campo]);
+      }
     }
   }
 
   handleSelectChange(datos:any, campo:string){
-    // console.log(datos, campo)
     this.formularioCoreccionCIE.get("nuevo_"+campo)?.setValue(datos);
   }
 }

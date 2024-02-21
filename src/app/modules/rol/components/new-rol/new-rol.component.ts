@@ -54,7 +54,7 @@ export class NewRolComponent implements OnInit {
   }
 
   onCancel(){
-
+    this.dialogRef.close(3)
   }
 
   updateForm(data:any){

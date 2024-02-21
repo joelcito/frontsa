@@ -2,8 +2,9 @@
 <mat-dialog-content>
   <form [formGroup]="rolesForm" class="form-container">
     <div *ngFor="let rol of roles" class="form-field">
-      <mat-slide-toggle [formControlName]="rol.nombre+'_'+rol.id">{{ rol.nombre }}</mat-slide-toggle>
-      <button mat-button color="primary" (click)="verMenusHabilitados(rol.id)" [disabled]="!rolesForm.get(rol.nombre+'_'+rol.id)?.value">
+      <!-- <mat-slide-toggle [formControlName]="rol.nombre+'_'+rol.id">{{ rol.nombre }}</mat-slide-toggle> -->
+      <mat-slide-toggle [formControlName]="quitarEspacios(rol.nombre)+'_'+rol.id">{{ rol.nombre }}</mat-slide-toggle>
+      <button mat-button color="primary" (click)="verMenusHabilitados(rol.id)" [disabled]="!rolesForm.get(quitarEspacios(rol.nombre)+'_'+rol.id)?.value">
         <mat-icon>remove_red_eye</mat-icon> Ver Per
       </button>
     </div>
@@ -13,7 +14,7 @@
   <button mat-button color="primary" (click)="guardarRol()">
     <mat-icon>save</mat-icon> Guardar
   </button>
-  <button mat-button color="primary">
+  <button mat-button color="primary" (click)="onCancel()">
     <mat-icon>cancel</mat-icon> Cancelar
   </button>
 </mat-dialog-actions>

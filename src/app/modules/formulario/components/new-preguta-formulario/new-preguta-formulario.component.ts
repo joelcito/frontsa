@@ -68,7 +68,7 @@ export class NewPregutaFormularioComponent  implements OnInit {
   }
 
   onCancel(){
-
+    this.dialogRef.close(3)
   }
 
 }

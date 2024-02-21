@@ -1,14 +1,14 @@
 
 <mat-card>
   <h2 class="alinear">Listado de Roles</h2>
-  <mat-card-header>
+  <!-- <mat-card-header>
     <div>
       <mat-form-field hintLabel="Buscar Rol" appearance="fill">
         <mat-label>Buscar Rol</mat-label>
         <input matInput #input>
       </mat-form-field>
     </div>
-  </mat-card-header>
+  </mat-card-header> -->
   <mat-card-header>
     <div class="derecha">
       <ul>
@@ -54,7 +54,7 @@
           <button mat-icon-button color="warn" (click)="edit(element.id, element.nombre)">
             <mat-icon aria-label="Edit">edit</mat-icon>
           </button>
-          <button mat-icon-button color="accent">
+          <button mat-icon-button color="accent" (click)="eliminar(element)">
             <mat-icon aria-label="Delete">delete</mat-icon>
           </button>
         </td>

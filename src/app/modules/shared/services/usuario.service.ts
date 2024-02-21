@@ -60,6 +60,10 @@ export class UsuarioService {
     return this.http.post(`${this.base_url}/usuarios/saveMenuUserById`, datos, {headers: this.agregarAuthorizationHeader()});
   }
 
+  deleteUsuer(id:any){
+    return this.http.delete(`${this.base_url}/usuarios/deleteUsuer/${id}`, {headers: this.agregarAuthorizationHeader()});
+  }
+
 
   // ******************** PUT ********************
   // ACTUALIZAR USUARIOS
@@ -68,7 +72,7 @@ export class UsuarioService {
   }
 
 
-  // PARA BUSCAR EN LA BASE DE DATOS DE COMUN
+  // ******************** PARA BUSCAR EN LA BASE DE DATOS DE COMUN ********************
   getFuncionario(datos:any){
     return this.http.post(`${this.base_url}/comun/datos`, datos, {headers: this.agregarAuthorizationHeader()});
   }

@@ -16,6 +16,7 @@ import { FormularioSolicitudDirectiva0082019Component } from '../solicitud/compo
 import { FormularioSolicitudDirectiva0082019RespuestaComponent } from '../solicitud/components/extranjeria/formulario-solicitud-directiva-008-2019/respuesta/formulario-solicitud-directiva-008-2019-respuesta.component';
 import { FormularioSolicitudCorreccionCieComponent } from '../solicitud/components/extranjeria/formulario-solicitud-correccion-cie/pregunta/formulario-solicitud-correccion-cie.component';
 import { FormularioSolicitudRespuestaComponent } from '../solicitud/components/extranjeria/formulario-solicitud/respuesta/formulario-solicitud-respuesta.component';
+import { FormularioSolicitudCorreccionCieRespuestaComponent } from '../solicitud/components/extranjeria/formulario-solicitud-correccion-cie/respuesta/formulario-solicitud-correccion-cie-respuesta.component';
 
 const ChildRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -49,6 +50,8 @@ const ChildRoutes: Routes = [
   { path: 'solicitud/newTipoSolicitud/newFormularioDirectiva0082019Res/:solicitud_id', component: FormularioSolicitudDirectiva0082019RespuestaComponent },
 
   { path: 'solicitud/newTipoSolicitud/newFormularioCorrecionCie/:tipo_saneo_id/:formulario_id', component: FormularioSolicitudCorreccionCieComponent },
+  { path: 'solicitud/newTipoSolicitud/newFormularioCorrecionCieRes/:solicitud_id', component: FormularioSolicitudCorreccionCieRespuestaComponent },
+
 
   // ************************* ASIGNACION *************************
   { path: 'asignacion', component: AsignacionComponent},

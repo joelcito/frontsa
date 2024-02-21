@@ -4,6 +4,10 @@
   <form [formGroup]="solicitudFormulario">
     <div class="usuario-container">
       <mat-form-field appearance="fill">
+        <mat-label>Pais</mat-label>
+        <input matInput placeholder="Pais" formControlName="pais" required />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
         <mat-label>Departamento</mat-label>
         <input matInput placeholder="Departamento" formControlName="departamento" required />
       </mat-form-field>

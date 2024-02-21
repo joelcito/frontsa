@@ -8,6 +8,8 @@ import { UserRolComponent } from '../user-rol/user-rol.component';
 import { Observable } from 'rxjs';
 import { RolService } from '../../../shared/services/rol.service';
 import { RolElement } from '../../../rol/components/rol/rol.component';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-usuario',
@@ -42,7 +44,7 @@ export class UsuarioComponent implements OnInit{
         this.procesarUsuariosResponse(data);
       },
       error: (error: any) => {
-        console.log(error);
+
       }
     });
   }
@@ -121,8 +123,6 @@ export class UsuarioComponent implements OnInit{
 
   opcionesVer(datos:any, id:any){
 
-    // console.log(datos)
-
     this.menuNav = this.usuarioService.getMenuNavData();
     const dialogRef = this.dialog.open( UserRolComponent, {
       width: '405px',
@@ -136,7 +136,7 @@ export class UsuarioComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe((result:any) => {
       if(result == 1){
-        this.openSnackBar('USUARIO REGISTADO ACTUALIZADO','Exitosa');
+        this.openSnackBar('SE REGISTRO CON EXITO','Exitosa');
         this.getUsuarios();
       }else if(result == 2){
         this.openSnackBar('SE PRODUCO UN ERROR AL ACTUALIZAR','Error');
@@ -150,6 +150,39 @@ export class UsuarioComponent implements OnInit{
     this.rolService.getRoles().subscribe(resul => {
       this.roles = resul as RolElement[];
     })
+  }
+
+  bajaLogica(datos:any){
+    Swal.fire({
+      title: "Estas seguro que deseas eliminar a "+datos.nombres+"?",
+      text: "¡No podras revertir eso!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, eliminar!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.usuarioService.deleteUsuer(datos.id).subscribe((result) => {
+
+        })
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "¡EXITO!",
+          text: "¡Se elimino con Extio!",
+          showConfirmButton: false,
+          timer: 3000,
+          allowOutsideClick: false
+        });
+
+        setTimeout(() => {
+          this.getUsuarios()
+        }, 2000);
+
+      }
+    });
   }
 }
 

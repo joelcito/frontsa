@@ -1,13 +1,13 @@
 
 <mat-card>
-  <h2 class="alinear">Listado de Usuarios</h2>
+  <h2 class="alinear">Listado de Tipo Saneos</h2>
   <mat-card-header>
-    <div>
+    <!-- <div>
       <mat-form-field hintLabel="Buscar tipo saneo" appearance="fill">
         <mat-label>Buscar Tipo Saneo</mat-label>
         <input matInput #input>
       </mat-form-field>
-    </div>
+    </div> -->
   </mat-card-header>
   <mat-card-header>
     <div class="derecha">
@@ -40,30 +40,18 @@
         <td mat-cell *matCellDef="let element">{{ element.descripcion }}</td>
       </ng-container>
 
-      <!-- usuario -->
-      <!-- <ng-container matColumDef="password">
-        <th mat-header-cell *matHeaderCellDef>CONTRASEÑA</th>
-        <td mat-cell *matCellDef="let element">{{ element.password }}</td>
-      </ng-container> -->
 
       <!-- ACCIONE -->
       <ng-container matColumnDef="acciones">
         <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
         <td mat-cell *matCellDef="let element; let i=index">
-          <!-- <button mat-icon-button class="btn-editar" (click)="edit(element)"> -->
-          <!-- <button mat-icon-button color="primary">
-            <mat-icon aria-label="Edit">add_circle</mat-icon>
-          </button> -->
-          <!-- <a mat-icon-button color="primary" [routerLink]="['/tipo_saneo/',encriptarConRellenoAleatorio(element.id, 10)]">
-            <mat-icon aria-label="Edit">add_circle</mat-icon>
-          </a> -->
           <button mat-icon-button color="primary" (click)="redirigir(element.id)">
             <mat-icon aria-label="Edit">add_circle</mat-icon>
           </button>
           <button mat-icon-button color="accent" (click)="edit(element.id, element.nombre, element.descripcion)">
             <mat-icon aria-label="Edit">edit</mat-icon>
           </button>
-          <button mat-icon-button color="warn" >
+          <button mat-icon-button color="warn" (click)="eliminar(element)">
             <mat-icon aria-label="Delete">delete</mat-icon>
           </button>
         </td>

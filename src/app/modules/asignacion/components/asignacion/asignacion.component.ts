@@ -70,13 +70,16 @@ export class AsignacionComponent implements OnInit {
     const idEncriptado                 = this.encriptarConAESBase64URL(dato.id, 'ESTE ES JOEL');   // Encriptar el ID
 
     let datos = {
-      sistema : "extranjeria",
-      pregunta_respuesta : "respuesta",
-      formulario : dato.formulario.id,
-      solicitud : idEncriptado
+      sistema           : "extranjeria",
+      pregunta_respuesta: "respuesta",
+      formulario        : dato.formulario.id,
+      solicitud         : idEncriptado
     }
 
     let da = environment.getUrlSolicitudAsignacionRespuesta(datos)
+
+    // console.log(da, datos)
+
     this.router.navigate(da);
 
   }

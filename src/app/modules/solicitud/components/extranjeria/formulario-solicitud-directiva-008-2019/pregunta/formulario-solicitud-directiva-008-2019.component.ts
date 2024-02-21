@@ -66,10 +66,10 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
       this.tipo_saneo_id = this.desencriptarConAESBase64URL(tipo_saneo_id_encry, 'ESTE ES JOEL');
       this.formulario_id = this.desencriptarConAESBase64URL(formulario_id_encry, 'ESTE ES JOEL');
 
-      console.log(
-        "tipo_saneo_id => "+this.tipo_saneo_id,
-        "formulario_id => "+this.formulario_id
-      )
+      // console.log(
+      //   "tipo_saneo_id => "+this.tipo_saneo_id,
+      //   "formulario_id => "+this.formulario_id
+      // )
 
       this.tipoSaneoService.getDetalleTiposSaneo(this.tipo_saneo_id).subscribe(resulg => {
         this.lista_tipo_solicitud = resulg
@@ -111,6 +111,7 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
       const datosRecuperados = JSON.parse(datosRecuperadosString);
       // *************** CREACION DEL FORMULARIO ***************
       this.solicitudFormulario = this.fb.group({
+        pais              : [{value:"Bolivia", disabled:true}, Validators.required],
         departamento      : [{value:datosRecuperados.departamento, disabled:true}, Validators.required],
         oficina           : [{value:datosRecuperados.nombre_organizacion, disabled:true}, Validators.required],
         nombre_funcionario: [{value:datosRecuperados.nombres+" "+datosRecuperados.primer_apellido+" "+datosRecuperados.segundo_apellido, disabled:true}, Validators.required],

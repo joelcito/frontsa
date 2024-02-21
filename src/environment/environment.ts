@@ -5,7 +5,7 @@ export const environment = {
   getUrlSolicitudAsignacionRespuesta: function(datos:any) {
     let dato:any           = [];
     let sistema            = datos.sistema
-    let formulario_id      = datos.formulario
+    let formulario_id      = datos.formulario //FORMUALRIO DE LA DATE BASE
     let pregunta_respuesta = datos.pregunta_respuesta
     if(sistema === "extranjeria"){
       if(formulario_id === 1){
@@ -33,7 +33,7 @@ export const environment = {
           dato = ['/solicitud/newTipoSolicitud/newFormularioCorrecionCie/', tipo_saneo_id_encry, formulario_id_encry];
         }else{
           let solicitud_encry = datos.solicitud
-          dato = ['/solicitud/newTipoSolicitud/newFormularioDirectiva0082019Res/', solicitud_encry];
+          dato = ['/solicitud/newTipoSolicitud/newFormularioCorrecionCieRes/', solicitud_encry];
         }
       }else{
 
@@ -46,6 +46,7 @@ export const environment = {
 
   // ********************** EXTRANJERIA **********************
   detalle_tipo_saneo_directiva_008_2019: 4,   //DIRECTIVA 008/2019
-  detalle_tipo_saneo_cambio_bandeja    : 3    //CAMBIO DE BANDEJA
+  detalle_tipo_saneo_cambio_bandeja    : 3,    //CAMBIO DE BANDEJA
+  detalle_tipo_saneo_correccion_cie    : 5    //CAMBIO DE BANDEJA
 
 }
