@@ -41,6 +41,24 @@ export class SolicitudService {
     return this.http.post(`${this.base_url}/solicitud/verificaSiTieneTramatiesEnviados`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
+  saveSolicitudTemporal(body:any){
+    return this.http.post(`${this.base_url}/solicitud/saveSolicitudTemporal`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
+  //***************** PARA LA TABLA DE TEMPORALES DE LA SOLICITUD *****************
+  saveTemporalSolicitud(body:any){
+    return this.http.post(`${this.base_url}/solicitud/saveTemporalSolicitud`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
+  getTemporalesByIdSolicitud(id:any){
+    return this.http.get(`${this.base_url}/solicitud/getTemporalesByIdSolicitud/${id}`, {headers: this.agregarAuthorizationHeader()});
+  }
+
+  eliminacionLogicaTemporalSolicitudDeseleccion(body:any){
+    return this.http.post(`${this.base_url}/solicitud/eliminacionLogicaTemporalSolicitudDeseleccion`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
+
 
   // ********************* SAVE SOLICICTUD *********************
   saveSolicitudCambioBandeja(body:any){
@@ -63,4 +81,5 @@ export class SolicitudService {
   saneoCambioBandeja(body:any){
     return this.http.post(`${this.base_url}/solicitud/saneoCambioBandeja`, body, {headers: this.agregarAuthorizationHeader()});
   }
+
 }

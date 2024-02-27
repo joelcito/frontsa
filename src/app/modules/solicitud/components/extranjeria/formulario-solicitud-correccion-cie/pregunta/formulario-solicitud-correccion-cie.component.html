@@ -98,6 +98,7 @@
 
   <mat-divider></mat-divider>
   <ng-container *ngIf="mostrarTablaExtranjeroSeleccionado">
+  <!-- <ng-container *ngIf="(extranjeroElejido | async) as extranjero"> -->
     <h3 class="alinear">Ciudadano Elegido</h3>
     <table>
       <thead>
@@ -150,7 +151,7 @@
               <td>{{ dar.name }}</td>
               <td><input type="text" formControlName="actual_{{ dar.nombre_campo }}" autocomplete="off"></td>
               <!-- <td><input id="nuevo_{{ dar.nombre_campo }}" type="text" formControlName="nuevo_{{ dar.nombre_campo }}"></td> -->
-              <td id="contenedorInput_{{ dar.nombre_campo }}"><input id="nuevo_{{ dar.nombre_campo }}" type="text" formControlName="nuevo_{{ dar.nombre_campo }}" autocomplete="off"></td>
+              <td id="contenedorInput_{{ dar.nombre_campo }}"><input id="nuevo_{{ dar.nombre_campo }}" type="text" formControlName="nuevo_{{ dar.nombre_campo }}" autocomplete="off"  (change)="guardarTemporalMente(dar)"></td>
             </tr>
           </tbody>
         </table>

@@ -65,7 +65,7 @@ export class FormularioSolicitudComponent implements OnInit{
 
   ngOnInit(): void {
 
-    this.detalle_tipo_saneo_id = environment.detalle_tipo_saneo_cambio_bandeja
+    this.detalle_tipo_saneo_id = environment.detalle_tipo_saneo_id_cambio_bandeja
 
     this.router.params.subscribe(params => {
 
@@ -263,6 +263,8 @@ export class FormularioSolicitudComponent implements OnInit{
       serialExtRegistros         : this.extranjeroElejido.SerialExtRegistros,
       nroCedulaBolExtRegistros   : this.extranjeroElejido.NroCedulaBolExtRegistros,
       tipo_solicitud             : this.solicitudFormularioTramite.value.tipo_solicitud,
+      solicitud_id               : 0,
+      estado                     : "ASIGNADO",
 
       // PREGUNTAS
       tipo_solicitud_respuesta       : this.solicitudFormularioTramite.value.tipo_solicitud,

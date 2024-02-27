@@ -56,7 +56,7 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
 
   ngOnInit(): void {
 
-    this.detalle_tipo_saneo_id = environment.detalle_tipo_saneo_directiva_008_2019
+    this.detalle_tipo_saneo_id = environment.detalle_tipo_saneo_id_directiva_008_2019
 
     this.router.params.subscribe(params => {
 
@@ -263,6 +263,8 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
       serialExtRegistros         : this.extranjeroElejido.SerialExtRegistros,
       nroCedulaBolExtRegistros   : this.extranjeroElejido.NroCedulaBolExtRegistros,
       tipo_solicitud             : this.solicitudFormularioTramite.value.tipo_solicitud,
+      solicitud_id               : 0,
+      estado                     : "ASIGNADO",
 
       // PREGUNTAS
       tipo_solicitud_respuesta       : this.solicitudFormularioTramite.value.tipo_solicitud,

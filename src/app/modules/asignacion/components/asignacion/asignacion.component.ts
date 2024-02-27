@@ -14,8 +14,8 @@ import * as CryptoJS from 'crypto-js';
 
 export class AsignacionComponent implements OnInit {
 
-  dataSourceSolicitud = new MatTableDataSource<AsignacionElemnt>();
-  displayedColumns: string[] = ['id', 'descripcion', 'solicitante', 'fechaSolicitud', 'fechaRespuesta', 'estado', 'acciones'];
+                   dataSourceSolicitud = new MatTableDataSource<AsignacionElemnt>();
+  displayedColumns: string[]           = ['id', 'descripcion', 'solicitante', 'fechaSolicitud', 'fechaRespuesta', 'estado', 'acciones'];
 
   private asignacionService = inject(AsignacionService);
   private router            = inject(Router);
@@ -23,15 +23,11 @@ export class AsignacionComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAsignaciones()
-
   }
 
   getAsignaciones(){
     const datosRecuperadosString: string | null = sessionStorage.getItem('datos');
-
-    console.log(datosRecuperadosString)
     var dato;
-
     if(datosRecuperadosString !== null){
       let ko = JSON.parse(datosRecuperadosString);
       dato = {
@@ -45,6 +41,7 @@ export class AsignacionComponent implements OnInit {
 
     this.asignacionService.getAsignaicones(dato).subscribe({
       next: (datos:any) => {
+        console.log(datos)
         this.procesarTiposSaneosResponse(datos)
       },
       error: (error:any) => {

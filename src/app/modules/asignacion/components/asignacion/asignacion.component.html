@@ -24,7 +24,8 @@
       <!-- id columna -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>N°</th>
-        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+        <!-- <td mat-cell *matCellDef="let element">{{ element.id }}</td> -->
+        <td mat-cell *matCellDef="let element">{{ element.codigo }}</td>
       </ng-container>
 
       <!-- usuario -->
@@ -36,7 +37,7 @@
       <!-- usuario -->
       <ng-container matColumnDef="solicitante">
         <th mat-header-cell *matHeaderCellDef>SOLICITANTE</th>
-        <td mat-cell *matCellDef="let element">{{ element.usuarioSolicitante.nombres+' '+element.usuarioSolicitante.primer_apellido+' '+element.usuarioSolicitante.segundo_apellido }}</td>
+        <td mat-cell *matCellDef="let element">{{element.usuarioSolicitante.nombre_dependencia+" - "+element.usuarioSolicitante.nombres+' '+element.usuarioSolicitante.primer_apellido+' '+element.usuarioSolicitante.segundo_apellido }}</td>
       </ng-container>
 
       <!-- fechaSolicitud -->

@@ -49,7 +49,8 @@ const ChildRoutes: Routes = [
   { path: 'solicitud/newTipoSolicitud/newFormularioDirectiva0082019/:tipo_saneo_id/:formulario_id', component: FormularioSolicitudDirectiva0082019Component },
   { path: 'solicitud/newTipoSolicitud/newFormularioDirectiva0082019Res/:solicitud_id', component: FormularioSolicitudDirectiva0082019RespuestaComponent },
 
-  { path: 'solicitud/newTipoSolicitud/newFormularioCorrecionCie/:tipo_saneo_id/:formulario_id', component: FormularioSolicitudCorreccionCieComponent },
+  // { path: 'solicitud/newTipoSolicitud/newFormularioCorrecionCie/:tipo_saneo_id/:formulario_id', component: FormularioSolicitudCorreccionCieComponent },
+  { path: 'solicitud/newTipoSolicitud/newFormularioCorrecionCie/:tipo_saneo_id/:formulario_id/:solicitud_id', component: FormularioSolicitudCorreccionCieComponent },
   { path: 'solicitud/newTipoSolicitud/newFormularioCorrecionCieRes/:solicitud_id', component: FormularioSolicitudCorreccionCieRespuestaComponent },
 
 

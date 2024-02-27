@@ -27,12 +27,12 @@ export const environment = {
           dato = ['/solicitud/newTipoSolicitud/newFormularioDirectiva0082019Res/', solicitud_encry];
         }
       }else if(formulario_id === 3){
+        let solicitud_encry = datos.solicitud
         if(pregunta_respuesta === "pregunta"){
           let tipo_saneo_id_encry = datos.tipo_saneo_id_encry
           let formulario_id_encry = datos.formulario_id_encry
-          dato = ['/solicitud/newTipoSolicitud/newFormularioCorrecionCie/', tipo_saneo_id_encry, formulario_id_encry];
+          dato = ['/solicitud/newTipoSolicitud/newFormularioCorrecionCie/', tipo_saneo_id_encry, formulario_id_encry, solicitud_encry];
         }else{
-          let solicitud_encry = datos.solicitud
           dato = ['/solicitud/newTipoSolicitud/newFormularioCorrecionCieRes/', solicitud_encry];
         }
       }else{
@@ -45,8 +45,7 @@ export const environment = {
   },
 
   // ********************** EXTRANJERIA **********************
-  detalle_tipo_saneo_directiva_008_2019: 4,   //DIRECTIVA 008/2019
-  detalle_tipo_saneo_cambio_bandeja    : 3,    //CAMBIO DE BANDEJA
-  detalle_tipo_saneo_correccion_cie    : 5    //CAMBIO DE BANDEJA
-
+  detalle_tipo_saneo_id_directiva_008_2019: 4,   //DIRECTIVA 008/2019
+  detalle_tipo_saneo_id_cambio_bandeja    : 3,   //CAMBIO DE BANDEJA
+  detalle_tipo_saneo_id_correccion_cie    : 5    //CORRECCION CIE
 }

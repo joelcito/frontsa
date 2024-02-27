@@ -65,10 +65,15 @@ export class ModalNewSolicitudComponent implements OnInit{
     this.tipo_saneo_id = this.soliForm.value.tipo_saneo_id;
     this.formulario_id = this.soliForm.value.formulario_id;
 
+    console.log("********************************")
+    console.log(this.soliForm.value)
+    console.log("********************************")
+
     this.dialogRef.close(1)
 
     const tipo_saneo_id_encry = this.encriptarConAESBase64URL(this.tipo_saneo_id, 'ESTE ES JOEL');
     const formulario_id_encry = this.encriptarConAESBase64URL(this.formulario_id, 'ESTE ES JOEL');
+    const solicitud_id_encry  = this.encriptarConAESBase64URL("0", 'ESTE ES JOEL');
     const sistema             = "extranjeria";
     const pregunta_respuesta  = "pregunta";
 
@@ -77,7 +82,8 @@ export class ModalNewSolicitudComponent implements OnInit{
       pregunta_respuesta : "pregunta",
       formulario         : this.formulario_id,
       tipo_saneo_id_encry: tipo_saneo_id_encry,
-      formulario_id_encry: formulario_id_encry
+      formulario_id_encry: formulario_id_encry,
+      solicitud          : solicitud_id_encry
     }
 
     let res = environment.getUrlSolicitudAsignacionRespuesta(datos)

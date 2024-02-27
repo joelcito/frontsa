@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ExtranjeriaService } from '../../../../../shared/services/extranjeria.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,6 +6,8 @@ import * as CryptoJS from 'crypto-js';
 import { TipoSaneoService } from '../../../../../shared/services/tipo-saneo.service';
 import { SolicitudService } from '../../../../../shared/services/solicitud.service';
 import Swal from 'sweetalert2';
+import { environment } from '../../../../../../../environment/environment';
+import { Observable, firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -21,6 +23,7 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
   private router             = inject(ActivatedRoute);
   private solicitudService   = inject(SolicitudService);
   private routerLink         = inject(Router);
+  private cdr                = inject(ChangeDetectorRef);
 
   public solicitudFormulario          !: FormGroup
   public formularioBusquedaExtranjero !: FormGroup
@@ -34,27 +37,59 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
   public botonGuardara:boolean   = true
 
 
-  public  extrajerosBuscados  : any [] = [];
-  private camposSeleccionados : any [] = [];
-  public  elementos           : any [] = [];
-  public  elemtosAseleccionar : any [] = []
-  public  extranjeroElejido   : any    = {};
+  public  extrajerosBuscados  : any []          = [];
+  private camposSeleccionados : any []          = [];
+  public  elementos           : any []          = [];
+  public  elemtosAseleccionar : any []          = []
+  public  elementosTemporalesGuardados : any [] = []
+  public  elementosPresentesArecuperar : any [] = []
+  public  extranjeroElejido   : any             = {};
 
-  private formulario_id       : any;
-  private tipo_saneo_id       : any;
+  private formulario_id        : any;
+  private tipo_saneo_id        : any;
+  private detalle_tipo_saneo_id: any;
+  private solicitud_id         : any;
+  private solicitud            : any;
 
   public valorSeleccionado  :string = ''
   public sele1              :string = ''
 
   ngOnInit(): void {
-
+    this.detalle_tipo_saneo_id = environment.detalle_tipo_saneo_id_correccion_cie
     this.router.params.subscribe(params => {
       const tipo_saneo_id_encry = params['tipo_saneo_id'];
       const formulario_id_encry = params['formulario_id'];
+      const solicitud_id_encry  = params['solicitud_id'];
+            this.tipo_saneo_id  = this.desencriptarConAESBase64URL(tipo_saneo_id_encry, 'ESTE ES JOEL');
+            this.formulario_id  = this.desencriptarConAESBase64URL(formulario_id_encry, 'ESTE ES JOEL');
+            this.solicitud_id   = this.desencriptarConAESBase64URL(solicitud_id_encry, 'ESTE ES JOEL');
+      if(this.solicitud_id === "0"){
 
-      this.tipo_saneo_id = this.desencriptarConAESBase64URL(tipo_saneo_id_encry, 'ESTE ES JOEL');
-      this.formulario_id = this.desencriptarConAESBase64URL(formulario_id_encry, 'ESTE ES JOEL');
+        console.log("si")
 
+      }else{
+
+        console.log(this.solicitud_id)
+
+        this.solicitudService.findByIdsolicitud(this.solicitud_id).subscribe((result:any) => {
+
+          console.log(result)
+
+          let datos = {
+            numero_cedula : result.nrocedulabolextregistros
+          }
+          this.extranjeriaService.buscarExtranjero(datos).subscribe((itmes:any) => {
+            this.extranjeroElejido                    = itmes[0]
+            this.mostrarFormularioBusquedaExtranjero  = false
+            this.mostrarTablaExtranjeroSeleccionado   = true
+          })
+        })
+
+        this.solicitudService.getTemporalesByIdSolicitud(this.solicitud_id).subscribe((result:any) => {
+          this.elementosTemporalesGuardados = result
+        })
+
+      }
       //  **************************** DE AQUI ES EXTRANJERIA HABER ****************************
       this.formularioBusquedaExtranjero = this.fb.group({
         numero_cedula   : ['10131544', Validators.required],
@@ -75,11 +110,7 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
         api_estado    : [{value :'ACTIVO', disabled:true}, Validators.required],
         estado_cambiar: [{value:'DESBLOQUEADO', disabled:true}, Validators.required],
-
       });
-
-      //  **************************** DE AQUI ES EXTRANJERIA HABER FIN **********************  ******
-
     });
 
     // Obtener los datos de sessionStorage como JSON
@@ -100,35 +131,46 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
         formulario_id     : [this.formulario_id]
       });
     } else {
-      // No se encontraron datos en sessionStorage
       console.log('No se encontraron datos en sessionStorage');
     }
 
-
     // ***************** PARA EL FORMULARIO CORRECION CIE *****************
     this.formularioCoreccionCIE = this.fb.group({});
-    // Agregar el validador al formulario
-    // this.formularioCoreccionCIE.setValidators(Validators.required); // O cualquier otro validador que desees agregar
-
 
     // ***************** TIPO DETALLE TIPO SANEO *****************
     this.tipoSaneoService.getTiposDetallesTipoSaneo().subscribe((result:any) => {
-      var array:any   = []
-      var cont:number = 1;
+
+      var array:any           = []
+      var arrayTemporales:any = []
+      var cont :number        = 1;
+
       result.forEach((item:any) => {
+
+        // ***** PARA SABER QUE CAMPOS HAY EN LA TEMPORAL *****
+        let forFast = this.elementosTemporalesGuardados.find(obj => obj.campo === item.nombre_campo)
+        if( forFast != undefined){
+          let da = {
+            actula      : item,
+            datoRecobery: forFast
+          }
+          this.elementosPresentesArecuperar.push(da)
+          if(!arrayTemporales.includes(item.nombre_grupo))
+            arrayTemporales.push(item.nombre_grupo)
+        }
+        // ***** PARA SABER QUE CAMPOS HAY EN LA TEMPORAL *****
         if(!array.includes(item.nombre_grupo)){
           this.elemtosAseleccionar.push({
             id    : item.nombre_grupo,
             name  : (item.nombre_grupo === "1")? "DATOS PRIMARIOS" : ((item.nombre_grupo === "2")? "DATOS SECUNDARIOS" : "DATOS COMPLEMENTARIOS "+cont++),
             estado: true,
             hijo: [{
-              padre: item.nombre_grupo,
-              name : item.nombre,
-              value:"",
+              padre       : item.nombre_grupo,
+              name        : item.nombre,
+              value       : "",
               nombre_campo: item.nombre_campo,
-              tipo_campo: item.tipo_campo,
-              tabla: item.tabla,
-              requerid: item.requerido,
+              tipo_campo  : item.tipo_campo,
+              tabla       : item.tabla,
+              requerid    : item.requerido,
             }]
           })
           array.push(item.nombre_grupo)
@@ -136,22 +178,22 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
           const nodo = this.elemtosAseleccionar.find((elem:any) => elem.id === item.nombre_grupo);
           var dar =  nodo.hijo;
           dar.push({
-            padre: item.nombre_grupo,
-            name : item.nombre,
-            value:"",
+            padre       : item.nombre_grupo,
+            name        : item.nombre,
+            value       : "",
             nombre_campo: item.nombre_campo,
-            tipo_campo: item.tipo_campo,
-            tabla: item.tabla,
-            requerid: item.requerido,
+            tipo_campo  : item.tipo_campo,
+            tabla       : item.tabla,
+            requerid    : item.requerido,
           })
           nodo.hijo = dar
         }
       });
+      this.agregarBloqueMasa(this.elementosPresentesArecuperar)
     })
   }
 
   seleccionarExtranjero(extranjero:any){
-
     Swal.fire({
       title             : "¡ALERTA!",
       text              : "Estas seguro que deseas iniciar el tramite con el ciudadano "+extranjero.NombresExtRegistros+"?",
@@ -163,7 +205,19 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
       cancelButtonText  : "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-
+        let datos = {
+          serialExtRegistros         : extranjero.SerialExtRegistros,
+          serialDocumentoExtRegistros: extranjero.SerialDocumentoExtRegistros,
+          nroCedulaBolExtRegistros   : extranjero.NroCedulaBolExtRegistros,
+          formulario_id              : this.formulario_id,
+          funcionario_id             : this.solicitudFormulario.value.funcionario_id,
+          tipo_solicitud             : this.detalle_tipo_saneo_id,
+          estado                     : "EN PROCESO",
+        }
+        this.solicitudService.saveSolicitudTemporal(datos).subscribe((result:any) => {
+          this.solicitud    = result
+          this.solicitud_id = result.id
+        })
         this.solicitudFormularioTramite.get('nombre_operador')?.setValue(extranjero.NombresSegUsuarios+" "+extranjero.PaternoSegUsuarios+" "+extranjero.MaternoSegUsuarios);
         this.solicitudFormularioTramite.get('usu_operador_id')?.setValue(extranjero.LoginSegUsuarios);
         this.extranjeroElejido                   = extranjero
@@ -193,7 +247,11 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
   agregarBloque() {
     if(this.valorSeleccionado !== ''){
+
       const elemento = this.elemtosAseleccionar.find((item:any) => item.name === this.valorSeleccionado);
+      // console.log("********************************")
+      // console.log(this.valorSeleccionado, this.elemtosAseleccionar, elemento)
+      // console.log("********************************")
       if (elemento) {
         elemento.estado = false;
         let d = elemento.hijo
@@ -202,23 +260,62 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
           listado: elemento.hijo
         }
         this.elementos.push(d);
-
         (elemento.hijo).forEach((item:any) =>{
-
-          console.log(item.requerid)
-
+          // console.log(item.requerid)
           this.formularioCoreccionCIE.addControl("check_"+item.nombre_campo, this.fb.control(false));
           this.formularioCoreccionCIE.addControl("actual_"+item.nombre_campo, this.fb.control({ value: item.value, disabled: true }));
           this.formularioCoreccionCIE.addControl("nuevo_"+item.nombre_campo, this.fb.control({ value: '', disabled: true }, ((item.requerid) ? Validators.required : null) ));
-
         });
-
         this.valorSeleccionado = ''
       } else {
       }
-    }else{
     }
   }
+
+  agregarBloqueMasa(datos:any) {
+    var arrayYaEntrados:any           = []
+    datos.forEach((itemA:any) => {
+      let g = itemA.actula.nombre_grupo
+      if(g !== ''){
+        const elemento = this.elemtosAseleccionar.find((itemB:any) => itemB.id === g);
+        if(!arrayYaEntrados.includes(elemento.id)){
+          if (elemento) {
+            elemento.estado = false;
+            let d = elemento.hijo
+            d = {
+              name   : elemento.name,
+              listado: elemento.hijo
+            }
+            this.elementos.push(d);
+            (elemento.hijo).forEach((itemC:any) =>{
+              if(itemC.nombre_campo==itemA.datoRecobery.campo){
+                this.formularioCoreccionCIE.addControl("check_"+itemC.nombre_campo, this.fb.control(true));
+                this.formularioCoreccionCIE.addControl("actual_"+itemC.nombre_campo, this.fb.control({ value: itemA.datoRecobery.dato_actual, disabled: true }));
+                this.formularioCoreccionCIE.addControl("nuevo_"+itemC.nombre_campo, this.fb.control({ value: itemA.datoRecobery.respuesta, disabled: false }, ((itemC.requerid) ? Validators.required : null) ));
+              }else{
+                this.formularioCoreccionCIE.addControl("check_"+itemC.nombre_campo, this.fb.control(false));
+                this.formularioCoreccionCIE.addControl("actual_"+itemC.nombre_campo, this.fb.control({ value: itemC.value, disabled: true }));
+                this.formularioCoreccionCIE.addControl("nuevo_"+itemC.nombre_campo, this.fb.control({ value: '', disabled: true }, ((itemC.requerid) ? Validators.required : null) ));
+              }
+            });
+          } else {
+            // console.log("holas")
+          }
+          arrayYaEntrados.push(elemento.id)
+        }else{
+          console.log(elemento, itemA.datoRecobery)
+          this.formularioCoreccionCIE.get("check_"+itemA.datoRecobery.campo)?.setValue(true)
+          this.formularioCoreccionCIE.get("actual_"+itemA.datoRecobery.campo)?.setValue(itemA.datoRecobery.dato_actual)
+          this.formularioCoreccionCIE.get("nuevo_"+itemA.datoRecobery.campo)?.setValue(itemA.datoRecobery.respuesta)
+          this.formularioCoreccionCIE.get("nuevo_"+itemA.datoRecobery.campo)?.enable()
+        }
+      }else{
+        // console.log("holas2")
+      }
+    })
+  }
+
+
 
   validaFormulario(formulario: FormGroup):boolean{
     const keys = Object.keys(formulario.controls);
@@ -226,19 +323,18 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
   }
 
   guardarSolicitud(){
-
-    // console.log(this.formularioCoreccionCIE.value)
-
     this.camposSeleccionados.forEach((item:any) => {
       this.formularioCoreccionCIE.get("actual_"+item)?.enable()
     })
     let datos                            = this.formularioCoreccionCIE.value
-    datos['serialExtRegistros']          = this.extranjeroElejido.SerialExtRegistros;
-    datos['serialDocumentoExtRegistros'] = this.extranjeroElejido.SerialDocumentoExtRegistros;
-    datos['nroCedulaBolExtRegistros']    = this.extranjeroElejido.NroCedulaBolExtRegistros;
-    datos['formulario_id']               = this.formulario_id;
-    datos['funcionario_id']              = this.solicitudFormulario.value.funcionario_id;
-    datos['tipo_solicitud']              = this.tipo_saneo_id;
+    datos['serialExtRegistros']          = this.extranjeroElejido.SerialExtRegistros
+    datos['serialDocumentoExtRegistros'] = this.extranjeroElejido.SerialDocumentoExtRegistros
+    datos['nroCedulaBolExtRegistros']    = this.extranjeroElejido.NroCedulaBolExtRegistros
+    datos['formulario_id']               = this.formulario_id
+    datos['funcionario_id']              = this.solicitudFormulario.value.funcionario_id
+    datos['tipo_solicitud']              = this.tipo_saneo_id
+    datos['solicitud_id']                = this.solicitud_id
+    datos['estado']                      = "ASIGNADO"
     this.solicitudService.saveCorreccionesCIE(datos).subscribe((result:any) => {
       if(result !== null){
         Swal.fire({
@@ -258,7 +354,6 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
   }
 
   habilitarCampos(datos:any){
-
     const valor = this.formularioCoreccionCIE.value["check_"+datos.nombre_campo]
     if(valor){
       this.camposSeleccionados.push(datos.nombre_campo)
@@ -267,8 +362,15 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
       this.camposSeleccionados = this.camposSeleccionados.filter(item => item !== datos.nombre_campo);
       this.formularioCoreccionCIE.get('nuevo_'+datos.nombre_campo)?.setValue('')
       this.formularioCoreccionCIE.get('nuevo_'+datos.nombre_campo)?.disable()
+      let daEli = {
+        nombreCampo     : datos.nombre_campo,
+        usarioEliminador: this.solicitudFormulario.value.funcionario_id,
+        solicitud_id    : this.solicitud_id
+      }
+      this.solicitudService.eliminacionLogicaTemporalSolicitudDeseleccion(daEli).subscribe((result:any) => {
+        console.log(result)
+      })
     }
-
     if(datos.tipo_campo === "texto"){
       this.formularioCoreccionCIE.get("actual_"+datos.nombre_campo)?.setValue(((valor)? this.extranjeroElejido[datos.nombre_campo] : ""))
     }else if(datos.tipo_campo === "fecha"){
@@ -338,5 +440,63 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
   handleSelectChange(datos:any, campo:string){
     this.formularioCoreccionCIE.get("nuevo_"+campo)?.setValue(datos);
+
+    let f = {
+      nombre_campo : campo
+    }
+
+    this.guardarTemporalMente(f)
   }
+
+  recuperarSolicitud(datos:any){
+    console.log(datos)
+  }
+
+  guardarTemporalMente(elem:any){
+    // console.log("**********************************************************")
+    // console.log(this.formularioCoreccionCIE.get("nuevo_"+elem.nombre_campo)?.value)
+    // console.log(elem)
+    this.formularioCoreccionCIE.get("actual_"+elem.nombre_campo)?.enable()
+    let datos = {
+      // solicitud_id   : this.solicitud.id,
+      solicitud_id   : this.solicitud_id,
+      campoModificado: elem.nombre_campo,
+      datoActual     : this.formularioCoreccionCIE.get("actual_"+elem.nombre_campo)?.value,
+      datoRespuesta  : this.formularioCoreccionCIE.get("nuevo_"+elem.nombre_campo)?.value,
+      funcionario_id : this.solicitudFormulario.value.funcionario_id
+    }
+    this.formularioCoreccionCIE.get("actual_"+elem.nombre_campo)?.disable()
+    this.solicitudService.saveTemporalSolicitud(datos).subscribe((resul:any) => {
+      console.log(resul)
+    })
+  }
+
+
+  async obtenerDatos() {
+    try {
+      const result:any = await firstValueFrom(this.solicitudService.findByIdsolicitud(this.solicitud_id));
+
+      if (result) { // Verificar si result no es undefined
+
+        console.log(result.nrocedulabolextregistros)
+
+        const datos = {
+          numero_cedula: result.nrocedulabolextregistros
+        };
+
+        const items = await firstValueFrom(this.extranjeriaService.buscarExtranjero(datos));
+        this.extranjeroElejido = items;
+        console.log(this.extranjeroElejido);
+
+        // Aquí puedes realizar cualquier otra operación que necesites con this.extranjeroElejido
+        this.mostrarFormularioBusquedaExtranjero = false;
+        this.mostrarTablaExtranjeroSeleccionado = true;
+      } else {
+        console.error('El resultado de la solicitud es undefined.');
+      }
+    } catch (error) {
+      console.error('Error al obtener datos:', error);
+    }
+  }
+
 }

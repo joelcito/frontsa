@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { SolicitudService } from '../../../shared/services/solicitud.service';
 import { Router } from '@angular/router';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-solicitud',
@@ -31,12 +32,8 @@ export class SolicitudComponent implements OnInit {
   }
 
   getSolicitud(){
-
     const datosRecuperadosString: string | null = sessionStorage.getItem('datos');
-
-    console.log(datosRecuperadosString)
     var dato;
-
     if(datosRecuperadosString !== null){
       let ko = JSON.parse(datosRecuperadosString);
       dato = {
@@ -50,7 +47,6 @@ export class SolicitudComponent implements OnInit {
 
     this.solicitudService.getSolicitud(dato).subscribe({
       next: (datos:any) => {
-        console.log(datos)
         this.procesarTiposSaneosResponse(datos)
       },
       error: (error:any) => {
@@ -66,6 +62,24 @@ export class SolicitudComponent implements OnInit {
       dataTiposSaneo.push(element)
     })
     this.dataSourceSolicitud = new MatTableDataSource<SolicitudElement>(dataTiposSaneo)
+  }
+
+  recuperarSolicitud(datos:any){
+    const tipo_saneo_id_encry = this.encriptarConAESBase64URL(datos.formulario.tipoSaneoFormulario.id, 'ESTE ES JOEL');
+    const formulario_id_encry = this.encriptarConAESBase64URL(datos.formulario.id, 'ESTE ES JOEL');
+    const solicitud_id_encry  = this.encriptarConAESBase64URL(datos.id, 'ESTE ES JOEL');
+    this.router.navigate(['solicitud/newTipoSolicitud/newFormularioCorrecionCie', tipo_saneo_id_encry , formulario_id_encry , solicitud_id_encry]);
+  }
+
+  encriptarConAESBase64URL(id:string, clave:string) {
+    const textoAEncriptar  = id.toString();
+    const textoEncriptado  = CryptoJS.AES.encrypt(textoAEncriptar, clave).toString();
+    const textoEnBase64URL = this.base64URL(textoEncriptado);
+    return textoEnBase64URL;
+  }
+
+  base64URL(cadena:string) {
+    return cadena.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
   }
 
 }
