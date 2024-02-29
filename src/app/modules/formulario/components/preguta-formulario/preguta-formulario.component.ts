@@ -33,12 +33,12 @@ export class PregutaFormularioComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
 
-      console.log(params)
+      // console.log(params)
 
       const idEncriptado = params['formulario_id']; // Obteniendo el valor de 'tipo_saneo' de la URL
       this.formulario_id = this.desencriptarConAESBase64URL(idEncriptado, 'ESTE ES JOEL');
 
-      console.log(this.formulario_id);
+      // console.log(this.formulario_id);
       this.getPreguntasFormulario(this.formulario_id);
       // console.log(dato)
 
@@ -101,7 +101,6 @@ export class PregutaFormularioComponent implements OnInit {
       dataTiposSaneo.push(element)
     })
     this.dataSourcePreguntasFormulario = new MatTableDataSource<FormularioPreguntaElement>(dataTiposSaneo)
-
   }
 
   openSnackBar(message:string, action:string): MatSnackBarRef<SimpleSnackBar>{

@@ -24,7 +24,6 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
 
     if(this.loginService.isAuthenticated())
-      // this.router.navigate(['/dashboard']);
       this.router.navigate(['/home']);
     else
       this.router.navigate(['/login']);
@@ -43,14 +42,11 @@ export class LoginComponent implements OnInit {
     this.loginService.login(this.formData).pipe(
       tap((ressul: any) => { // Aquí se está utilizando `any` temporalmente
 
-        // console.log(ressul)
-
         this.loginService.guardarUsuarioLogeuado(ressul.user)
         this.loginService.guardarUsuario(ressul.token);
         this.loginService.guardartoken(ressul.token);
 
         // Redireccionar al dashboard (aquí podrías usar el Router de Angular)
-        // this.router.navigate(['/dashboard']); // Reemplaza '/dashboard' con tu ruta real
         this.router.navigate(['/home']); // Reemplaza '/dashboard' con tu ruta real
       }),
       catchError((error: any) => {

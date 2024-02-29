@@ -32,15 +32,15 @@ export class NewPregutaFormularioComponent  implements OnInit {
     this.newData       = this.data.newData
     this.formulario_id = this.data.formulario_id
 
-    console.log(Object(this.data).length === 0);
-    console.log(this.data);
-    console.log(JSON.stringify(this.data).length);
+    // console.log(Object(this.data).length === 0);
+    // console.log(this.data);
+    // console.log(JSON.stringify(this.data).length);
 
   }
 
   onSave(){
 
-    console.log(this.preguntaFormularioForm.value);
+    // console.log(this.preguntaFormularioForm.value);
 
     let data = {
       nombre    : this.preguntaFormularioForm.get('nombre')?.value,

@@ -20,7 +20,6 @@ export class AsignacionComponent implements OnInit {
   private asignacionService = inject(AsignacionService);
   private router            = inject(Router);
 
-
   ngOnInit(): void {
     this.getAsignaciones()
   }
@@ -38,10 +37,8 @@ export class AsignacionComponent implements OnInit {
         id:"1"
       }
     }
-
     this.asignacionService.getAsignaicones(dato).subscribe({
       next: (datos:any) => {
-        console.log(datos)
         this.procesarTiposSaneosResponse(datos)
       },
       error: (error:any) => {
