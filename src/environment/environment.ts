@@ -5,6 +5,7 @@ export const environment = {
   base_url: "http://10.0.10.28:8080/api",  // PRODUCCION
   host    : "http://10.0.10.28:8080",  // PRODUCCION
 
+
   userId  : 1,
   getUrlSolicitudAsignacionRespuesta: function(datos:any) {
     let dato:any           = [];
