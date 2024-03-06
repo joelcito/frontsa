@@ -105,7 +105,8 @@ export class NewUsuarioComponent implements OnInit  {
   }
 
   updateValidatorsArray() {
-    const validatorsArray: ValidatorFn[] = eval(this.requerimeinto_user);
+    // const validatorsArray: ValidatorFn[] = eval(this.requerimeinto_user);
+    const validatorsArray: ValidatorFn[] = JSON.parse(this.requerimeinto_user);
     this.validatorsArray = validatorsArray;
     // Aquí se actualiza el FormGroup con los nuevos validadores
     this.usuarioForm = this.fb.group({

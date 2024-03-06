@@ -198,7 +198,7 @@ export class FormularioSolicitudComponent implements OnInit{
             this.extranjeroElejido                  = extranjero
             this.mostrarTabla                       = false
             this.mostrarTablaExtranjeroSeleccionado = true;
-            this.mostrarAlertaPersona = false
+            this.mostrarAlertaPersona               = false
           }else{
             Swal.fire({
               position: "top-end",

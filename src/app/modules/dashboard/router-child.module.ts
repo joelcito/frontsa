@@ -17,6 +17,8 @@ import { FormularioSolicitudDirectiva0082019RespuestaComponent } from '../solici
 import { FormularioSolicitudCorreccionCieComponent } from '../solicitud/components/extranjeria/formulario-solicitud-correccion-cie/pregunta/formulario-solicitud-correccion-cie.component';
 import { FormularioSolicitudRespuestaComponent } from '../solicitud/components/extranjeria/formulario-solicitud/respuesta/formulario-solicitud-respuesta.component';
 import { FormularioSolicitudCorreccionCieRespuestaComponent } from '../solicitud/components/extranjeria/formulario-solicitud-correccion-cie/respuesta/formulario-solicitud-correccion-cie-respuesta.component';
+import { FormularioBajaOrpeNaturalizacionComponent } from '../solicitud/components/extranjeria/formulario-baja-orpe-naturalizacion/pregunta/formulario-baja-orpe-naturalizacion.component';
+import { FormularioBajaOrpeNaturalizacionRespuestaComponent } from '../solicitud/components/extranjeria/formulario-baja-orpe-naturalizacion/respuesta/formulario-baja-orpe-naturalizacion-respuesta.component';
 
 const ChildRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -53,6 +55,8 @@ const ChildRoutes: Routes = [
   { path: 'solicitud/newTipoSolicitud/newFormularioCorrecionCie/:tipo_saneo_id/:formulario_id/:solicitud_id', component: FormularioSolicitudCorreccionCieComponent },
   { path: 'solicitud/newTipoSolicitud/newFormularioCorrecionCieRes/:solicitud_id', component: FormularioSolicitudCorreccionCieRespuestaComponent },
 
+  { path: 'solicitud/newTipoSolicitud/newFormularioBajaOrpeNaturalizacion/:tipo_saneo_id/:formulario_id/:solicitud_id', component: FormularioBajaOrpeNaturalizacionComponent },
+  { path: 'solicitud/newTipoSolicitud/newFormularioBajaOrpeNaturalizacionRes/:solicitud_id', component: FormularioBajaOrpeNaturalizacionRespuestaComponent },
 
   // ************************* ASIGNACION *************************
   { path: 'asignacion', component: AsignacionComponent},

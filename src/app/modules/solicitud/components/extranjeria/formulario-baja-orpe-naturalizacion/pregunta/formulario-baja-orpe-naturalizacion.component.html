@@ -1,0 +1,163 @@
+<mat-card class="container">
+  <h2 class="alinear">FORMULARIO DE SOLICITUD BAJA DEL ORPE / NATURALIZACION</h2>
+ <mat-card-content>
+  <form [formGroup]="solicitudFormulario">
+    <div class="usuario-container">
+      <mat-form-field appearance="fill">
+        <mat-label>Pais</mat-label>
+        <input matInput placeholder="Pais" formControlName="pais" required />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Departamento</mat-label>
+        <input matInput placeholder="Departamento" formControlName="departamento" required />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Oficina</mat-label>
+        <input matInput placeholder="Oficina" formControlName="oficina" required />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Nombre del Funcionario</mat-label>
+        <input matInput placeholder="Nombre del Funcionario" formControlName="nombre_funcionario" required />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Fecha de Solicitud</mat-label>
+        <input matInput [matDatepicker]="picker" placeholder="Fecha de Solicitud" formControlName="fecha_solicitud" required />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </form>
+  <mat-divider></mat-divider>
+  <h3 class="alinear">Busqueda de Ciudadano</h3>
+  <form [formGroup]="formularioBusquedaExtranjero">
+    <div class="usuario-container">
+      <mat-form-field appearance="fill">
+        <mat-label>Nro documento</mat-label>
+        <input matInput placeholder="Numero documento" formControlName="numero_cedula" required />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Complemento</mat-label>
+        <input matInput placeholder="Complemento" formControlName="complemento"  />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Nombres</mat-label>
+        <input matInput placeholder="Nombres" formControlName="nombres"  />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Primer Apellido</mat-label>
+        <input matInput placeholder="Pri Apellido" formControlName="primer_apellido"  />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Segundo Apellido</mat-label>
+        <input matInput placeholder="Seg Apellido" formControlName="segundo_apellido"  />
+      </mat-form-field>
+      <button mat-icon-button color="primary" (click)="buscarExtranjero()" [disabled]="formularioBusquedaExtranjero.invalid && formularioBusquedaExtranjero.value.numero_cedula === '' && formularioBusquedaExtranjero.value.complemento === '' && formularioBusquedaExtranjero.value.nombres === '' && formularioBusquedaExtranjero.value.primer_apellido === '' && formularioBusquedaExtranjero.value.segundo_apellido === ''">
+        <mat-icon aria-label="Buscar">search</mat-icon>
+      </button>
+    </div>
+  </form>
+
+  <ng-container *ngIf="mostrarTabla">
+    <table>
+      <thead>
+        <tr>
+          <th>Nro documento</th>
+          <th>Complemento</th>
+          <th>Nombres</th>
+          <th>Primer Apellido</th>
+          <th>Segundo Apellido</th>
+          <th>Apellido Casada</th>
+          <th>Estado</th>
+          <th>Imagen</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let extranjero of extrajerosBuscados">
+          <td>{{ extranjero.NroCedulaBolExtRegistros }}</td>
+          <td>{{ extranjero.HexadecimalExtRegistros }}</td>
+          <td>{{ extranjero.NombresExtRegistros }}</td>
+          <td>{{ extranjero.PrimerApExtRegistros }}</td>
+          <td>{{ extranjero.SegundoApExtRegistros }}</td>
+          <td>{{ extranjero.ApCasadaExtRegistros }}</td>
+          <td>{{ extranjero.ApiEstadoExtRegistros }}</td>
+          <td></td>
+          <td>
+            <button mat-icon-button color="primary" (click)="seleccionarExtranjero(extranjero)">
+              <mat-icon>check_circle_outline</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+
+  <!-- <ng-container *ngIf="mostrarAlertaPersona">
+    <div class="alert-container">
+      <div class="alert alert-danger" role="alert">
+        {{ mostrarMensajeAlerta }}
+      </div>
+      <br>
+      <div class="button-container">
+        <button mat-raised-button color="primary" class="boton-largo" (click)="volverListado()">Volver</button>
+      </div>
+    </div>
+  </ng-container> -->
+
+  <mat-divider></mat-divider>
+  <ng-container *ngIf="mostrarTablaExtranjeroSeleccionado">
+    <h3 class="alinear">Ciudadano Elegido</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Nro documento</th>
+          <th>Complemento</th>
+          <th>Nombres</th>
+          <th>Primer Apellido</th>
+          <th>Segundo Apellido</th>
+          <th>Apellido Casada</th>
+          <th>Estado</th>
+          <th>Imagen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ extranjeroElejido.NroCedulaBolExtRegistros }}</td>
+          <td>{{ extranjeroElejido.HexadecimalExtRegistros }}</td>
+          <td>{{ extranjeroElejido.NombresExtRegistros }}</td>
+          <td>{{ extranjeroElejido.PrimerApExtRegistros }}</td>
+          <td>{{ extranjeroElejido.SegundoApExtRegistros }}</td>
+          <td>{{ extranjeroElejido.ApCasadaExtRegistros }}</td>
+          <td>{{ extranjeroElejido.ApiEstadoExtRegistros }}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+
+  <mat-divider></mat-divider>
+  <ng-container *ngIf="mostrarTablaExtranjeroSeleccionado">
+    <h3 class="alinear">Datos del tramite</h3>
+
+    <form [formGroup]="solicitudFormularioTramite">
+      <div class="toggle-container">
+        <div class="toggle-column">
+          <mat-slide-toggle formControlName="naturalizacion" color="primary">
+            NATURALIZACION
+          </mat-slide-toggle>
+        </div>
+        <div class="toggle-column">
+          <mat-slide-toggle formControlName="baja_orpe" color="primary">
+            BAJA DEL ORPE
+          </mat-slide-toggle>
+        </div>
+      </div>
+      <div class="usuario-container fondo">
+        <button mat-raised-button color="primary" class="boton-largo" (click)="guardarSolicitud()" [disabled]="solicitudFormularioTramite.invalid">Guardar</button>
+      </div>
+    </form>
+  </ng-container>
+ </mat-card-content>
+</mat-card>

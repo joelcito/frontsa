@@ -57,9 +57,9 @@ export class AsignacionComponent implements OnInit {
   }
 
   tipoCasoSaneo(dato:any){
-    let sistema            = "extranjeria"
-    let pregunta_respuesta = "respuesta"
-    let formulario         = dato.formulario.id
+    // let sistema            = "extranjeria"
+    // let pregunta_respuesta = "respuesta"
+    // let formulario         = dato.formulario.id
 
     const idEncriptado                 = this.encriptarConAESBase64URL(dato.id, 'ESTE ES JOEL');   // Encriptar el ID
 
