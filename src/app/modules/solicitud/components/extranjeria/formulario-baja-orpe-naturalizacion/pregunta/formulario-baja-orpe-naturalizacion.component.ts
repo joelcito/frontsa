@@ -1,11 +1,16 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import * as CryptoJS from 'crypto-js';
-import { ExtranjeriaService } from '../../../../../shared/services/extranjeria.service';
 import Swal from 'sweetalert2';
+
+import { ExtranjeriaService } from '../../../../../shared/services/extranjeria.service';
 import { environment } from '../../../../../../../environment/environment';
 import { SolicitudService } from '../../../../../shared/services/solicitud.service';
+import { MinioService } from '../../../../../shared/services/minio.service';
+import { TipoSaneoService } from '../../../../../shared/services/tipo-saneo.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-formulario-baja-orpe-naturalizacion',
@@ -18,7 +23,10 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
   private fb                 = inject(FormBuilder);
   private extranjeriaService = inject(ExtranjeriaService);
   private solicitudService   = inject(SolicitudService);
-  private routerLink         = inject(Router)
+  private routerLink         = inject(Router);
+  private minioService       = inject(MinioService);
+  private tipoSaneoService   = inject(TipoSaneoService);
+  private datePipe           = inject(DatePipe);
 
   public solicitudFormulario          !: FormGroup
   public formularioBusquedaExtranjero !: FormGroup
@@ -35,8 +43,9 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
 
   public mostrarMensajeAlerta:string  = ""
 
-  public extrajerosBuscados  : any [] = []
-  public extranjeroElejido   : any    = {};
+  public extrajerosBuscados  : any []       = []
+  public listaDocumentosSolicitud  : any [] = []
+  public extranjeroElejido   : any          = {};
 
 
   ngOnInit(): void {
@@ -148,6 +157,16 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
       this.mostrarTablaExtranjeroSeleccionado = true;
       this.mostrarAlertaPersona               = false;
 
+      // Datos para los documentos
+      this.tipoSaneoService.getDocumentoDetalleTipoSaneo(this.detalle_tipo_saneo_id).subscribe((resuly :any) => {
+        this.listaDocumentosSolicitud = resuly
+      })
+
+
+      console.log(this.detalle_tipo_saneo_id)
+      console.log(this.tipo_saneo_id)
+      console.log(this.formulario_id)
+
   }
 
   guardarSolicitud(){
@@ -174,22 +193,109 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
     this.solicitudFormularioTramite.disable()
 
     this.solicitudService.saveSolicitudBajaOrpeNaturalizacion(datRes).subscribe((result:any) => {
-      if(result != null){
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Se registro con exito",
-          text: "El Caso se le asigno a "+result.usuarioAsignado.nombres+" "+result.usuarioAsignado.primer_apellido+" "+result.usuarioAsignado.segundo_apellido,
-          showConfirmButton: false,
-          timer: 4000,
-          allowOutsideClick: false
-        });
+      if(result.id !== null && result.estado === "ASIGNADO"){
 
-        setTimeout(() => {
-          this.routerLink.navigate(['/solicitud']);
-        }, 4000);
+        // console.log(result+)
+        const fechaActual = new Date();
+        const anioActual = fechaActual.getFullYear();
+        const mesEnLiteral = fechaActual.toLocaleDateString('es-ES', { month: 'long' });
+        const fechaFormato = this.datePipe.transform(fechaActual, 'yyyy-MM-dd');
+
+        console.log(anioActual, fechaActual, mesEnLiteral,fechaFormato); // Imprime el año actual, por ejemplo, 2023
+
+        let ruta = anioActual+"-EXT/"+mesEnLiteral+"/"+fechaFormato+"/solicitud_"+result.id;
+
+        console.log(ruta)
+
+        for (const doc of this.listaDocumentosSolicitud) {
+          const fileInput = document.getElementById(`document_${doc.id}`) as HTMLInputElement;
+          if(fileInput.files){
+            const file      = fileInput.files[0]
+            console.log(file)
+            // const file = event.target.files[0];
+
+            const bucketName = 'saneoxample';
+            // const objectKey = 'hbas.pdf';
+            // const objectKey = event.target.files[0].name;
+            const objectKey = ruta+"/"+file.name;
+
+            this.minioService.uploadFile(file, bucketName, objectKey)
+            .then(data => {
+              // console.log('Archivo subido exitosamente:', data.Location);
+              console.log(data)
+            })
+            .catch(err => {
+              console.error('Error al subir el archivo:', err);
+            });
+          }
+        }
+
+
+
+
+
+
+
+
+
+
+        // Swal.fire({
+        //   position: "top-end",
+        //   icon: "success",
+        //   title: "Se registro con exito",
+        //   text: "El Caso se le asigno a "+result.usuarioAsignado.nombres+" "+result.usuarioAsignado.primer_apellido+" "+result.usuarioAsignado.segundo_apellido,
+        //   showConfirmButton: false,
+        //   timer: 4000,
+        //   allowOutsideClick: false
+        // });
+
+        // setTimeout(() => {
+        //   this.routerLink.navigate(['/solicitud']);
+        // }, 4000);
+
       }
+
+      // if(result != null){
+
+      // }
     })
+  }
+
+
+  onFileChange(event:any){
+
+    const file = event.target.files[0];
+
+    const bucketName = 'saneoxample';
+    // const objectKey = 'hbas.pdf';
+    const objectKey = event.target.files[0].name;
+
+    this.minioService.uploadFile(file, bucketName, objectKey)
+      .then(data => {
+        console.log('Archivo subido exitosamente:', data.Location);
+      })
+      .catch(err => {
+        console.error('Error al subir el archivo:', err);
+      });
+
+  }
+
+  onFileSelected(event: any, tamanio: string, id:number){
+    const maxFileSize = parseInt(tamanio) * 1048576;
+    const file        = event.target.files[0];
+    if (file && file.size > maxFileSize) {
+      const fileInput = document.getElementById('document_'+id) as HTMLInputElement;
+      fileInput.value = '';
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "¡ERROR!",
+        text: "El tamaño del archivo exede los "+tamanio+" MB. permitidos.",
+        showConfirmButton: false,
+        timer: 6000,
+        allowOutsideClick: false
+      });
+    }
   }
 
 }

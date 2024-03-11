@@ -3,7 +3,21 @@
     <form [formGroup]="newDocumentoDetalleTipoSaneoForm">
         <div class="usuario-container">
             <mat-form-field>
+              <mat-label>Nombre</mat-label>
                 <input matInput placeholder="Nombre" formControlName="nombre" required />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Tamaño del archivo</mat-label>
+              <input matInput placeholder="Tamaño" formControlName="tamanio" required type="number" />
+              <mat-hint>Escribe el tamaño del archivo en Megabytes.</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Tipo de Documento</mat-label>
+              <mat-select formControlName="tipo_documento" required>
+                <mat-option value=".pdf">PDF</mat-option>
+                <mat-option value=".doc,.docx">WORD</mat-option>
+                <mat-option value=".xlsx,.xls">EXCEL</mat-option>
+              </mat-select>
             </mat-form-field>
             <mat-form-field>
               <mat-label>Detalle Tipo de Saneo</mat-label>

@@ -35,6 +35,8 @@ export class DetalleTipoSaneoComponent implements OnInit  {
       expandable: !!node.children && node.children.length > 0,
       name: node.name,
       level: level,
+      dato: node.dato,
+      id: node.id,
     };
   };
 
@@ -72,39 +74,6 @@ export class DetalleTipoSaneoComponent implements OnInit  {
   }
 
   constructor(){
-    // this.dataSource.data = TREE_DATA;
-
-    this.dataSource.data =
-    [
-      {
-        name: 'Fruit',
-        children: [
-          {
-            name: 'Apple'
-          },
-          {
-            name: 'Banana'
-          },
-          {
-            name: 'Fruit loops'
-          }
-        ],
-      },
-      {
-        name: 'Vegetables',
-        children: [
-          {
-            name: 'Green',
-            children: [{name: 'Broccoli'}, {name: 'Brussels sprouts'}],
-          },
-          {
-            name: 'Orange',
-            children: [{name: 'Pumpkins'}, {name: 'Carrots'}],
-          },
-        ],
-      },
-    ];
-
   }
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
@@ -143,49 +112,23 @@ export class DetalleTipoSaneoComponent implements OnInit  {
   getDetalleTiposSaneo(id:any){
     this.tipoSaneoService.getDetalleTiposSaneo(id).subscribe({
       next: (datos:any) => {
-
         this.procesarDetalleTiposSaneosResponse(datos)
-
-        console.log(datos)
-
         const da = datos.map((item:any) => {
           return {
-            name    : item.nombre,
+            name: item.nombre,
+            dato: "padre",
+            id  : item.id,
             // children:[{name: 'Apple'},{name: 'Banana'},{name: 'Fruit loops'}]
             children: item.tipoDetalleTipoSaneo.map((datos:any) => {
-              return {name:datos.nombre}
+              return {
+                name: datos.nombre,
+                dato: "hijo"
+              }
             })
-
           }
         })
-
-      //   const da = datos.map((item: any) => {
-      //     // Verificar si 'children' está definido y es un array
-      //     // if (item.children && Array.isArray(item.children)) {
-      //     if (item.children) {
-      //         // Mapear los elementos de 'children' de acuerdo a los datos específicos de 'item'
-      //         const children = item.children.map((childItem: any) => {
-      //             return { name: childItem.nombre };
-      //         });
-
-      //         // Retornar el objeto con 'name' de 'item' y los 'children' generados dinámicamente
-      //         return {
-      //             name: item.nombre,
-      //             children: children
-      //         };
-      //     } else {
-      //         // Si 'children' no está definido o no es un array, retornar un objeto con 'name' de 'item'
-      //         return {
-      //             name: item.nombre,
-      //             children: [] // o null, dependiendo de tus necesidades
-      //         };
-      //     }
-      // });
-
         console.log(da)
-
         this.dataSource.data = da
-
       },
       error: (error:any) => {
 
@@ -240,6 +183,12 @@ export class DetalleTipoSaneoComponent implements OnInit  {
     return cadena.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
   }
 
+  verDAtos(nodo:any){
+    // console.log(nodo);
+    console.log(nodo)
+    return nodo
+  }
+
 
 }
 
@@ -249,38 +198,19 @@ export interface DetalleTipoSaneoElement{
   detalle_tipo_saneo: any;
 }
 
-
-
-
 /** Flat node with expandable and level information */
 interface ExampleFlatNode {
   expandable: boolean;
   name: string;
   level: number;
+  dato:string;
+  id:number;
 }
-
-const TREE_DATA: FoodNode[] = [
-  {
-    name: 'Fruit',
-    children: [{name: 'Apple'}, {name: 'Banana'}, {name: 'Fruit loops'}],
-  },
-  {
-    name: 'Vegetables',
-    children: [
-      {
-        name: 'Green',
-        children: [{name: 'Broccoli'}, {name: 'Brussels sprouts'}],
-      },
-      {
-        name: 'Orange',
-        children: [{name: 'Pumpkins'}, {name: 'Carrots'}],
-      },
-    ],
-  },
-];
 
 interface FoodNode {
   name: string;
+  dato: string;
+  id: number;
   children?: FoodNode[];
 }
 

@@ -1,9 +1,14 @@
 export const environment = {
-  // base_url: "http://localhost:8080/api",   //DESARROLLO LOCAL
-  // host    : "http://localhost:8080",   //DESARROLLO LOCAL
+  base_url: "http://localhost:8080/api",   //DESARROLLO LOCAL
+  host    : "http://localhost:8080",   //DESARROLLO LOCAL
 
-  base_url: "http://10.0.10.28:8080/api",  // PRODUCCION
-  host    : "http://10.0.10.28:8080",  // PRODUCCION
+  // base_url: "http://10.0.10.28:8080/api",  // PRODUCCION
+  // host    : "http://10.0.10.28:8080",  // PRODUCCION
+
+  // ****************** CONEXION A MINIO ******************
+  url_minio : "http://10.0.10.30:9000",
+  user_minio: "minioadmin",
+  pass_minio: "minioadmin",
 
 
   userId  : 1,

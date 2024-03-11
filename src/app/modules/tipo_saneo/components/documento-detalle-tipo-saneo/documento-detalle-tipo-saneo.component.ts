@@ -27,7 +27,8 @@ export class DocumentoDetalleTipoSaneoComponent implements OnInit {
 
   dataSourceDocumentoDetalleTipoSaneo = new MatTableDataSource<DocumentoDetalleTipoSaneoElement>();
 
-          displayedColumns     : String[]      = ['id', 'tipo_saneo','nombre', 'acciones'];
+          // displayedColumns     : String[]      = ['id', 'tipo_saneo','detalle_tipo_saneo', 'nombre', 'acciones'];
+          displayedColumns     : String[]      = ['tipo_saneo','detalle_tipo_saneo', 'nombre', 'acciones'];
   private tipo_saneo_id        : any;
   private detalle_tipo_saneo_id: any;
   private detalle_tipo_saneo   : any = [];
@@ -101,7 +102,7 @@ export class DocumentoDetalleTipoSaneoComponent implements OnInit {
   getDocumentoDetalleTipoSaneo(id:any){
     this.tipoSaneoService.getDocumentoDetalleTipoSaneo(id).subscribe({
       next: (datos:any) => {
-        console.log(datos)
+        // console.log(datos)
         // this.tipo_saneo = dato
         this.procesarDocumentoDetalleTiposSaneosResponse(datos)
       },
@@ -127,10 +128,10 @@ export class DocumentoDetalleTipoSaneoComponent implements OnInit {
   }
 
   getDetalleTiposSaneo(id:any){
-    console.log(id)
+    // console.log(id)
     this.tipoSaneoService.getDetalleTiposSaneo(id).subscribe(resul => {
       this.detalle_tipo_saneo = resul
-      console.log(resul)
+      // console.log(resul)
     })
   }
 
