@@ -90,4 +90,13 @@ export class SolicitudService {
     return this.http.post(`${this.base_url}/solicitud/sanearBajaOrpeNaturalizado`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
+  // ***************** SOLICITUD ARCHIVOS *****************
+  saveSolicitudArchivo(body:any){
+    return this.http.post(`${this.base_url}/solicitud/saveSolicitudArchivo`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
+  getSolicitudArchivosById(id:any){
+    return this.http.get(`${this.base_url}/solicitud/getSolicitudArchivosById/${id}`, {headers: this.agregarAuthorizationHeader()});
+  }
+
 }

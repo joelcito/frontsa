@@ -171,9 +171,7 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
 
   guardarSolicitud(){
     let datos = this.solicitudFormularioTramite.value
-
     this.solicitudFormularioTramite.enable()
-
     let datRes = {
       funcionario_id             : this.solicitudFormulario.value.funcionario_id,
       formulario_id              : this.solicitudFormulario.value.formulario_id,
@@ -182,82 +180,70 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
       nroCedulaBolExtRegistros   : this.extranjeroElejido.NroCedulaBolExtRegistros,
       solicitud_id               : 0,
       estado                     : "ASIGNADO",
-
-      tipo_solicitud    : this.solicitudFormularioTramite.value.tipo_solicitud,
-      naturalizacion    : this.solicitudFormularioTramite.value.naturalizacion,
-      baja_orpe         : this.solicitudFormularioTramite.value.baja_orpe,
-      obs_baja_orpe     : this.solicitudFormularioTramite.value.obs_baja_orpe,
-      obs_naturalizacion: this.solicitudFormularioTramite.value.obs_naturalizacion
+      tipo_solicitud             : this.solicitudFormularioTramite.value.tipo_solicitud,
+      naturalizacion             : this.solicitudFormularioTramite.value.naturalizacion,
+      baja_orpe                  : this.solicitudFormularioTramite.value.baja_orpe,
+      obs_baja_orpe              : this.solicitudFormularioTramite.value.obs_baja_orpe,
+      obs_naturalizacion         : this.solicitudFormularioTramite.value.obs_naturalizacion
     }
-
     this.solicitudFormularioTramite.disable()
-
     this.solicitudService.saveSolicitudBajaOrpeNaturalizacion(datRes).subscribe((result:any) => {
       if(result.id !== null && result.estado === "ASIGNADO"){
-
-        // console.log(result+)
-        const fechaActual = new Date();
-        const anioActual = fechaActual.getFullYear();
+        const fechaActual  = new Date();
+        const anioActual   = fechaActual.getFullYear();
         const mesEnLiteral = fechaActual.toLocaleDateString('es-ES', { month: 'long' });
         const fechaFormato = this.datePipe.transform(fechaActual, 'yyyy-MM-dd');
-
-        console.log(anioActual, fechaActual, mesEnLiteral,fechaFormato); // Imprime el año actual, por ejemplo, 2023
-
-        let ruta = anioActual+"-EXT/"+mesEnLiteral+"/"+fechaFormato+"/solicitud_"+result.id;
-
-        console.log(ruta)
-
+        let   ruta         = anioActual+"-EXT/"+mesEnLiteral+"/"+fechaFormato+"/solicitud_"+result.id;
+        let   numBucles    = 0;
         for (const doc of this.listaDocumentosSolicitud) {
           const fileInput = document.getElementById(`document_${doc.id}`) as HTMLInputElement;
           if(fileInput.files){
-            const file      = fileInput.files[0]
-            console.log(file)
-            // const file = event.target.files[0];
-
+            const file       = fileInput.files[0]
             const bucketName = 'saneoxample';
-            // const objectKey = 'hbas.pdf';
-            // const objectKey = event.target.files[0].name;
-            const objectKey = ruta+"/"+file.name;
-
+            const nameFile   = file.name.replaceAll(" ", "_" )
+            const objectKey  = ruta+"/"+nameFile;
             this.minioService.uploadFile(file, bucketName, objectKey)
             .then(data => {
-              // console.log('Archivo subido exitosamente:', data.Location);
-              console.log(data)
+              if(data !== null){
+                let datos = {
+                  solicitud      : result.id,
+                  usuario_creador: this.solicitudFormulario.value.funcionario_id,
+                  gestion        : anioActual,
+                  sistema        : "EXT",
+                  mes            : mesEnLiteral,
+                  fecha          : fechaFormato,
+                  nombre_archivo : nameFile ,
+                  ETag           : data.ETag,
+                  Location       : data.Location,
+                  key            : data.Key,
+                  Bucket         : data.Bucket,
+                }
+                this.solicitudService.saveSolicitudArchivo(datos).subscribe((resultado:any) =>{
+                  console.log(resultado)
+                })
+                numBucles++;
+                if(numBucles == this.listaDocumentosSolicitud.length){
+                  Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Se registro con exito",
+                    text: "El Caso se le asigno a "+result.usuarioAsignado.nombres+" "+result.usuarioAsignado.primer_apellido+" "+result.usuarioAsignado.segundo_apellido,
+                    showConfirmButton: false,
+                    timer: 4000,
+                    allowOutsideClick: false
+                  });
+                  setTimeout(() => {
+                    this.routerLink.navigate(['/solicitud']);
+                  }, 4000);
+                }
+              }
             })
             .catch(err => {
               console.error('Error al subir el archivo:', err);
             });
           }
         }
-
-
-
-
-
-
-
-
-
-
-        // Swal.fire({
-        //   position: "top-end",
-        //   icon: "success",
-        //   title: "Se registro con exito",
-        //   text: "El Caso se le asigno a "+result.usuarioAsignado.nombres+" "+result.usuarioAsignado.primer_apellido+" "+result.usuarioAsignado.segundo_apellido,
-        //   showConfirmButton: false,
-        //   timer: 4000,
-        //   allowOutsideClick: false
-        // });
-
-        // setTimeout(() => {
-        //   this.routerLink.navigate(['/solicitud']);
-        // }, 4000);
-
       }
-
-      // if(result != null){
-
-      // }
     })
   }
 

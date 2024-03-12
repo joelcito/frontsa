@@ -36,59 +36,59 @@ export class FormularioBajaOrpeNaturalizacionRespuestaComponent implements OnIni
   public datosTramite:any   = {};
 
   public  listadotramites: any = []
+  public  listadoDocumentos: any = []
 
   ngOnInit(): void {
     this.usuario = sessionStorage.getItem('datos');
     this.router.params.subscribe(params => {
 
       const idEncriptado       = params['solicitud_id'];
-            this.solicitud_id  = this.desencriptarConAESBase64URL(idEncriptado, 'ESTE ES JOEL');
-            this.solictudNuber = this.solicitud_id
+      this.solicitud_id  = this.desencriptarConAESBase64URL(idEncriptado, 'ESTE ES JOEL');
+      this.solictudNuber = this.solicitud_id
+      this.solicitudservice.findByIdsolicitud(this.solicitud_id).subscribe((result:any) => {
 
-            // console.log(this.solicitud_id)
+        // ******************** DATOS DE LA OFICINA ********************
+        this.datosOficina.departamento = result.departamento
+        this.datosOficina.oficina      = result.nombre_organizacion
+        this.datosOficina.nombre       = result.nombres+" "+result.primer_apellido+" "+result.segundo_apellido
+        this.datosOficina.fecha        = this.datePipe.transform(result.fecha_solicitud, 'dd/MM/yyyy HH:mm:ss')
 
-            this.solicitudservice.findByIdsolicitud(this.solicitud_id).subscribe((result:any) => {
+        // // ******************** DATOS DEL CIUDADANO EXTRANJERO ********************
+        let data = {
+          serial : result.serialextregistros
+        }
+        this.extranjeriaService.buscaExtranjeroPorSerial(data).subscribe((resultExt:any) => {
+          this.datosCiudadano = resultExt
+        })
 
-              // console.log(result)
-
-              // ******************** DATOS DE LA OFICINA ********************
-              this.datosOficina.departamento = result.departamento
-              this.datosOficina.oficina      = result.nombre_organizacion
-              this.datosOficina.nombre       = result.nombres+" "+result.primer_apellido+" "+result.segundo_apellido
-              this.datosOficina.fecha        = this.datePipe.transform(result.fecha_solicitud, 'dd/MM/yyyy HH:mm:ss')
-
-              // // ******************** DATOS DEL CIUDADANO EXTRANJERO ********************
-              let data = {
-                serial : result.serialextregistros
+        // ******************** DATOS DEL TRAMITE ********************
+        this.solicitudservice.tramitesSolicitudesByIdSolicitud(this.solicitud_id).subscribe((resul:any) => {
+          resul.forEach((item:any) => {
+            let g
+            if(item.pregunta == "naturalizado"){
+              g = {
+                nombre: "NATURALIZADO",
+                valor : item.respuesta,
+                dato  : item.pregunta
               }
-              this.extranjeriaService.buscaExtranjeroPorSerial(data).subscribe((resultExt:any) => {
-                this.datosCiudadano = resultExt
-              })
+            }else if(item.pregunta == "baja_orpe"){
+              g = {
+                nombre : "BAJA DEL ORPE",
+                valor : item.respuesta,
+                dato  : item.pregunta
+              }
+            }
+            this.listadotramites.push(g)
+          })
+          // console.log(resul)
+          // console.log(this.listadotramites)
+        })
 
-              // ******************** DATOS DEL TRAMITE ********************
-              this.solicitudservice.tramitesSolicitudesByIdSolicitud(this.solicitud_id).subscribe((resul:any) => {
-                resul.forEach((item:any) => {
-                  console.log(item)
-                  let g
-                  if(item.pregunta == "naturalizado"){
-                    g = {
-                      nombre: "NATURALIZADO",
-                      valor : item.respuesta,
-                      dato  : item.pregunta
-                    }
-                  }else if(item.pregunta == "baja_orpe"){
-                    g = {
-                      nombre : "BAJA DEL ORPE",
-                      valor : item.respuesta,
-                      dato  : item.pregunta
-                    }
-                  }
-                  this.listadotramites.push(g)
-                })
-                // console.log(resul)
-                // console.log(this.listadotramites)
-              })
-            })
+        // ******************** PARA LOS ARCHIVOS DE LA SOLICITUD ********************
+        this.solicitudservice.getSolicitudArchivosById(this.solicitud_id).subscribe((result:any) =>{
+          this.listadoDocumentos = result
+        })
+      })
       // console.log(params)
     })
   }
@@ -99,14 +99,14 @@ export class FormularioBajaOrpeNaturalizacionRespuestaComponent implements OnIni
     const textoDesencriptado  = bytesDesencriptados.toString(CryptoJS.enc.Utf8);
     return textoDesencriptado;
   }
-
   sanear(){
-
     this.solicitudservice.sanearBajaOrpeNaturalizado(this.listadotramites).subscribe((resul:any) => {
-      console.log(resul)
+
     })
+  }
 
-    console.log(this.listadotramites)
-
+  descargarArchivo(doc:any){
+    const url = doc.location;
+    window.open(url, "_blank");
   }
 }
