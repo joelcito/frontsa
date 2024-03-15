@@ -1,5 +1,5 @@
 <mat-card class="container">
-  <h2 class="alinear">FORMULARIO DE SOLICITUD BAJA DEL ORPE / NATURALIZACION</h2>
+  <h2 class="alinear">FORMULARIO DE SOLICITUD DE CONVENIO</h2>
  <mat-card-content>
   <form [formGroup]="solicitudFormulario">
     <div class="usuario-container">
@@ -9,11 +9,11 @@
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Departamento</mat-label>
-        <input matInput placeholder="Departamento" formControlName="departamento" required />
+        <input matInput placeholder="Departamento" formControlName="departamento" required   [disabled]="true"  />
       </mat-form-field>
       <mat-form-field>
         <mat-label>Oficina</mat-label>
-        <input matInput placeholder="Oficina" formControlName="oficina" required />
+        <input matInput placeholder="Oficina" formControlName="oficina" required  />
       </mat-form-field>
 
       <mat-form-field>
@@ -39,7 +39,7 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Complemento</mat-label>
-        <input matInput placeholder="Complemento" formControlName="complemento"  />
+        <input matInput placeholder="Complemento" formControlName="complemento" />
       </mat-form-field>
       <mat-form-field>
         <mat-label>Nombres</mat-label>
@@ -68,10 +68,10 @@
           <th>Nombres</th>
           <th>Primer Apellido</th>
           <th>Segundo Apellido</th>
-          <th>Apellido Casada</th>
+          <th>Apellido de Casada</th>
           <th>Estado</th>
           <th>Imagen</th>
-          <th>Acción</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -112,12 +112,12 @@
     <table>
       <thead>
         <tr>
-          <th>Nro documento</th>
-          <th>Complemento</th>
+          <th>Nro cedula</th>
+          <th>Nro Complemento</th>
           <th>Nombres</th>
           <th>Primer Apellido</th>
           <th>Segundo Apellido</th>
-          <th>Apellido Casada</th>
+          <th>Apellido de Casada</th>
           <th>Estado</th>
           <th>Imagen</th>
         </tr>
@@ -141,41 +141,59 @@
   <ng-container *ngIf="mostrarTablaExtranjeroSeleccionado">
     <h3 class="alinear">Datos del tramite</h3>
     <form [formGroup]="solicitudFormularioTramite">
-      <div class="toggle-container">
-        <div class="toggle-column">
-          <mat-slide-toggle formControlName="naturalizacion" color="primary">
-            NATURALIZACION
-          </mat-slide-toggle>
-        </div>
-        <div class="toggle-column">
-          <mat-slide-toggle formControlName="baja_orpe" color="primary">
-            BAJA DEL ORPE
-          </mat-slide-toggle>
-        </div>
+
+      <div class="usuario-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Descripcion</mat-label>
+          <textarea matInput rows="1" placeholder="Descripcion" formControlName="descripcion"></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Articulos del Reglamento</mat-label>
+          <mat-select formControlName="articulos_reglamentos">
+            <mat-option value="SOPORTE EXTRANJERIA">SOPORTE EXTRANJERIA</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
 
-      <mat-divider></mat-divider>
+      <div class="usuario-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Tipo solicitud</mat-label>
+          <mat-select formControlName="tipo_solicitud">
+            <mat-option *ngFor="let tipo_saneo of lista_tipo_solicitud" [value]="tipo_saneo.id">{{ tipo_saneo.nombre }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- <mat-form-field>
+          <mat-label>Nombre del Operador</mat-label>
+          <input matInput placeholder="Nombre del Operador" formControlName="nombre_operador"/>
+        </mat-form-field> -->
+        <mat-form-field>
+          <mat-label>Fecha Certificacion Correcta</mat-label>
+          <input matInput placeholder="Nombre del Operador" formControlName="fecha_certificacion"/>
+        </mat-form-field>
+      </div>
 
-      <h3 class="alinear">Documentación del tramite</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Documento</th>
-            <th>Ach. Permitidos</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let doc of listaDocumentosSolicitud">
-            <td>{{ doc.nombre }}</td>
-            <td>{{ doc.tipo_documento }}</td>
-            <td><input type="file" id="document_{{ doc.id }}" accept="{{ doc.tipo_documento }}" (change)="onFileSelected($event, doc.tamanio, doc.id)"></td>
-          </tr>
-        </tbody>
-      </table>
-
+      <!-- <div class="usuario-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Datos a Procesar</mat-label>
+          <mat-select (selectionChange)="tipoCaso($event)" formControlName="datos_procesar">
+            <mat-option value="RENOVADO A DUPLICADO">RENOVADO A DUPLICADO</mat-option>
+            <mat-option value="RENOVADO A ENTREGADO">RENOVADO A ENTREGADO</mat-option>
+            <mat-option value="DUPLICADO A RENOVADO">DUPLICADO A RENOVADO</mat-option>
+            <mat-option value="DUPLICADO A ENTREGADO">DUPLICADO A ENTREGADO</mat-option>
+            <mat-option value="RECIBIDO A ENTREGADO">RECIBIDO A ENTREGADO</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Dato Anterior</mat-label>
+          <input matInput placeholder="Nombre del Operador" formControlName="dato_anterior"/>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Dato Correcto</mat-label>
+          <input matInput placeholder="Nombre del Operador" formControlName="dato_correcto"/>
+        </mat-form-field>
+      </div> -->
       <div class="usuario-container fondo">
-        <button mat-raised-button color="primary" class="boton-largo" (click)="guardarSolicitud()" [disabled]="isGuardarButtonDisabled()">Guardar</button>
+        <button mat-raised-button color="primary" class="boton-largo"(click)="guardarSolicitud()" [disabled]="solicitudFormularioTramite.invalid">Guardar</button>
       </div>
     </form>
   </ng-container>

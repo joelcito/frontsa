@@ -8,6 +8,8 @@ import { SolicitudService } from '../../../../../shared/services/solicitud.servi
 import Swal from 'sweetalert2';
 import { environment } from '../../../../../../../environment/environment';
 import { Observable, firstValueFrom } from 'rxjs';
+import { DatePipe } from '@angular/common';
+import { MinioService } from '../../../../../shared/services/minio.service';
 
 
 @Component({
@@ -24,6 +26,9 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
   private solicitudService   = inject(SolicitudService);
   private routerLink         = inject(Router);
   private cdr                = inject(ChangeDetectorRef);
+  private datePipe           = inject(DatePipe);
+  private minioService       = inject(MinioService);
+
 
   public solicitudFormulario          !: FormGroup
   public formularioBusquedaExtranjero !: FormGroup
@@ -44,18 +49,22 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
   public  elementosTemporalesGuardados : any [] = []
   public  elementosPresentesArecuperar : any [] = []
   public  extranjeroElejido   : any             = {};
+  public  listaDocumentosSolicitud  : any []    = []
+
 
   private formulario_id        : any;
   private tipo_saneo_id        : any;
   private detalle_tipo_saneo_id: any;
   private solicitud_id         : any;
   private solicitud            : any;
+  public  bucketName           : any
 
   public valorSeleccionado  :string = ''
   public sele1              :string = ''
 
   ngOnInit(): void {
     this.detalle_tipo_saneo_id = environment.detalle_tipo_saneo_id_correccion_cie
+    this.bucketName            = environment.bucketName
     this.router.params.subscribe(params => {
       const tipo_saneo_id_encry = params['tipo_saneo_id'];
       const formulario_id_encry = params['formulario_id'];
@@ -224,6 +233,11 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
         this.mostrarTabla                        = false
         this.mostrarTablaExtranjeroSeleccionado  = true;
         this.mostrarFormularioBusquedaExtranjero = false;
+
+        // Datos para los documentos
+        this.tipoSaneoService.getDocumentoDetalleTipoSaneo(this.detalle_tipo_saneo_id).subscribe((resuly :any) => {
+          this.listaDocumentosSolicitud = resuly
+        })
       }
     });
   }
@@ -336,20 +350,79 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
     datos['solicitud_id']                = this.solicitud_id
     datos['estado']                      = "ASIGNADO"
     this.solicitudService.saveCorreccionesCIE(datos).subscribe((result:any) => {
-      if(result !== null){
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Se registro con exito",
-          text: "El Caso se le asigno a "+result.usuarioAsignado.nombres+" "+result.usuarioAsignado.primer_apellido+" "+result.usuarioAsignado.segundo_apellido,
-          showConfirmButton: false,
-          timer: 4000,
-          allowOutsideClick: false
-        });
-        setTimeout(() => {
-          this.routerLink.navigate(['/solicitud']);
-        }, 4000);
+
+
+      if(result.id !== null && result.estado === "ASIGNADO"){
+        const fechaActual  = new Date();
+        const anioActual   = fechaActual.getFullYear();
+        const mesEnLiteral = fechaActual.toLocaleDateString('es-ES', { month: 'long' });
+        const fechaFormato = this.datePipe.transform(fechaActual, 'yyyy-MM-dd');
+        let   ruta         = anioActual+"-EXT/"+mesEnLiteral+"/"+fechaFormato+"/solicitud_"+result.id;
+        let   numBucles    = 0;
+        for (const doc of this.listaDocumentosSolicitud) {
+          const fileInput = document.getElementById(`document_${doc.id}`) as HTMLInputElement;
+          if(fileInput.files){
+            const file       = fileInput.files[0]
+            const bucketName = this.bucketName;
+            const nameFile   = file.name.replaceAll(" ", "_" )
+            const objectKey  = ruta+"/"+nameFile;
+            this.minioService.uploadFile(file, bucketName, objectKey)
+            .then(data => {
+              if(data !== null){
+                let datos = {
+                  solicitud      : result.id,
+                  usuario_creador: this.solicitudFormulario.value.funcionario_id,
+                  gestion        : anioActual,
+                  sistema        : "EXT",
+                  mes            : mesEnLiteral,
+                  fecha          : fechaFormato,
+                  nombre_archivo : nameFile ,
+                  ETag           : data.ETag,
+                  Location       : data.Location,
+                  key            : data.Key,
+                  Bucket         : data.Bucket,
+                }
+                this.solicitudService.saveSolicitudArchivo(datos).subscribe((resultado:any) =>{
+                  console.log(resultado)
+                })
+                numBucles++;
+                if(numBucles == this.listaDocumentosSolicitud.length){
+                  Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Se registro con exito",
+                    text: "El Caso se le asigno a "+result.usuarioAsignado.nombres+" "+result.usuarioAsignado.primer_apellido+" "+result.usuarioAsignado.segundo_apellido,
+                    showConfirmButton: false,
+                    timer: 4000,
+                    allowOutsideClick: false
+                  });
+                  setTimeout(() => {
+                    this.routerLink.navigate(['/solicitud']);
+                  }, 4000);
+                }
+              }
+            })
+            .catch(err => {
+              console.error('Error al subir el archivo:', err);
+            });
+          }
+        }
       }
+
+      // if(result !== null){
+      //   Swal.fire({
+      //     position: "top-end",
+      //     icon: "success",
+      //     title: "Se registro con exito",
+      //     text: "El Caso se le asigno a "+result.usuarioAsignado.nombres+" "+result.usuarioAsignado.primer_apellido+" "+result.usuarioAsignado.segundo_apellido,
+      //     showConfirmButton: false,
+      //     timer: 4000,
+      //     allowOutsideClick: false
+      //   });
+      //   setTimeout(() => {
+      //     this.routerLink.navigate(['/solicitud']);
+      //   }, 4000);
+      // }
     })
   }
 
@@ -497,6 +570,11 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
     } catch (error) {
       console.error('Error al obtener datos:', error);
     }
+  }
+
+
+  onFileSelected(event: any, tamanio: string, id:number){
+
   }
 
 }

@@ -13,6 +13,8 @@ import { FormularioSolicitudRespuestaComponent } from './components/extranjeria/
 import { FormularioSolicitudCorreccionCieRespuestaComponent } from './components/extranjeria/formulario-solicitud-correccion-cie/respuesta/formulario-solicitud-correccion-cie-respuesta.component';
 import { FormularioBajaOrpeNaturalizacionComponent } from './components/extranjeria/formulario-baja-orpe-naturalizacion/pregunta/formulario-baja-orpe-naturalizacion.component';
 import { FormularioBajaOrpeNaturalizacionRespuestaComponent } from './components/extranjeria/formulario-baja-orpe-naturalizacion/respuesta/formulario-baja-orpe-naturalizacion-respuesta.component';
+import { FormularioConvenioComponent } from './components/extranjeria/formulario-convenio/pregunta/formulario-convenio.component';
+import { FormularioConvenioRespuestaComponent } from './components/extranjeria/formulario-convenio/respuesta/formulario-convenio-respuesta.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { FormularioBajaOrpeNaturalizacionRespuestaComponent } from './components
     FormularioSolicitudRespuestaComponent,
     FormularioSolicitudCorreccionCieRespuestaComponent,
     FormularioBajaOrpeNaturalizacionComponent,
-    FormularioBajaOrpeNaturalizacionRespuestaComponent
+    FormularioBajaOrpeNaturalizacionRespuestaComponent,
+    FormularioConvenioComponent,
+    FormularioConvenioRespuestaComponent
   ],
   imports: [
     CommonModule,

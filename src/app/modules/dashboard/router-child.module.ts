@@ -19,6 +19,8 @@ import { FormularioSolicitudRespuestaComponent } from '../solicitud/components/e
 import { FormularioSolicitudCorreccionCieRespuestaComponent } from '../solicitud/components/extranjeria/formulario-solicitud-correccion-cie/respuesta/formulario-solicitud-correccion-cie-respuesta.component';
 import { FormularioBajaOrpeNaturalizacionComponent } from '../solicitud/components/extranjeria/formulario-baja-orpe-naturalizacion/pregunta/formulario-baja-orpe-naturalizacion.component';
 import { FormularioBajaOrpeNaturalizacionRespuestaComponent } from '../solicitud/components/extranjeria/formulario-baja-orpe-naturalizacion/respuesta/formulario-baja-orpe-naturalizacion-respuesta.component';
+import { FormularioConvenioComponent } from '../solicitud/components/extranjeria/formulario-convenio/pregunta/formulario-convenio.component';
+import { FormularioConvenioRespuestaComponent } from '../solicitud/components/extranjeria/formulario-convenio/respuesta/formulario-convenio-respuesta.component';
 
 const ChildRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -51,12 +53,14 @@ const ChildRoutes: Routes = [
   { path: 'solicitud/newTipoSolicitud/newFormularioDirectiva0082019/:tipo_saneo_id/:formulario_id', component: FormularioSolicitudDirectiva0082019Component },
   { path: 'solicitud/newTipoSolicitud/newFormularioDirectiva0082019Res/:solicitud_id', component: FormularioSolicitudDirectiva0082019RespuestaComponent },
 
-  // { path: 'solicitud/newTipoSolicitud/newFormularioCorrecionCie/:tipo_saneo_id/:formulario_id', component: FormularioSolicitudCorreccionCieComponent },
   { path: 'solicitud/newTipoSolicitud/newFormularioCorrecionCie/:tipo_saneo_id/:formulario_id/:solicitud_id', component: FormularioSolicitudCorreccionCieComponent },
   { path: 'solicitud/newTipoSolicitud/newFormularioCorrecionCieRes/:solicitud_id', component: FormularioSolicitudCorreccionCieRespuestaComponent },
 
   { path: 'solicitud/newTipoSolicitud/newFormularioBajaOrpeNaturalizacion/:tipo_saneo_id/:formulario_id/:solicitud_id', component: FormularioBajaOrpeNaturalizacionComponent },
   { path: 'solicitud/newTipoSolicitud/newFormularioBajaOrpeNaturalizacionRes/:solicitud_id', component: FormularioBajaOrpeNaturalizacionRespuestaComponent },
+
+  { path: 'solicitud/newTipoSolicitud/newFormularioConvenio/:tipo_saneo_id/:formulario_id/:solicitud_id', component: FormularioConvenioComponent },
+  { path: 'solicitud/newTipoSolicitud/newFormularioConvenioRes/:solicitud_id', component: FormularioConvenioRespuestaComponent },
 
   // ************************* ASIGNACION *************************
   { path: 'asignacion', component: AsignacionComponent},

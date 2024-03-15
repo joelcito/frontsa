@@ -19,9 +19,9 @@ export class MinioService {
 
   private loadAWS(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      const script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.src = 'https://sdk.amazonaws.com/js/aws-sdk-2.1033.0.min.js'; // URL del SDK de AWS
+      const script      = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src  = 'https://sdk.amazonaws.com/js/aws-sdk-2.1033.0.min.js';  // URL del SDK de AWS
       script.onload = () => {
         resolve();
       };
@@ -39,7 +39,7 @@ export class MinioService {
       // accessKeyId: 'minioadmin', // Tus credenciales de Minio
       // secretAccessKey: 'minioadmin', // Tus credenciales de Minio
 
-      endpoint       : environment.url_minio,   // URL de tu servidor Minio
+      endpoint       : environment.url_minio,             // URL de tu servidor Minio
       accessKeyId    : environment.user_minio,            // Tus credenciales de Minio
       secretAccessKey: environment.pass_minio,            // Tus credenciales de Minio
 

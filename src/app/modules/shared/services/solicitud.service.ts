@@ -77,6 +77,10 @@ export class SolicitudService {
     return this.http.post(`${this.base_url}/solicitud/saveSolicitudBajaOrpeNaturalizacion`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
+  saveSolicitudConvenio(body:any){
+    return this.http.post(`${this.base_url}/solicitud/saveSolicitudConvenio`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
   // ********************* SANEAMIENTO EXTRANJERIA *********************
   sanearDirectiva0082019(body:any){
     return this.http.post(`${this.base_url}/solicitud/sanearDirectiva0082019`, body, {headers: this.agregarAuthorizationHeader()});

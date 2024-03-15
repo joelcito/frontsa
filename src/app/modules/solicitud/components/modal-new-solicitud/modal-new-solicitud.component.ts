@@ -70,7 +70,6 @@ export class ModalNewSolicitudComponent implements OnInit{
     console.log("********************************")
 
     this.dialogRef.close(1)
-
     const tipo_saneo_id_encry = this.encriptarConAESBase64URL(this.tipo_saneo_id, 'ESTE ES JOEL');
     const formulario_id_encry = this.encriptarConAESBase64URL(this.formulario_id, 'ESTE ES JOEL');
     const solicitud_id_encry  = this.encriptarConAESBase64URL("0", 'ESTE ES JOEL');
@@ -87,6 +86,7 @@ export class ModalNewSolicitudComponent implements OnInit{
     }
 
     let res = environment.getUrlSolicitudAsignacionRespuesta(datos)
+    console.log(res, datos)
     this.router.navigate(res);
 
     // Swal.fire({

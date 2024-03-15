@@ -1,8 +1,7 @@
 <mat-card class="container">
-  <h2 class="alinear">FORMULARIO DE SOLICITUD CORRECCION CIE</h2><br>
+  <h2 class="alinear">FORMULARIO DE SOLICITUD DE CONVENIO</h2><br>
   <h2>CASO : EXTRANJERIA - {{ solictudNuber }}</h2>
  <mat-card-content>
-
   <ng-container>
     <h3 class="alinear">DATOS OFICINA</h3>
     <table>
@@ -60,48 +59,45 @@
   <mat-divider></mat-divider>
 
   <ng-container >
-    <h3 class="alinear">Datos del tramite</h3>
+    <h3 class="alinear">DATOS TRAMITE</h3>
+
     <table>
       <thead>
         <tr>
-          <th>CAMPO MODIFICAR</th>
-          <th>DATO ACTUAL</th>
+          <th colspan="2">DESCRIPCION</th>
+          <th colspan="2">ARTICULO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="2">{{ datosTramite.descripcion_respuesta }}</td>
+          <td colspan="2">{{ datosTramite.articulos_reglamentos_respuesta }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table>
+      <thead>
+        <tr>
+          <th>TIPO SOLICITUD</th>
+          <!-- <th>DATO ACTUAL</th> -->
           <th>DATO CORREGIR</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let da of datosTramite">
-          <td>{{ da.campo }}</td>
-          <td>{{ da.actual }}</td>
-          <td>{{ da.modificar }}</td>
+        <tr>
+          <td>FECHA DE VIGENCIA</td>
+          <!-- <td>{{ datosTramite.dato_anterior_respuesta }}</td> -->
+          <td>{{ datosTramite.dato_correcto_respuesta }}</td>
         </tr>
       </tbody>
     </table>
-    <mat-divider></mat-divider>
-      <h3 class="alinear">Documentación adjunto</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Documento</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let doc of listadoDocumentos">
-            <td>{{ doc.nombre_archivo }}</td>
-            <td>
-              <button mat-icon-button (click)="descargarArchivo(doc)">
-                <mat-icon >cloud_download</mat-icon>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
+
     <div class="usuario-container fondo">
       <button mat-raised-button color="primary" class="boton-largo" (click)="sanear()">Procesar</button>
     </div>
   </ng-container>
-
 
   <mat-divider></mat-divider>
 

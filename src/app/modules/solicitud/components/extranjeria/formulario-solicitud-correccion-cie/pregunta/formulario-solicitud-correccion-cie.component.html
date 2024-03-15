@@ -167,11 +167,28 @@
     <button (click)="agregarBloque()">Agregar Campos</button>
     <br>
     <br>
+
+    <mat-divider></mat-divider>
+    <h3 class="alinear">Documentación del tramite</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Documento</th>
+            <th>Ach. Permitidos</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let doc of listaDocumentosSolicitud">
+            <td>{{ doc.nombre }}</td>
+            <td>{{ doc.tipo_documento }}</td>
+            <td><input type="file" id="document_{{ doc.id }}" accept="{{ doc.tipo_documento }}" (change)="onFileSelected($event, doc.tamanio, doc.id)"></td>
+          </tr>
+        </tbody>
+      </table>
+
     <div class="usuario-container fondo">
-      <!-- <button mat-raised-button color="primary" class="boton-largo" (click)="guardarSolicitud()" [disabled]="formularioCoreccionCIE.invalid">Guardar</button> -->
-      <!-- <button mat-raised-button color="primary" class="boton-largo" (click)="guardarSolicitud()" [disabled]="validaFormulario">Guardar</button> -->
       <button mat-raised-button color="primary" class="boton-largo" (click)="guardarSolicitud()" [disabled]="validaFormulario(formularioCoreccionCIE)">Guardar</button>
-      <!-- <button mat-raised-button color="primary" class="boton-largo" (click)="guardarSolicitud()" [disabled]="botonGuardara">Guardar</button> -->
     </div>
   </ng-container>
  </mat-card-content>

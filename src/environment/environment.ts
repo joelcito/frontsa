@@ -6,10 +6,15 @@ export const environment = {
   // host    : "http://10.0.10.28:8080",  // PRODUCCION
 
   // ****************** CONEXION A MINIO ******************
-  url_minio : "http://10.0.10.30:9000",
-  user_minio: "minioadmin",
-  pass_minio: "minioadmin",
+  // url_minio : "http://10.0.10.30:9000",
+  // user_minio: "minioadmin",
+  // pass_minio: "minioadmin",
+  // bucketName: "saneoxample",
 
+  url_minio : "http://10.0.10.30:9000",
+  user_minio: "uextranjeriadocs",
+  pass_minio: "3xtr4nj3r14d0c$",
+  bucketName: "extranjeriadocs",
 
   userId  : 1,
   getUrlSolicitudAsignacionRespuesta: function(datos:any) {
@@ -55,6 +60,15 @@ export const environment = {
           dato = ['/solicitud/newTipoSolicitud/newFormularioBajaOrpeNaturalizacionRes/', solicitud_encry];
         }
 
+      }else if(formulario_id === 5){
+        let solicitud_encry = datos.solicitud
+        if(pregunta_respuesta === "pregunta"){
+          let tipo_saneo_id_encry = datos.tipo_saneo_id_encry
+          let formulario_id_encry = datos.formulario_id_encry
+          dato = ['/solicitud/newTipoSolicitud/newFormularioConvenio/', tipo_saneo_id_encry, formulario_id_encry, solicitud_encry];
+        }else{
+          dato = ['/solicitud/newTipoSolicitud/newFormularioConvenioRes/', solicitud_encry];
+        }
       }else{
 
       }
@@ -68,5 +82,6 @@ export const environment = {
   detalle_tipo_saneo_id_directiva_008_2019      : 4,   //DIRECTIVA 008/2019
   detalle_tipo_saneo_id_cambio_bandeja          : 3,   //CAMBIO DE BANDEJA
   detalle_tipo_saneo_id_correccion_cie          : 5,   //CORRECCION CIE
-  detalle_tipo_saneo_id_baja_orpe_naturalizacion: 6    //CORRECCION CIE
+  detalle_tipo_saneo_id_baja_orpe_naturalizacion: 6,    //BAJA ORPE NATURALIZACION
+  detalle_tipo_saneo_id_solicitud_convenio      : 7    //BAJA ORPE NATURALIZACION
 }

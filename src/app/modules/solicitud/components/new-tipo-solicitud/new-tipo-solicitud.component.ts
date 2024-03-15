@@ -56,25 +56,4 @@ export class NewTipoSolicitudComponent  implements OnInit{
     });
   }
 
-  // getTiposSaneo(){
-  //   this.tipoSaneoService.getTiposSaneos().subscribe({
-  //     next: (datos:any) => {
-  //       // console.log(datos)
-  //       this.procesarTiposSaneosResponse(datos)
-  //     },
-  //     error: (error:any) => {
-
-  //     }
-  //   })
-  // }
-
-  // procesarTiposSaneosResponse(resp:any){
-  //   const dataTiposSaneo: TipoSaneoElement[] = [];
-  //   let listadoTipoSaneos = resp
-  //   listadoTipoSaneos.forEach((element:TipoSaneoElement) => {
-  //     dataTiposSaneo.push(element)
-  //   })
-  //   this.dataSourceTipoSaneo = new MatTableDataSource<TipoSaneoElement>(dataTiposSaneo)
-  // }
-
 }

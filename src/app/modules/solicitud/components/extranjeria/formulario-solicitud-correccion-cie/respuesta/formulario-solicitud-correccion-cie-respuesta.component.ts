@@ -25,10 +25,11 @@ export class FormularioSolicitudCorreccionCieRespuestaComponent implements OnIni
   private solicitud_id : any
   public  usuario      : any;
 
-  public datos_actuales:any = []
-  public datos_nuevos:any = []
+  public datos_actuales:any     = []
+  public listadoDocumentos: any = []
+  public datos_nuevos:any       = []
+  public datosTramite   : any   = []
 
-  public datosTramite   : any = []
   public datosCiudadano : any = {};
 
   public datosOficina:any   = {
@@ -62,6 +63,11 @@ export class FormularioSolicitudCorreccionCieRespuestaComponent implements OnIni
 
         this.extranjeriaService.buscaExtranjeroPorSerial(data).subscribe(resul => {
           this.datosCiudadano = resul
+        })
+
+        // ******************** PARA LOS ARCHIVOS DE LA SOLICITUD ********************
+        this.solicitudService.getSolicitudArchivosById(this.solicitud_id).subscribe((result:any) =>{
+          this.listadoDocumentos = result
         })
       })
 
@@ -180,5 +186,10 @@ export class FormularioSolicitudCorreccionCieRespuestaComponent implements OnIni
         });
       }
     })
+  }
+
+  descargarArchivo(doc:any){
+    const url = doc.location;
+    window.open(url, "_blank");
   }
 }

@@ -1,0 +1,103 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* padding-left: 5%;
+  padding-right: 5%; */
+}
+
+.alinear {
+  text-align: center;
+  margin-top: 20px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.usuario-container {
+  display: flex;
+  flex-direction: row; /* Cambiado de column a row para alinear horizontalmente */
+  margin-bottom: 20px; /* Espaciado entre contenedores de usuario */
+}
+
+.usuario-container > mat-form-field {
+  margin-right: 10px; /* Espaciado entre campos de entrada dentro de usuario-container */
+}
+
+/* PARA LA TALA DE EXTRANJEROS */
+/* Estilo para la tabla */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px; /* Ajusta el margen inferior según tus preferencias */
+  font-size: 15px;
+}
+
+/* Estilo para las celdas del encabezado */
+th {
+  background-color: #f2f2f2; /* Color de fondo del encabezado */
+  border: 1px solid #dddddd; /* Borde entre celdas del encabezado */
+  padding: 4px; /* Espaciado interno */
+  text-align: left; /* Alineación del texto a la izquierda */
+}
+
+/* Estilo para las celdas del cuerpo */
+td {
+  border: 1px solid #dddddd; /* Borde entre celdas del cuerpo */
+  padding: 4px; /* Espaciado interno */
+}
+
+/* Estilo para las filas impares (alternancia de colores) */
+tbody tr:nth-child(odd) {
+  background-color: #f9f9f9; /* Color de fondo para filas impares */
+}
+
+/* Estilo para las celdas de acción */
+td button {
+  background-color: #4caf50; /* Color de fondo del botón */
+  color: white; /* Color del texto del botón */
+  /*border: none; /* Sin borde */
+  /*padding: 4px; /* Espaciado interno del botón */
+  /*cursor: pointer; /* Cursor de apuntador al pasar el ratón */
+}
+
+.usuario-container {
+  text-align: center; /* Center the button within the container */
+}
+
+.boton-largo {
+  width: 100%;
+}
+
+/* PARA EL ALERT */
+.alert-container {
+  position: relative;
+  margin-top: 5px;
+  z-index: 1000;
+  /*display: flex; /* Usar flexbox para alinear los elementos */
+  align-items: center; /* Centrar verticalmente los elementos */
+}
+
+.alert {
+  flex: 1; /* Ocupar el 50% del ancho del contenedor */
+  padding: 15px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.button-container {
+  flex: 1; /* Ocupar el otro 50% del ancho del contenedor */
+  text-align: center; /* Centrar el botón horizontalmente */
+}
+
+

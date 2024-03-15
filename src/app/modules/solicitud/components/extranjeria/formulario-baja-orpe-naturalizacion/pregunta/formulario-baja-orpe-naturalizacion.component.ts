@@ -35,6 +35,7 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
   private formulario_id        : any
   private tipo_saneo_id        : any
   public  detalle_tipo_saneo_id: any
+  public  bucketName           : any
 
 
   public mostrarTabla:boolean                       = false
@@ -51,6 +52,7 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
   ngOnInit(): void {
 
     this.detalle_tipo_saneo_id = environment.detalle_tipo_saneo_id_baja_orpe_naturalizacion
+    this.bucketName            = environment.bucketName
 
     this.router.params.subscribe(params => {
 
@@ -116,6 +118,39 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
 
   }
 
+  isGuardarButtonDisabled(): boolean {
+    // Verificar si naturalizacion y baja_orpe son nulos antes de acceder a value
+    const naturalizacion = this.solicitudFormularioTramite.get('naturalizacion');
+    const baja_orpe = this.solicitudFormularioTramite.get('baja_orpe');
+
+    // Verificar si al menos un toggle está activo
+    const toggleActivo = (naturalizacion && naturalizacion.value) || (baja_orpe && baja_orpe.value);
+
+    if (!toggleActivo) {
+      return true; // Si ningún toggle está activo, deshabilitar el botón
+    }
+
+    // Verificar si todos los input de tipo file tienen archivos adjuntos
+    let todosConArchivos = true;
+    this.listaDocumentosSolicitud.forEach(input => {
+      const fileInput = document.getElementById('document_'+input.id) as HTMLInputElement;
+      // if (input.nativeElement.files && input.nativeElement.files.length > 0) {
+      if (fileInput.files && fileInput.files.length > 0) {
+        const files = fileInput.files;
+        for (let i = 0; i < files.length; i++) {
+          if (files[i].size === 0) {
+            todosConArchivos = false;
+            break;
+          }
+        }
+      } else {
+        todosConArchivos = false;
+      }
+    });
+
+    return !todosConArchivos; // Si algún input no tiene archivos adjuntos, deshabilitar el botón
+  }
+
   desencriptarConAESBase64URL(textoEnBase64URL:string, clave:string) {
     const textoEncriptado     = textoEnBase64URL.replace(/-/g, '+').replace(/_/g, '/');
     const bytesDesencriptados = CryptoJS.AES.decrypt(textoEncriptado, clave);
@@ -161,12 +196,6 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
       this.tipoSaneoService.getDocumentoDetalleTipoSaneo(this.detalle_tipo_saneo_id).subscribe((resuly :any) => {
         this.listaDocumentosSolicitud = resuly
       })
-
-
-      console.log(this.detalle_tipo_saneo_id)
-      console.log(this.tipo_saneo_id)
-      console.log(this.formulario_id)
-
   }
 
   guardarSolicitud(){
@@ -199,7 +228,7 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
           const fileInput = document.getElementById(`document_${doc.id}`) as HTMLInputElement;
           if(fileInput.files){
             const file       = fileInput.files[0]
-            const bucketName = 'saneoxample';
+            const bucketName = this.bucketName;
             const nameFile   = file.name.replaceAll(" ", "_" )
             const objectKey  = ruta+"/"+nameFile;
             this.minioService.uploadFile(file, bucketName, objectKey)

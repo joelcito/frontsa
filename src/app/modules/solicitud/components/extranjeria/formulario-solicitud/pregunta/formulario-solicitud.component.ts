@@ -132,7 +132,7 @@ export class FormularioSolicitudComponent implements OnInit{
         datos_procesar       : ['', Validators.required],
         dato_anterior        : ['',],
         dato_correcto        : ['',],
-        usu_operador_id     : ['', Validators.required],
+        usu_operador_id      : ['', Validators.required],
       });
 
       //  **************************** DE AQUI ES EXTRANJERIA HABER FIN ****************************
@@ -238,14 +238,14 @@ export class FormularioSolicitudComponent implements OnInit{
   }
 
   guardarSolicitud(){
-    console.log("******************************************************************************************************")
-    console.log("========================")
-    console.log(this.solicitudFormulario.value)
-    console.log("========================")
-    console.log(this.extranjeroElejido)
-    console.log("========================")
-    console.log(this.solicitudFormularioTramite.value)
-    console.log("******************************************************************************************************")
+    // console.log("******************************************************************************************************")
+    // console.log("========================")
+    // console.log(this.solicitudFormulario.value)
+    // console.log("========================")
+    // console.log(this.extranjeroElejido)
+    // console.log("========================")
+    // console.log(this.solicitudFormularioTramite.value)
+    // console.log("******************************************************************************************************")
 
     let dato = {
       datosFormularioSolicitud  : this.solicitudFormulario.value,
@@ -281,19 +281,19 @@ export class FormularioSolicitudComponent implements OnInit{
     this.solicitudService.saveSolicitudCambioBandeja(datosREales).subscribe((resul:any) => {
       if(resul !== null){
 
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Se registro con exito",
-          text: "El Caso se le asigno a "+resul.usuarioAsignado.nombres+" "+resul.usuarioAsignado.primer_apellido+" "+resul.usuarioAsignado.segundo_apellido,
-          showConfirmButton: false,
-          timer: 4000,
-          allowOutsideClick: false
-        });
+        // Swal.fire({
+        //   position: "top-end",
+        //   icon: "success",
+        //   title: "Se registro con exito",
+        //   text: "El Caso se le asigno a "+resul.usuarioAsignado.nombres+" "+resul.usuarioAsignado.primer_apellido+" "+resul.usuarioAsignado.segundo_apellido,
+        //   showConfirmButton: false,
+        //   timer: 4000,
+        //   allowOutsideClick: false
+        // });
 
-        setTimeout(() => {
-          this.routerLink.navigate(['/solicitud']);
-        }, 4000);
+        // setTimeout(() => {
+        //   this.routerLink.navigate(['/solicitud']);
+        // }, 4000);
 
       }else{
 
