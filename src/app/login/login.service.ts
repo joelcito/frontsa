@@ -72,8 +72,14 @@ export class LoginService {
       "nombres"            : usuario.nombres,
       "primer_apellido"    : usuario.primer_apellido,
       "segundo_apellido"   : usuario.segundo_apellido,
-      "nombre_organizacion": usuario.nombre_organizacion
+      "nombre_organizacion": usuario.nombre_organizacion,
+
+      "dependencia_id"     : usuario.dependencia_id,
+      "organizacion_id"    : usuario.organizacion_id,
+      "jer_org_id"         : usuario.jer_org_id,
+
     }
+
     sessionStorage.setItem('datos', JSON.stringify(datos))
   }
 

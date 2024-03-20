@@ -3,6 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SolicitudService } from '../../../shared/services/solicitud.service';
 import { Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
+import { environment } from '../../../../../environment/environment';
 
 @Component({
   selector: 'app-solicitud',
@@ -18,6 +19,7 @@ export class SolicitudComponent implements OnInit {
 
   private solicitudService = inject(SolicitudService);
   private router           = inject(Router);
+
 
   ngOnInit(): void {
     this.getSolicitud()
@@ -80,6 +82,18 @@ export class SolicitudComponent implements OnInit {
 
   base64URL(cadena:string) {
     return cadena.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
+  }
+
+  tipoCasoSaneo(dato:any){
+    const idEncriptado                 = this.encriptarConAESBase64URL(dato.id, 'ESTE ES JOEL');   // Encriptar el ID
+    let datos = {
+      sistema           : "extranjeria",
+      pregunta_respuesta: "respuesta",
+      formulario        : dato.formulario.id,
+      solicitud         : idEncriptado
+    }
+    let da = environment.getUrlSolicitudAsignacionRespuesta(datos)
+    this.router.navigate(da);
   }
 
 }

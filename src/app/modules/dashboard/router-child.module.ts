@@ -21,6 +21,7 @@ import { FormularioBajaOrpeNaturalizacionComponent } from '../solicitud/componen
 import { FormularioBajaOrpeNaturalizacionRespuestaComponent } from '../solicitud/components/extranjeria/formulario-baja-orpe-naturalizacion/respuesta/formulario-baja-orpe-naturalizacion-respuesta.component';
 import { FormularioConvenioComponent } from '../solicitud/components/extranjeria/formulario-convenio/pregunta/formulario-convenio.component';
 import { FormularioConvenioRespuestaComponent } from '../solicitud/components/extranjeria/formulario-convenio/respuesta/formulario-convenio-respuesta.component';
+import { AsignacionSolicitudDependenciaComponent } from '../asignacion/components/asignacion-solicitud-dependencia/asignacion-solicitud-dependencia.component';
 
 const ChildRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -65,6 +66,9 @@ const ChildRoutes: Routes = [
   // ************************* ASIGNACION *************************
   { path: 'asignacion', component: AsignacionComponent},
 
+
+  // ************************* ASIGNACION SOLICITUD DEPENDENCIA *************************
+  { path: 'asignacion_solicitud_dependencia', component: AsignacionSolicitudDependenciaComponent},
 
 ]
 

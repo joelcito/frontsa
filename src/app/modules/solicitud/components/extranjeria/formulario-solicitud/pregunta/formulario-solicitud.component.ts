@@ -133,6 +133,9 @@ export class FormularioSolicitudComponent implements OnInit{
         dato_anterior        : ['',],
         dato_correcto        : ['',],
         usu_operador_id      : ['', Validators.required],
+        mensaje_adicion      : ['', Validators.required],
+
+        tipo_prioridad       : ['ATENCIÓN COMUN', Validators.required],
       });
 
       //  **************************** DE AQUI ES EXTRANJERIA HABER FIN ****************************
@@ -275,25 +278,29 @@ export class FormularioSolicitudComponent implements OnInit{
       dato_anterior_respuesta        : this.solicitudFormularioTramite.value.dato_anterior,
       dato_correcto_respuesta        : this.solicitudFormularioTramite.value.dato_correcto,
       usu_operador_id_respuesta      : this.solicitudFormularioTramite.value.usu_operador_id,
+      tipo_prioridad                 : this.solicitudFormularioTramite.value.tipo_prioridad,
+
+      // PREGUNTA_CONVERSACION
+      mensaje_adicion : this.solicitudFormularioTramite.value.mensaje_adicion
+
     }
 
-    // this.solicitudService.saveSolicitudCambioBandeja(dato).subscribe(resul => {
     this.solicitudService.saveSolicitudCambioBandeja(datosREales).subscribe((resul:any) => {
       if(resul !== null){
 
-        // Swal.fire({
-        //   position: "top-end",
-        //   icon: "success",
-        //   title: "Se registro con exito",
-        //   text: "El Caso se le asigno a "+resul.usuarioAsignado.nombres+" "+resul.usuarioAsignado.primer_apellido+" "+resul.usuarioAsignado.segundo_apellido,
-        //   showConfirmButton: false,
-        //   timer: 4000,
-        //   allowOutsideClick: false
-        // });
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Se registro con exito",
+          text: "El Caso se le asigno a "+resul.usuarioAsignado.nombres+" "+resul.usuarioAsignado.primer_apellido+" "+resul.usuarioAsignado.segundo_apellido,
+          showConfirmButton: false,
+          timer: 4000,
+          allowOutsideClick: false
+        });
 
-        // setTimeout(() => {
-        //   this.routerLink.navigate(['/solicitud']);
-        // }, 4000);
+        setTimeout(() => {
+          this.routerLink.navigate(['/solicitud']);
+        }, 4000);
 
       }else{
 

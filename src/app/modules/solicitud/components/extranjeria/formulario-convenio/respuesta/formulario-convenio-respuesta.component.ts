@@ -104,7 +104,7 @@ export class FormularioConvenioRespuestaComponent implements OnInit {
             position: "top-end",
             icon: "success",
             title: "¡EXITO!",
-            text: "EL CASO SE DESBLOQUEO CON EXITO",
+            text: "EL CASO SE ACTUALIZO CON EXITO",
             showConfirmButton: false,
             timer: 5000,
             allowOutsideClick: false

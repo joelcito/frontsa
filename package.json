@@ -22,6 +22,7 @@
     "@angular/router": "^17.0.0",
     "aws-sdk": "^2.1573.0",
     "crypto-js": "^4.2.0",
+    "esbuild": "^0.20.1",
     "js-sha256": "^0.10.1",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.10.3",

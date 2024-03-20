@@ -1,5 +1,5 @@
 <mat-card>
-  <h2 class="alinear">Listado de Asignaciones</h2>
+  <h2 class="alinear">Listado de Casos </h2>
   <mat-card-header>
     <!-- <div>
       <mat-form-field hintLabel="Buscar Rol" appearance="fill">
@@ -9,11 +9,11 @@
     </div> -->
   </mat-card-header>
   <mat-card-header>
-    <div class="derecha">
+    <!-- <div class="derecha">
       <ul>
-        <!-- <li><button mat-raised-button color="primary" (click)="inicarSolicitud()">Iniciar Solicitud</button></li> -->
+        <li><button mat-raised-button color="primary">Iniciar Solicitud</button></li>
       </ul>
-    </div>
+    </div> -->
   </mat-card-header>
   <div mat-card-image>
 
@@ -22,27 +22,38 @@
     <table mat-table [dataSource]="dataSourceSolicitud" class="mat-cell">
 
       <!-- id columna -->
-      <ng-container matColumnDef="id">
+      <ng-container matColumnDef="codigo">
         <th mat-header-cell *matHeaderCellDef>N°</th>
         <!-- <td mat-cell *matCellDef="let element">{{ element.id }}</td> -->
         <td mat-cell *matCellDef="let element">{{ element.codigo }}</td>
       </ng-container>
 
       <!-- usuario -->
-      <ng-container matColumnDef="descripcion">
-        <th mat-header-cell *matHeaderCellDef>TIPO SOLICITUD</th>
-        <td mat-cell *matCellDef="let element">{{ element.formulario.tipoSaneoFormulario.nombre }}</td>
+      <ng-container matColumnDef="solicitante_oficina">
+        <th mat-header-cell *matHeaderCellDef>SOLICITANTE / OFICINA</th>
+        <td mat-cell *matCellDef="let element">{{ element.usuarioSolicitante.nombre_dependencia+' - '+ element.usuarioSolicitante.nombres+' '+element.usuarioSolicitante?.primer_apellido+' '+element.usuarioSolicitante?.segundo_apellido }}</td>
       </ng-container>
 
       <!-- usuario -->
-      <ng-container matColumnDef="solicitante">
-        <th mat-header-cell *matHeaderCellDef>SOLICITANTE</th>
-        <td mat-cell *matCellDef="let element">{{element.usuarioSolicitante.nombre_dependencia+" - "+element.usuarioSolicitante.nombres+' '+element.usuarioSolicitante.primer_apellido+' '+element.usuarioSolicitante.segundo_apellido }}</td>
+      <ng-container matColumnDef="solicitud_formulario">
+        <th mat-header-cell *matHeaderCellDef>SOLICITUD / FORMULARIO</th>
+        <td mat-cell *matCellDef="let element">{{ element.formulario.tipoSaneoFormulario.nombre+' - '+ element.formulario.nombre }}</td>
       </ng-container>
+
+      <!-- usuario -->
+      <ng-container matColumnDef="asignado">
+        <th mat-header-cell *matHeaderCellDef>ASIGNADO</th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container *ngIf="element.usuarioAsignado">
+            {{ element.usuarioAsignado?.nombres+' '+element.usuarioAsignado?.primer_apellido+' '+element.usuarioAsignado?.segundo_apellido }}
+          </ng-container>
+        </td>
+      </ng-container>
+
 
       <!-- fechaSolicitud -->
       <ng-container matColumnDef="fechaSolicitud">
-        <th mat-header-cell *matHeaderCellDef>FECHA DE ASIGNACION</th>
+        <th mat-header-cell *matHeaderCellDef>FECHA DE SOLICITUD</th>
         <td mat-cell *matCellDef="let element">{{ element.fechaSolicitud | date:'dd/MM/yyyy HH:mm:ss' }}</td>
       </ng-container>
 
@@ -52,42 +63,37 @@
         <td mat-cell *matCellDef="let element">{{ element.fechaRespuesta | date:'dd/MM/yyyy HH:mm:ss' }}</td>
       </ng-container>
 
-      <!-- fechaRespuesta -->
       <ng-container matColumnDef="estado">
         <th mat-header-cell *matHeaderCellDef>ESTADO</th>
         <td mat-cell *matCellDef="let element">
           <mat-chip color="darker" selected="false" *ngIf="element.estado === 'ASIGNADO'">
-            ASIGNADO
+            {{ element.estado }}
           </mat-chip>
-
           <mat-chip style="background-color: rgb(116, 213, 116); color: white;" selected="false" *ngIf="element.estado === 'PROCESADO'">
-            PROCESADO
+            {{ element.estado }}
           </mat-chip>
-
-          <mat-chip style="background-color: rgba(255, 34, 0, 0.697); color: white;" selected="false" *ngIf="element.estado === 'RECHAZADO'">
+          <mat-chip style="background-color: rgba(235, 98, 78, 0.697); color: white;" selected="false" *ngIf="element.estado === 'EN PROCESO'">
+            {{ element.estado }}
+          </mat-chip>
+          <mat-chip style="background-color: rgba(255, 34, 0, 0.697); color: white;" selected="false" *ngIf="element.estado === 'RECHAZADO' || element.estado === 'OBSERVADO'">
             {{ element.estado }}
           </mat-chip>
         </td>
       </ng-container>
-
       <!-- ACCIONE -->
       <ng-container matColumnDef="acciones">
         <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
         <td mat-cell *matCellDef="let element; let i=index">
-          <button *ngIf="element.estado === 'ASIGNADO' || element.estado === 'RECHAZADO'" mat-icon-button color="warn" (click)="tipoCasoSaneo(element)">
+          <button *ngIf="element.estado === 'EN PROCESO'" mat-icon-button color="warn">
             <mat-icon>send</mat-icon>
           </button>
-          <!-- <button mat-icon-button color="accent">
-            <mat-icon aria-label="Delete">delete</mat-icon>
-          </button> -->
+          <button *ngIf="element.estado === 'RECHAZADO' || element.estado === 'OBSERVADO'" mat-icon-button color="warn">
+            <mat-icon>send</mat-icon>
+          </button>
         </td>
       </ng-container>
-
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
     </table>
-
-    <!-- <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator> -->
   </mat-card-content>
 </mat-card>

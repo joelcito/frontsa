@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { SolicitudComponent } from './components/solicitud/solicitud.component';
-import { MaterialModule } from '../shared/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NewTipoSolicitudComponent } from './components/new-tipo-solicitud/new-tipo-solicitud.component';
 import { ModalNewSolicitudComponent } from './components/modal-new-solicitud/modal-new-solicitud.component';
@@ -15,6 +14,7 @@ import { FormularioBajaOrpeNaturalizacionComponent } from './components/extranje
 import { FormularioBajaOrpeNaturalizacionRespuestaComponent } from './components/extranjeria/formulario-baja-orpe-naturalizacion/respuesta/formulario-baja-orpe-naturalizacion-respuesta.component';
 import { FormularioConvenioComponent } from './components/extranjeria/formulario-convenio/pregunta/formulario-convenio.component';
 import { FormularioConvenioRespuestaComponent } from './components/extranjeria/formulario-convenio/respuesta/formulario-convenio-respuesta.component';
+import { MaterialModule } from '../shared/material.module';
 
 @NgModule({
   declarations: [
@@ -36,10 +36,13 @@ import { FormularioConvenioRespuestaComponent } from './components/extranjeria/f
     CommonModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+
+    // EditorModule
   ],
   providers:[
-    DatePipe
+    DatePipe,
+
   ]
 })
 export class SolicitudModule { }

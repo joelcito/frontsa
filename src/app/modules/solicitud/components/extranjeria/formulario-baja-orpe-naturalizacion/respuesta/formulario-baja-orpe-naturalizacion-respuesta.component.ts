@@ -1,10 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
 import { SolicitudService } from '../../../../../shared/services/solicitud.service';
 import { DatePipe } from '@angular/common';
 import { ExtranjeriaService } from '../../../../../shared/services/extranjeria.service';
 import { FormBuilder } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-formulario-baja-orpe-naturalizacion-respuesta',
@@ -17,6 +18,7 @@ export class FormularioBajaOrpeNaturalizacionRespuestaComponent implements OnIni
   private solicitudservice   = inject(SolicitudService);
   private datePipe           = inject(DatePipe);
   private extranjeriaService = inject(ExtranjeriaService)
+  private routerLink         = inject(Router);
 
   // public solicitudFormularioTramite : FormBuilder
 
@@ -100,9 +102,24 @@ export class FormularioBajaOrpeNaturalizacionRespuestaComponent implements OnIni
     return textoDesencriptado;
   }
   sanear(){
-    this.solicitudservice.sanearBajaOrpeNaturalizado(this.listadotramites).subscribe((resul:any) => {
 
-    })
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "¡EXITO!",
+      text: "EL CASO SE PROCESO CON EXITO",
+      showConfirmButton: false,
+      timer: 5000,
+      allowOutsideClick: false
+    });
+
+
+    setTimeout(() => {
+      this.routerLink.navigate(['/asignacion']);
+    }, 5000);
+    // this.solicitudservice.sanearBajaOrpeNaturalizado(this.listadotramites).subscribe((resul:any) => {
+
+    // })
   }
 
   descargarArchivo(doc:any){

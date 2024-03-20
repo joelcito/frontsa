@@ -98,6 +98,12 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
           this.elementosTemporalesGuardados = result
         })
 
+        // PARA LOS DOCUMENTOS
+        this.tipoSaneoService.getDocumentoDetalleTipoSaneo(this.detalle_tipo_saneo_id).subscribe((resuly :any) => {
+          console.log(resuly)
+          this.listaDocumentosSolicitud = resuly
+        })
+
       }
       //  **************************** DE AQUI ES EXTRANJERIA HABER ****************************
       this.formularioBusquedaExtranjero = this.fb.group({
@@ -234,8 +240,9 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
         this.mostrarTablaExtranjeroSeleccionado  = true;
         this.mostrarFormularioBusquedaExtranjero = false;
 
-        // Datos para los documentos
+        // PARA LOS DOCUMENTOS
         this.tipoSaneoService.getDocumentoDetalleTipoSaneo(this.detalle_tipo_saneo_id).subscribe((resuly :any) => {
+          console.log(resuly)
           this.listaDocumentosSolicitud = resuly
         })
       }
@@ -350,6 +357,8 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
     datos['solicitud_id']                = this.solicitud_id
     datos['estado']                      = "ASIGNADO"
     this.solicitudService.saveCorreccionesCIE(datos).subscribe((result:any) => {
+
+      console.log(result)
 
 
       if(result.id !== null && result.estado === "ASIGNADO"){

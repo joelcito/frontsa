@@ -6,6 +6,7 @@ import { ExtranjeriaService } from '../../../../../shared/services/extranjeria.s
 import * as CryptoJS from 'crypto-js';
 import { environment } from '../../../../../../../environment/environment';
 import Swal from 'sweetalert2';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 
@@ -22,6 +23,7 @@ export class FormularioSolicitudRespuestaComponent implements OnInit{
   private datePipe           = inject(DatePipe);
   private extranjeriaService = inject(ExtranjeriaService);
   private routerLink         = inject(Router);
+  private fb                 = inject(FormBuilder);
 
 
   private solicitud_id : any
@@ -34,13 +36,48 @@ export class FormularioSolicitudRespuestaComponent implements OnInit{
     fecha       : "",
   }
 
-  public datosCiudadano:any = {};
-  public datosTramite:any   = {};
+  public estadosRespuestas:any = [
+
+    {
+      nombre: 'OBSERVADO',
+      value : 'OBSERVADO'
+    },
+    {
+      nombre: 'PROCESADO',
+      value : 'PROCESADO'
+    },
+    {
+      nombre: 'RECHAZADO',
+      value : 'RECHAZADO'
+    },
+  ]
+
+  public datosCiudadano:any           = {};
+  public datosTramite:any             = {};
+
+  public solicitudConversacion:any [] = [];
 
   public usuario:any;
 
+  public formularioRespuesta !:FormGroup
+
   ngOnInit(): void {
-    this.usuario = sessionStorage.getItem('datos');
+
+      // Obtener los datos de sessionStorage como JSON
+      const datosRecuperadosString: string | null = sessionStorage.getItem('datos');
+
+
+      // Verificar si hay datos en sessionStorage
+      if (datosRecuperadosString !== null) {
+        // console.log(datosRecuperadosString)
+        // const datosRecuperados = JSON.stringify(datosRecuperadosString);
+        const datosRecuperados = JSON.parse(datosRecuperadosString);
+
+        // console.log(this.usuario, datosRecuperadosString, datosRecuperados)
+
+        this.usuario = datosRecuperados;
+      }
+
     this.route.params.subscribe(params => {
 
       const idEncriptado      = params['solicitud_id'];
@@ -82,6 +119,17 @@ export class FormularioSolicitudRespuestaComponent implements OnInit{
         this.datosTramite = fa
       })
 
+      this.formularioRespuesta = this.fb.group({
+        mensaje_adicion   : ['', Validators.required],
+        tipo_observacion  : ['', Validators.required],
+      });
+
+      // ******************** SOLICITUD CONVERSACION ********************
+      this.solicitudService.getSolicitudConversacionById(this.solicitud_id).subscribe((result:any) => {
+        // console.log(result)
+        this.solicitudConversacion = result
+      })
+
     });
 
   }
@@ -94,14 +142,17 @@ export class FormularioSolicitudRespuestaComponent implements OnInit{
   }
 
   sanear(){
+
     let da = {
       tipo_cambio       : 1,
       solicitud         : this.solicitud_id,
       serialExtRegistros: this.datosCiudadano.SerialExtRegistros,
       nro_cedula        : this.datosCiudadano.NroCedulaBolExtRegistros,
       id_unico_extr     : this.datosCiudadano.IdUnicoExtRegistros,
-      usuario           : JSON.parse(this.usuario).id
+      usuario           : this.usuario.id
     }
+
+
     this.extranjeriaService.saneoCambioBandejaSqlServer(da).subscribe((result:any) => {
       if(result.Resultado){
         this.solicitudService.sanearDirectiva0082019(da).subscribe((resul:any) => {
@@ -128,6 +179,39 @@ export class FormularioSolicitudRespuestaComponent implements OnInit{
           timer: 5000,
           allowOutsideClick: false
         });
+      }
+    })
+  }
+
+  enviarRespesta(){
+
+    console.log(this.usuario, this.formularioRespuesta.value)
+
+    let datos = {
+      solicitud_id: this.solicitud_id,
+      usuario_id  : this.usuario.id,
+      mensaje     : this.formularioRespuesta.value.mensaje_adicion,
+      estado      : this.formularioRespuesta.value.tipo_observacion,
+      tipo        : "RESPUESTA",
+    }
+
+    this.solicitudService.saveSolicitudConversacionRespuesta(datos).subscribe((result:any) => {
+      console.log(result)
+      if(result == 1){
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "¡EXITO!",
+          text: "SE REGISTRO EL COMENTARIO",
+          showConfirmButton: false,
+          timer: 5000,
+          allowOutsideClick: false
+        });
+        setTimeout(() => {
+          this.routerLink.navigate(['/asignacion']);
+        }, 5000);
+      }else{
+
       }
     })
   }
