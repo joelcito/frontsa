@@ -5,6 +5,7 @@ import { DatePipe } from '@angular/common';
 import { ExtranjeriaService } from '../../../../../shared/services/extranjeria.service';
 import Swal from 'sweetalert2';
 import * as CryptoJS from 'crypto-js';
+import { environment } from '../../../../../../../environment/environment';
 
 @Component({
   selector: 'app-formulario-convenio-respuesta',
@@ -20,9 +21,12 @@ export class FormularioConvenioRespuestaComponent implements OnInit {
   private routerLink         = inject(Router);
 
 
-  public  solictudNuber: any
-  private solicitud_id : any
-  public  usuario      : any;
+  public  solictudNuber        : any;
+  private solicitud_id         : any;
+  public  usuario              : any;
+  public  detalle_tipo_saneo_id: any;
+  public  solicitud            : any;
+  public  estadosRespuestas    : any;
 
   public datosCiudadano:any = {};
   public datosTramite:any   = {};
@@ -34,9 +38,17 @@ export class FormularioConvenioRespuestaComponent implements OnInit {
     fecha       : "",
   }
 
+  public mostrarBoton!:boolean;
+
   ngOnInit(): void {
 
-    this.usuario = sessionStorage.getItem('datos');
+    this.detalle_tipo_saneo_id = environment.detalle_tipo_saneo_id_solicitud_convenio
+    const datosRecuperadosString: string | null = sessionStorage.getItem('datos');
+    if (datosRecuperadosString !== null) {
+      const datosRecuperados = JSON.parse(datosRecuperadosString);
+      this.usuario = datosRecuperados;
+    }
+
     this.route.params.subscribe(params => {
 
       const idEncriptado       = params['solicitud_id'];
@@ -44,6 +56,38 @@ export class FormularioConvenioRespuestaComponent implements OnInit {
             this.solictudNuber = this.solicitud_id
 
       this.solicitudService.findByIdsolicitud(this.solicitud_id).subscribe((resul:any) => {
+
+        this.solicitud = resul
+        if(resul.asignado_id === this.usuario.id){
+          this.mostrarBoton      = true
+          this.estadosRespuestas = [
+            {
+              nombre: 'OBSERVADO',
+              value : 'OBSERVADO'
+            },
+            {
+              nombre: 'RECHAZADO',
+              value : 'RECHAZADO'
+            },
+            {
+              nombre: 'ANULADO',
+              value : 'ANULADO'
+            },
+          ]
+
+        }else{
+          this.mostrarBoton      = false
+          this.estadosRespuestas = [
+            {
+              nombre: 'REVISADO',
+              value : 'REVISADO'
+            },
+            {
+              nombre: 'ANULADO',
+              value : 'ANULADO'
+            },
+          ]
+        }
 
         // ******************** DATOS DE LA OFICINA ********************
         this.datosOficina.departamento = resul.departamento
@@ -95,7 +139,8 @@ export class FormularioConvenioRespuestaComponent implements OnInit {
       serialExtRegistros: this.datosCiudadano.SerialExtRegistros,
       nro_cedula        : this.datosCiudadano.NroCedulaBolExtRegistros,
       id_unico_extr     : this.datosCiudadano.IdUnicoExtRegistros,
-      usuario           : JSON.parse(this.usuario).id
+      // usuario           : JSON.parse(this.usuario).id
+      usuario           : this.usuario.id
     }
     this.extranjeriaService.saneoCambioBandejaSqlServer(da).subscribe((result:any) => {
       if(result.Resultado){

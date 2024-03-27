@@ -78,32 +78,24 @@
       </tbody>
     </table>
     <mat-divider></mat-divider>
-      <h3 class="alinear">Documentación adjunto</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Documento</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let doc of listadoDocumentos">
-            <td>{{ doc.nombre_archivo }}</td>
-            <td>
-              <button mat-icon-button (click)="descargarArchivo(doc)">
-                <mat-icon >cloud_download</mat-icon>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    <div class="usuario-container fondo">
+    <div class="usuario-container fondo" *ngIf="mostrarBoton">
       <button mat-raised-button color="primary" class="boton-largo" (click)="sanear()">Procesar</button>
     </div>
+
+    <mat-divider></mat-divider>
+
+    <app-comentario
+        [solicitud_id]          = "solictudNuber"
+        [usuario]               = "usuario"
+        [solicitud]             = "solicitud"
+        [estadosRespuestas]     = "estadosRespuestas"
+        [mostrarBoton]          = "mostrarBoton"
+        [detalle_tipo_saneo_id] = "detalle_tipo_saneo_id"
+        ></app-comentario>
+
   </ng-container>
 
 
-  <mat-divider></mat-divider>
 
 
   <mat-divider></mat-divider>

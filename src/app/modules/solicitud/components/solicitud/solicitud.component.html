@@ -68,7 +68,13 @@
           <mat-chip style="background-color: rgba(235, 98, 78, 0.697); color: white;" selected="false" *ngIf="element.estado === 'EN PROCESO'">
             {{ element.estado }}
           </mat-chip>
-          <mat-chip style="background-color: rgba(255, 34, 0, 0.697); color: white;" selected="false" *ngIf="element.estado === 'RECHAZADO' || element.estado === 'OBSERVADO'">
+          <!-- <mat-chip style="background-color: rgba(255, 34, 0, 0.697); color: white;" selected="false" *ngIf="element.estado === 'RECHAZADO' || element.estado === 'OBSERVADO'">
+            {{ element.estado }}
+          </mat-chip> -->
+          <mat-chip style="background-color: rgba(255, 34, 0, 0.697); color: white;" selected="false" *ngIf="element.estado === 'OBSERVADO'">
+            {{ element.estado }}
+          </mat-chip>
+          <mat-chip style="background-color: rgba(255, 234, 0, 0.697); color: white;" selected="false" *ngIf="element.estado === 'REVISADO'">
             {{ element.estado }}
           </mat-chip>
         </td>
@@ -80,7 +86,13 @@
           <button *ngIf="element.estado === 'EN PROCESO'" mat-icon-button color="warn" (click)="recuperarSolicitud(element)">
             <mat-icon>send</mat-icon>
           </button>
-          <button *ngIf="element.estado === 'RECHAZADO' || element.estado === 'OBSERVADO'" mat-icon-button color="warn" (click)="tipoCasoSaneo(element)">
+          <!-- <button *ngIf="element.estado === 'RECHAZADO' || element.estado === 'OBSERVADO'" mat-icon-button color="warn" (click)="tipoCasoSaneo(element)">
+            <mat-icon>send</mat-icon>
+          </button> -->
+          <button *ngIf="element.estado === 'OBSERVADO'" mat-icon-button color="warn" (click)="tipoCasoSaneo(element)">
+            <mat-icon>send</mat-icon>
+          </button>
+          <button *ngIf="element.estado === 'REVISADO'" mat-icon-button color="warn" (click)="tipoCasoSaneo(element)">
             <mat-icon>send</mat-icon>
           </button>
         </td>

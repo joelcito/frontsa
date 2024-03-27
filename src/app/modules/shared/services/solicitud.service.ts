@@ -152,8 +152,8 @@ export class SolicitudService {
     );
   }
 
-  getSolicitudArchivosById(id:any){
-    return this.http.get(`${this.base_url}/solicitud/getSolicitudArchivosById/${id}`, {headers: this.agregarAuthorizationHeader()}).pipe(
+  getSolicitudArchivosById(id:any, conversacion_id:any){
+    return this.http.get(`${this.base_url}/solicitud/getSolicitudArchivosById/${id}/${conversacion_id}`, {headers: this.agregarAuthorizationHeader()}).pipe(
       catchError(error => this.manejarError(error))
     );
   }

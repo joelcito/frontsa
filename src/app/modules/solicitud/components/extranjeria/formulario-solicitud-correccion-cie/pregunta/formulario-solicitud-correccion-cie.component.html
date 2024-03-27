@@ -131,6 +131,33 @@
   <mat-divider></mat-divider>
   <ng-container *ngIf="mostrarTablaExtranjeroSeleccionado">
     <h3 class="alinear">Datos del tramite</h3>
+
+
+    <form [formGroup]="solicitudFormularioTramite">
+      <div class="usuario-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Tipo solicitud</mat-label>
+          <mat-select formControlName="tipo_solicitud">
+            <mat-option *ngFor="let tipo_saneo of lista_tipo_solicitud" [value]="tipo_saneo.id">{{ tipo_saneo.nombre }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Nombre del Operador</mat-label>
+          <input matInput placeholder="Nombre del Operador" formControlName="nombre_operador"/>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Tipo Prioridad</mat-label>
+          <mat-select formControlName="tipo_prioridad">
+            <mat-option value="ATENCIÓN COMUN">ATENCIÓN COMUN</mat-option>
+            <mat-option value="ATENCIÓN ADULTO MAYOR">ATENCIÓN ADULTO MAYOR</mat-option>
+            <mat-option value="ATENCIÓN EMBARAZADA">ATENCIÓN EMBARAZADA</mat-option>
+            <mat-option value="ATENCIÓN NIÑO MENOR DE 10 AÑOS">ATENCIÓN NIÑO MENOR DE 10 AÑOS</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+
     <form [formGroup]="formularioCoreccionCIE">
       <div *ngFor="let elemento of elementos">
         <table>
@@ -168,24 +195,32 @@
     <br>
     <br>
 
+
     <mat-divider></mat-divider>
     <h3 class="alinear">Documentación del tramite</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Documento</th>
-            <th>Ach. Permitidos</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let doc of listaDocumentosSolicitud">
-            <td>{{ doc.nombre }}</td>
-            <td>{{ doc.tipo_documento }}</td>
-            <td><input type="file" id="document_{{ doc.id }}" accept="{{ doc.tipo_documento }}" (change)="onFileSelected($event, doc.tamanio, doc.id)"></td>
-          </tr>
-        </tbody>
-      </table>
+    <table>
+      <thead>
+        <tr>
+          <th>Documento</th>
+          <th>Ach. Permitidos</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let doc of listaDocumentosSolicitud">
+          <td>{{ doc.nombre }}</td>
+          <td>{{ doc.tipo_documento }}</td>
+          <td><input type="file" id="document_{{ doc.id }}" accept="{{ doc.tipo_documento }}" (change)="onFileSelected($event, doc.tamanio, doc.id)"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="usuario-container">
+      <mat-form-field>
+        <mat-label>Mensaje Descripcion</mat-label>
+        <textarea matInput  id="mensajeTextarea" placeholder="Escriba su mensaje...."></textarea>
+      </mat-form-field>
+    </div>
 
     <div class="usuario-container fondo">
       <button mat-raised-button color="primary" class="boton-largo" (click)="guardarSolicitud()" [disabled]="validaFormulario(formularioCoreccionCIE)">Guardar</button>

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ExtranjeriaService } from '../../../../../shared/services/extranjeria.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,6 +19,8 @@ import { MinioService } from '../../../../../shared/services/minio.service';
 })
 export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
+  // @ViewChild('mensajeTextarea') mensajeTextarea: ElementRef;
+
   private extranjeriaService = inject(ExtranjeriaService);
   private tipoSaneoService   = inject(TipoSaneoService);
   private fb                 = inject(FormBuilder);
@@ -28,7 +30,6 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
   private cdr                = inject(ChangeDetectorRef);
   private datePipe           = inject(DatePipe);
   private minioService       = inject(MinioService);
-
 
   public solicitudFormulario          !: FormGroup
   public formularioBusquedaExtranjero !: FormGroup
@@ -41,37 +42,42 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
   public botonGuardara:boolean   = true
 
+  public  extrajerosBuscados            : any [] = [];
+  private camposSeleccionados           : any [] = [];
+  public  elementos                     : any [] = [];
+  public  elemtosAseleccionar           : any [] = [];
+  public  elementosTemporalesGuardados  : any [] = [];
+  public  elementosPresentesArecuperar  : any [] = [];
+  public  listaDocumentosSolicitud      : any [] = [];
 
-  public  extrajerosBuscados  : any []          = [];
-  private camposSeleccionados : any []          = [];
-  public  elementos           : any []          = [];
-  public  elemtosAseleccionar : any []          = []
-  public  elementosTemporalesGuardados : any [] = []
-  public  elementosPresentesArecuperar : any [] = []
-  public  extranjeroElejido   : any             = {};
-  public  listaDocumentosSolicitud  : any []    = []
-
+  public  extranjeroElejido             : any = {};
 
   private formulario_id        : any;
   private tipo_saneo_id        : any;
   private detalle_tipo_saneo_id: any;
   private solicitud_id         : any;
   private solicitud            : any;
-  public  bucketName           : any
+  public  bucketName           : any;
+  public  lista_tipo_solicitud : any;
 
   public valorSeleccionado  :string = ''
   public sele1              :string = ''
+  public mensaje            :string = ''
 
   ngOnInit(): void {
     this.detalle_tipo_saneo_id = environment.detalle_tipo_saneo_id_correccion_cie
     this.bucketName            = environment.bucketName
+
     this.router.params.subscribe(params => {
+
       const tipo_saneo_id_encry = params['tipo_saneo_id'];
       const formulario_id_encry = params['formulario_id'];
       const solicitud_id_encry  = params['solicitud_id'];
-            this.tipo_saneo_id  = this.desencriptarConAESBase64URL(tipo_saneo_id_encry, 'ESTE ES JOEL');
-            this.formulario_id  = this.desencriptarConAESBase64URL(formulario_id_encry, 'ESTE ES JOEL');
-            this.solicitud_id   = this.desencriptarConAESBase64URL(solicitud_id_encry, 'ESTE ES JOEL');
+
+      this.tipo_saneo_id  = this.desencriptarConAESBase64URL(tipo_saneo_id_encry, 'ESTE ES JOEL');
+      this.formulario_id  = this.desencriptarConAESBase64URL(formulario_id_encry, 'ESTE ES JOEL');
+      this.solicitud_id   = this.desencriptarConAESBase64URL(solicitud_id_encry, 'ESTE ES JOEL');
+
       if(this.solicitud_id === "0"){
 
         console.log("si")
@@ -100,11 +106,17 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
         // PARA LOS DOCUMENTOS
         this.tipoSaneoService.getDocumentoDetalleTipoSaneo(this.detalle_tipo_saneo_id).subscribe((resuly :any) => {
-          console.log(resuly)
           this.listaDocumentosSolicitud = resuly
         })
 
       }
+
+
+      this.tipoSaneoService.getDetalleTiposSaneo(this.tipo_saneo_id).subscribe(resulg => {
+        this.lista_tipo_solicitud = resulg
+      })
+
+
       //  **************************** DE AQUI ES EXTRANJERIA HABER ****************************
       this.formularioBusquedaExtranjero = this.fb.group({
         numero_cedula   : ['10131544', Validators.required],
@@ -115,7 +127,8 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
       });
 
       this.solicitudFormularioTramite = this.fb.group({
-        tipo_solicitud       : [{value:4, disabled:true}, Validators.required],
+        tipo_solicitud       : [{value:this.detalle_tipo_saneo_id, disabled:true}, Validators.required],
+        nombre_operador      : ['', Validators.required],
         descripcion          : ['',],
         articulos_reglamentos: ['', Validators.required],
         // datos_procesar       : ['', Validators.required],
@@ -125,6 +138,9 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
         api_estado    : [{value :'ACTIVO', disabled:true}, Validators.required],
         estado_cambiar: [{value:'DESBLOQUEADO', disabled:true}, Validators.required],
+
+        tipo_prioridad       : ['ATENCIÓN COMUN', Validators.required],
+
       });
     });
 
@@ -234,6 +250,8 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
           this.solicitud_id = result.id
         })
         this.solicitudFormularioTramite.get('nombre_operador')?.setValue(extranjero.NombresSegUsuarios+" "+extranjero.PaternoSegUsuarios+" "+extranjero.MaternoSegUsuarios);
+        this.solicitudFormularioTramite.get('nombre_operador')?.disable()
+
         this.solicitudFormularioTramite.get('usu_operador_id')?.setValue(extranjero.LoginSegUsuarios);
         this.extranjeroElejido                   = extranjero
         this.mostrarTabla                        = false
@@ -347,6 +365,7 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
     this.camposSeleccionados.forEach((item:any) => {
       this.formularioCoreccionCIE.get("actual_"+item)?.enable()
     })
+
     let datos                            = this.formularioCoreccionCIE.value
     datos['serialExtRegistros']          = this.extranjeroElejido.SerialExtRegistros
     datos['serialDocumentoExtRegistros'] = this.extranjeroElejido.SerialDocumentoExtRegistros
@@ -356,11 +375,11 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
     datos['tipo_solicitud']              = this.tipo_saneo_id
     datos['solicitud_id']                = this.solicitud_id
     datos['estado']                      = "ASIGNADO"
+    datos['tipo_prioridad']              = this.solicitudFormularioTramite.value.tipo_prioridad
+    datos['mensaje_adicion']             = (document.getElementById('mensajeTextarea') as HTMLTextAreaElement).value;
+    // datos['tipo_archivo']                = ;
+
     this.solicitudService.saveCorreccionesCIE(datos).subscribe((result:any) => {
-
-      console.log(result)
-
-
       if(result.id !== null && result.estado === "ASIGNADO"){
         const fechaActual  = new Date();
         const anioActual   = fechaActual.getFullYear();
@@ -385,11 +404,14 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
                   sistema        : "EXT",
                   mes            : mesEnLiteral,
                   fecha          : fechaFormato,
-                  nombre_archivo : nameFile ,
+                  nombre_archivo : nameFile,
                   ETag           : data.ETag,
                   Location       : data.Location,
                   key            : data.Key,
                   Bucket         : data.Bucket,
+                  tipo_archivo   : "INICIO SOLICITUD"
+
+
                 }
                 this.solicitudService.saveSolicitudArchivo(datos).subscribe((resultado:any) =>{
                   console.log(resultado)
@@ -405,6 +427,7 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
                     timer: 4000,
                     allowOutsideClick: false
                   });
+                  
                   setTimeout(() => {
                     this.routerLink.navigate(['/solicitud']);
                   }, 4000);

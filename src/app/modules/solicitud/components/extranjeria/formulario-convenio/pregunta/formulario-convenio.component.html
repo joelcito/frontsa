@@ -94,18 +94,6 @@
     </table>
   </ng-container>
 
-  <!-- <ng-container *ngIf="mostrarAlertaPersona">
-    <div class="alert-container">
-      <div class="alert alert-danger" role="alert">
-        {{ mostrarMensajeAlerta }}
-      </div>
-      <br>
-      <div class="button-container">
-        <button mat-raised-button color="primary" class="boton-largo" (click)="volverListado()">Volver</button>
-      </div>
-    </div>
-  </ng-container> -->
-
   <mat-divider></mat-divider>
   <ng-container *ngIf="mostrarTablaExtranjeroSeleccionado">
     <h3 class="alinear">Ciudadano Elegido</h3>
@@ -142,6 +130,31 @@
     <h3 class="alinear">Datos del tramite</h3>
     <form [formGroup]="solicitudFormularioTramite">
 
+
+      <div class="usuario-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Tipo solicitud</mat-label>
+          <mat-select formControlName="tipo_solicitud">
+            <mat-option *ngFor="let tipo_saneo of lista_tipo_solicitud" [value]="tipo_saneo.id">{{ tipo_saneo.nombre }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Nombre del Operador</mat-label>
+          <input matInput placeholder="Nombre del Operador" formControlName="nombre_operador"/>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Tipo Prioridad</mat-label>
+          <mat-select formControlName="tipo_prioridad">
+            <mat-option value="ATENCIÓN COMUN">ATENCIÓN COMUN</mat-option>
+            <mat-option value="ATENCIÓN ADULTO MAYOR">ATENCIÓN ADULTO MAYOR</mat-option>
+            <mat-option value="ATENCIÓN EMBARAZADA">ATENCIÓN EMBARAZADA</mat-option>
+            <mat-option value="ATENCIÓN NIÑO MENOR DE 10 AÑOS">ATENCIÓN NIÑO MENOR DE 10 AÑOS</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
       <div class="usuario-container">
         <mat-form-field appearance="fill">
           <mat-label>Descripcion</mat-label>
@@ -162,36 +175,19 @@
             <mat-option *ngFor="let tipo_saneo of lista_tipo_solicitud" [value]="tipo_saneo.id">{{ tipo_saneo.nombre }}</mat-option>
           </mat-select>
         </mat-form-field>
-        <!-- <mat-form-field>
-          <mat-label>Nombre del Operador</mat-label>
-          <input matInput placeholder="Nombre del Operador" formControlName="nombre_operador"/>
-        </mat-form-field> -->
         <mat-form-field>
           <mat-label>Fecha Certificacion Correcta</mat-label>
           <input matInput placeholder="Nombre del Operador" formControlName="fecha_certificacion"/>
         </mat-form-field>
       </div>
 
-      <!-- <div class="usuario-container">
-        <mat-form-field appearance="fill">
-          <mat-label>Datos a Procesar</mat-label>
-          <mat-select (selectionChange)="tipoCaso($event)" formControlName="datos_procesar">
-            <mat-option value="RENOVADO A DUPLICADO">RENOVADO A DUPLICADO</mat-option>
-            <mat-option value="RENOVADO A ENTREGADO">RENOVADO A ENTREGADO</mat-option>
-            <mat-option value="DUPLICADO A RENOVADO">DUPLICADO A RENOVADO</mat-option>
-            <mat-option value="DUPLICADO A ENTREGADO">DUPLICADO A ENTREGADO</mat-option>
-            <mat-option value="RECIBIDO A ENTREGADO">RECIBIDO A ENTREGADO</mat-option>
-          </mat-select>
+      <div class="usuario-container">
+        <mat-form-field>
+          <mat-label>Mensaje Descripcion</mat-label>
+          <textarea matInput  id="mensajeTextarea" placeholder="Escriba su mensaje...."></textarea>
         </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Dato Anterior</mat-label>
-          <input matInput placeholder="Nombre del Operador" formControlName="dato_anterior"/>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Dato Correcto</mat-label>
-          <input matInput placeholder="Nombre del Operador" formControlName="dato_correcto"/>
-        </mat-form-field>
-      </div> -->
+      </div>
+
       <div class="usuario-container fondo">
         <button mat-raised-button color="primary" class="boton-largo"(click)="guardarSolicitud()" [disabled]="solicitudFormularioTramite.invalid">Guardar</button>
       </div>

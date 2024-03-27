@@ -1,0 +1,74 @@
+<h3 class="alinear">COMENTARIOS DEL CASO</h3>
+<form [formGroup]="formularioRespuesta">
+  <table>
+    <thead>
+      <tr>
+        <th>FECHA</th>
+        <th>ESTADO</th>
+        <th>MENSAJE</th>
+        <th colspan="2">USUARIO</th>
+        <th>ARCHIVOS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let con of solicitudConversacion">
+        <td>{{ con.fechaCreacion }}</td>
+        <td>{{ con.estado }}</td>
+        <td>{{ con.texto }}</td>
+        <td colspan="2">
+          <div *ngIf="con.usuarioSolicitante !== null">
+            {{ con.usuarioSolicitante.nombres+" "+con.usuarioSolicitante.primer_apellido+" "+con.usuarioSolicitante.segundo_apellido }}
+          </div>
+          <div *ngIf="con.usuarioRespuseta !== null">
+            {{ con.usuarioRespuseta.nombres+" "+con.usuarioRespuseta.primer_apellido+" "+con.usuarioRespuseta.segundo_apellido }}
+          </div>
+        </td>
+        <td>
+          <button mat-mini-fab class="extra-small-button" (click)="abreModalArchivos(con)">
+            <mat-icon aria-label="Edit" class="extra-small-icon">attach_file</mat-icon>
+          </button>
+        </td>
+      </tr>
+      <tr style="background-color: rgb(250, 212, 165);">
+        <td>
+          <mat-form-field appearance="fill">
+            <mat-label>Tipo Observacion</mat-label>
+            <mat-select formControlName="tipo_observacion">
+              <mat-option *ngFor="let da of estadosRespuestas" value="{{ da.value }}">{{ da.nombre }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+        <!-- <td colspan="2"> -->
+        <!-- <td [colspan]="listaDocumentosSolicitud? 2 : 3"> -->
+        <td [attr.colspan]="(listaDocumentosSolicitud.length > 0) ? 2 : 3">
+          <mat-form-field>
+            <mat-label>Mensaje de Respuesta</mat-label>
+            <textarea matInput placeholder="Escriba su mensaje...." formControlName="mensaje_adicion" ></textarea>
+          </mat-form-field>
+        </td>
+        <td *ngIf="listaDocumentosSolicitud.length > 0">
+          <h3 class="alinear">Documentación del tramite</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Documento</th>
+                <th>Ach. Permitidos</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let doc of listaDocumentosSolicitud">
+                <td>{{ doc.nombre }}</td>
+                <td>{{ doc.tipo_documento }}</td>
+                <td><input type="file" id="document_{{ doc.id }}" accept="{{ doc.tipo_documento }}" (change)="onFileSelected($event, doc.tamanio, doc.id)"></td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+        <td colspan="2">
+          <button class="btn-comentar" mat-raised-button (click)="enviarRespesta()" [disabled]="formularioRespuesta.invalid">Comentar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>

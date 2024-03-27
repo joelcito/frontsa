@@ -33,8 +33,10 @@ export class LoginComponent implements OnInit {
   private loginService = inject(LoginService);
 
   formData = {
-    username: 'jjjoelcito123@gmail.com',
-    password: '123456789'
+    // username: 'jjjoelcito123@gmail.com',
+    // password: '123456789'
+    username: '',
+    password: ''
   };
 
   onSubmit() {

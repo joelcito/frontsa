@@ -143,14 +143,29 @@
     <form [formGroup]="solicitudFormularioTramite">
 
       <div class="usuario-container">
-        <mat-form-field appearance="fill">
+        <!-- <mat-form-field appearance="fill">
           <mat-label>Descripcion</mat-label>
           <textarea matInput rows="1" placeholder="Descripcion" formControlName="descripcion"></textarea>
-        </mat-form-field>
+        </mat-form-field> -->
         <mat-form-field appearance="fill">
           <mat-label>Articulos del Reglamento</mat-label>
           <mat-select formControlName="articulos_reglamentos">
             <mat-option value="SOPORTE EXTRANJERIA">SOPORTE EXTRANJERIA</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Nombre del Operador</mat-label>
+          <input matInput placeholder="Nombre del Operador" formControlName="nombre_operador"/>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Tipo Prioridad</mat-label>
+          <mat-select formControlName="tipo_prioridad">
+            <mat-option value="ATENCIÓN COMUN">ATENCIÓN COMUN</mat-option>
+            <mat-option value="ATENCIÓN ADULTO MAYOR">ATENCIÓN ADULTO MAYOR</mat-option>
+            <mat-option value="ATENCIÓN EMBARAZADA">ATENCIÓN EMBARAZADA</mat-option>
+            <mat-option value="ATENCIÓN NIÑO MENOR DE 10 AÑOS">ATENCIÓN NIÑO MENOR DE 10 AÑOS</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -171,6 +186,12 @@
         <mat-form-field>
           <mat-label>Estado a Cambiar</mat-label>
           <input matInput placeholder="Nombre del Operador" formControlName="dato_corregir"/>
+        </mat-form-field>
+      </div>
+      <div class="usuario-container">
+        <mat-form-field>
+          <mat-label>Mensaje Descripcion</mat-label>
+          <textarea matInput placeholder="Escriba su mensaje...." formControlName="mensaje_adicion" ></textarea>
         </mat-form-field>
       </div>
       <div class="usuario-container fondo">

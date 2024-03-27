@@ -32,11 +32,11 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
   public formularioBusquedaExtranjero !: FormGroup
   public solicitudFormularioTramite   !: FormGroup
 
-  private formulario_id        : any
-  private tipo_saneo_id        : any
-  public  detalle_tipo_saneo_id: any
-  public  bucketName           : any
-
+  private formulario_id        : any;
+  private tipo_saneo_id        : any;
+  public  detalle_tipo_saneo_id: any;
+  public  bucketName           : any;
+  public  lista_tipo_solicitud : any;
 
   public mostrarTabla:boolean                       = false
   public mostrarAlertaPersona:boolean               = false
@@ -86,7 +86,14 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
         obs_naturalizacion: [''],
         obs_baja_orpe     : [''],
 
+
+        tipo_prioridad       : ['ATENCIÓN COMUN', Validators.required],
+
       });
+
+      this.tipoSaneoService.getDetalleTiposSaneo(this.tipo_saneo_id).subscribe(resulg => {
+        this.lista_tipo_solicitud = resulg
+      })
 
 
       // console.log(params, )
@@ -186,6 +193,7 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
   seleccionarExtranjero(extranjero:any){
 
       this.solicitudFormularioTramite.get('nombre_operador')?.setValue(extranjero.NombresSegUsuarios+" "+extranjero.PaternoSegUsuarios+" "+extranjero.MaternoSegUsuarios);
+      this.solicitudFormularioTramite.get('nombre_operador')?.disable()
       this.solicitudFormularioTramite.get('usu_operador_id')?.setValue(extranjero.LoginSegUsuarios);
       this.extranjeroElejido                  = extranjero
       this.mostrarTabla                       = false
@@ -213,7 +221,10 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
       naturalizacion             : this.solicitudFormularioTramite.value.naturalizacion,
       baja_orpe                  : this.solicitudFormularioTramite.value.baja_orpe,
       obs_baja_orpe              : this.solicitudFormularioTramite.value.obs_baja_orpe,
-      obs_naturalizacion         : this.solicitudFormularioTramite.value.obs_naturalizacion
+      obs_naturalizacion         : this.solicitudFormularioTramite.value.obs_naturalizacion,
+
+      tipo_prioridad : this.solicitudFormularioTramite.value.tipo_prioridad,
+      mensaje_adicion: (document.getElementById('mensajeTextarea') as HTMLTextAreaElement).value
     }
     this.solicitudFormularioTramite.disable()
     this.solicitudService.saveSolicitudBajaOrpeNaturalizacion(datRes).subscribe((result:any) => {
@@ -246,6 +257,7 @@ export class FormularioBajaOrpeNaturalizacionComponent implements OnInit {
                   Location       : data.Location,
                   key            : data.Key,
                   Bucket         : data.Bucket,
+                  tipo_archivo   : "INICIO SOLICITUD"
                 }
                 this.solicitudService.saveSolicitudArchivo(datos).subscribe((resultado:any) =>{
                   console.log(resultado)

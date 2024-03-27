@@ -141,6 +141,30 @@
   <ng-container *ngIf="mostrarTablaExtranjeroSeleccionado">
     <h3 class="alinear">Datos del tramite</h3>
     <form [formGroup]="solicitudFormularioTramite">
+
+      <div class="usuario-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Tipo solicitud</mat-label>
+          <mat-select formControlName="tipo_solicitud">
+            <mat-option *ngFor="let tipo_saneo of lista_tipo_solicitud" [value]="tipo_saneo.id">{{ tipo_saneo.nombre }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Nombre del Operador</mat-label>
+          <input matInput placeholder="Nombre del Operador" formControlName="nombre_operador"/>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Tipo Prioridad</mat-label>
+          <mat-select formControlName="tipo_prioridad">
+            <mat-option value="ATENCIÓN COMUN">ATENCIÓN COMUN</mat-option>
+            <mat-option value="ATENCIÓN ADULTO MAYOR">ATENCIÓN ADULTO MAYOR</mat-option>
+            <mat-option value="ATENCIÓN EMBARAZADA">ATENCIÓN EMBARAZADA</mat-option>
+            <mat-option value="ATENCIÓN NIÑO MENOR DE 10 AÑOS">ATENCIÓN NIÑO MENOR DE 10 AÑOS</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
       <div class="toggle-container">
         <div class="toggle-column">
           <mat-slide-toggle formControlName="naturalizacion" color="primary">
@@ -173,6 +197,13 @@
           </tr>
         </tbody>
       </table>
+
+      <div class="usuario-container">
+        <mat-form-field>
+          <mat-label>Mensaje Descripcion</mat-label>
+          <textarea matInput  id="mensajeTextarea" placeholder="Escriba su mensaje...."></textarea>
+        </mat-form-field>
+      </div>
 
       <div class="usuario-container fondo">
         <button mat-raised-button color="primary" class="boton-largo" (click)="guardarSolicitud()" [disabled]="isGuardarButtonDisabled()">Guardar</button>

@@ -93,61 +93,23 @@
       </tbody>
     </table>
 
-    <mat-divider></mat-divider>
-    <h3 class="alinear">COMENTARIOS DEL CASO</h3>
-    <form [formGroup]="formularioRespuesta">
-      <table>
-        <thead>
-          <tr>
-            <th>USUARIO</th>
-            <th>MENSAJE</th>
-            <th colspan="2">ESTADO</th>
-            <th>FECHA</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let con of solicitudConversacion">
-            <td>
-              <div *ngIf="con.usuarioSolicitante !== null">
-                {{ con.usuarioSolicitante.nombres+" "+con.usuarioSolicitante.primer_apellido+" "+con.usuarioSolicitante.segundo_apellido }}
-              </div>
-              <div *ngIf="con.usuarioRespuseta !== null">
-                {{ con.usuarioRespuseta.nombres+" "+con.usuarioRespuseta.primer_apellido+" "+con.usuarioRespuseta.segundo_apellido }}
-              </div>
-            </td>
-            <td>{{ con.texto }}</td>
-            <td colspan="2">{{ con.estado }}</td>
-            <td>{{ con.fechaCreacion }}</td>
-          </tr>
-          <tr>
-            <td colspan="2">
-                <mat-form-field>
-                  <mat-label>Mensaje de Respuesta</mat-label>
-                  <textarea matInput placeholder="Escriba su mensaje...." formControlName="mensaje_adicion" ></textarea>
-                </mat-form-field>
-            </td>
-            <td colspan="2">
-              <mat-form-field appearance="fill">
-                <mat-label>Tipo Observacion</mat-label>
-                <mat-select formControlName="tipo_observacion">
-                  <mat-option *ngFor="let da of estadosRespuestas" value="{{ da.value }}">{{ da.nombre }}</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </td>
-            <td>
-              <button mat-raised-button color="dark" (click)="enviarRespesta()" [disabled]="formularioRespuesta.invalid">Responder</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </form>
-    <div class="usuario-container fondo">
+    <div class="usuario-container fondo" *ngIf="mostrarBoton">
       <button mat-raised-button color="primary" class="boton-largo" (click)="sanear()">Procesar</button>
     </div>
+
+    <mat-divider></mat-divider>
+
+    <app-comentario
+      [solicitud_id]          = "solictudNuber"
+      [usuario]               = "usuario"
+      [solicitud]             = "solicitud"
+      [estadosRespuestas]     = "estadosRespuestas"
+      [mostrarBoton]          = "mostrarBoton"
+      [detalle_tipo_saneo_id] = "detalle_tipo_saneo_id"
+      ></app-comentario>
+
+
   </ng-container>
-
-
-
 
   <mat-divider></mat-divider>
 

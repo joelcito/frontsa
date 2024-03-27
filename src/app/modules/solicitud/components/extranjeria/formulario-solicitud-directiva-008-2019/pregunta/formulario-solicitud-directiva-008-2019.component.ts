@@ -88,14 +88,17 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
         tipo_solicitud       : [{value: this.detalle_tipo_saneo_id, disabled:true}, Validators.required],
         descripcion          : ['',],
         articulos_reglamentos: ['', Validators.required],
-        // datos_procesar       : ['', Validators.required],
-        // dato_anterior        : ['', Validators.required],
-        // dato_correcto        : ['', Validators.required],
-        usu_operador_id      : ['', Validators.required],
+          // datos_procesar       : ['', Validators.required],
+          // dato_anterior        : ['', Validators.required],
+          // dato_correcto        : ['', Validators.required],
+        usu_operador_id: ['', Validators.required],
+        nombre_operador: ['', Validators.required],
 
         dato_actual  : [{value :'ACTIVO', disabled:true}, Validators.required],
         dato_corregir: [{value:'DESBLOQUEADO', disabled:true}, Validators.required],
 
+        mensaje_adicion: ['', Validators.required],
+        tipo_prioridad : ['ATENCIÓN COMUN', Validators.required],
       });
 
       //  **************************** DE AQUI ES EXTRANJERIA HABER FIN ****************************
@@ -172,6 +175,7 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
             console.log(result)
             if(result.length === 0){
               this.solicitudFormularioTramite.get('nombre_operador')?.setValue(extranjero.NombresSegUsuarios+" "+extranjero.PaternoSegUsuarios+" "+extranjero.MaternoSegUsuarios);
+              this.solicitudFormularioTramite.get('nombre_operador')?.disable()
               this.solicitudFormularioTramite.get('usu_operador_id')?.setValue(extranjero.LoginSegUsuarios);
               this.extranjeroElejido = extranjero
               this.mostrarTabla = false
@@ -237,20 +241,20 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
   }
 
   guardarSolicitud(){
-    console.log("******************************************************************************************************")
-    console.log("========================")
-    console.log(this.solicitudFormulario.value)
-    console.log("========================")
-    console.log(this.extranjeroElejido)
-    console.log("========================")
-    console.log(this.solicitudFormularioTramite.value)
-    console.log("******************************************************************************************************")
+    // console.log("******************************************************************************************************")
+    // console.log("========================")
+    // console.log(this.solicitudFormulario.value)
+    // console.log("========================")
+    // console.log(this.extranjeroElejido)
+    // console.log("========================")
+    // console.log(this.solicitudFormularioTramite.value)
+    // console.log("******************************************************************************************************")
 
-    let dato = {
-      datosFormularioSolicitud  : this.solicitudFormulario.value,
-      datosExtranjeroElejido    : this.extranjeroElejido,
-      solicitudFormularioTramite: this.solicitudFormularioTramite.value
-    }
+    // let dato = {
+    //   datosFormularioSolicitud  : this.solicitudFormulario.value,
+    //   datosExtranjeroElejido    : this.extranjeroElejido,
+    //   solicitudFormularioTramite: this.solicitudFormularioTramite.value
+    // }
 
     this.solicitudFormularioTramite.get('tipo_solicitud')?.enable()
     this.solicitudFormularioTramite.get('dato_actual')?.enable()
@@ -269,15 +273,18 @@ export class FormularioSolicitudDirectiva0082019Component implements OnInit{
       // PREGUNTAS
       tipo_solicitud_respuesta       : this.solicitudFormularioTramite.value.tipo_solicitud,
       nombre_operador_respuesta      : this.solicitudFormularioTramite.value.nombre_operador,
-      descripcion_respuesta          : this.solicitudFormularioTramite.value.descripcion,
+      // descripcion_respuesta          : this.solicitudFormularioTramite.value.descripcion,
       articulos_reglamentos_respuesta: this.solicitudFormularioTramite.value.articulos_reglamentos,
       // datos_procesar_respuesta       : this.solicitudFormularioTramite.value.datos_procesar,
       // dato_anterior_respuesta        : this.solicitudFormularioTramite.value.dato_anterior,
       // dato_correcto_respuesta        : this.solicitudFormularioTramite.value.dato_correcto,
       usu_operador_id_respuesta: this.solicitudFormularioTramite.value.usu_operador_id,
 
-      dato_actual_respuesta    : this.solicitudFormularioTramite.value.dato_actual,
+      dato_actual_respuesta  : this.solicitudFormularioTramite.value.dato_actual,
       dato_corregir_respuesta: this.solicitudFormularioTramite.value.dato_corregir,
+
+      mensaje_adicion: this.solicitudFormularioTramite.value.mensaje_adicion,
+      tipo_prioridad : this.solicitudFormularioTramite.value.tipo_prioridad,
     }
 
     // this.solicitudService.saveSolicitudCambioBandeja(dato).subscribe(resul => {

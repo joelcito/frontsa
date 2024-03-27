@@ -81,13 +81,19 @@ export class UsuarioService {
   saveMenuUserById(datos:any){
     return this.http.post(`${this.base_url}/usuarios/saveMenuUserById`, datos, {headers: this.agregarAuthorizationHeader()}).pipe(
       catchError(error => this.manejarError(error))
-    );;
+    );
   }
 
   deleteUsuer(id:any){
     return this.http.delete(`${this.base_url}/usuarios/deleteUsuer/${id}`, {headers: this.agregarAuthorizationHeader()}).pipe(
       catchError(error => this.manejarError(error))
-    );;
+    );
+  }
+
+  upDateUsuario(id:any, body:any){
+    return this.http.post(`${this.base_url}/usuarios/upDateUsuario/${id}`, body, {headers: this.agregarAuthorizationHeader()}).pipe(
+      catchError(error => this.manejarError(error))
+    );
   }
 
 

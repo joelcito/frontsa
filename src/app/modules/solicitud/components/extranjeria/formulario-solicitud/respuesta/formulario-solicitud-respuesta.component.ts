@@ -25,7 +25,6 @@ export class FormularioSolicitudRespuestaComponent implements OnInit{
   private routerLink         = inject(Router);
   private fb                 = inject(FormBuilder);
 
-
   private solicitud_id : any
   public  solictudNuber: any
 
@@ -36,36 +35,29 @@ export class FormularioSolicitudRespuestaComponent implements OnInit{
     fecha       : "",
   }
 
-  public estadosRespuestas:any = [
-
-    {
-      nombre: 'OBSERVADO',
-      value : 'OBSERVADO'
-    },
-    {
-      nombre: 'PROCESADO',
-      value : 'PROCESADO'
-    },
-    {
-      nombre: 'RECHAZADO',
-      value : 'RECHAZADO'
-    },
-  ]
+  public estadosRespuestas:any = [] ;
 
   public datosCiudadano:any           = {};
   public datosTramite:any             = {};
 
   public solicitudConversacion:any [] = [];
 
-  public usuario:any;
+  public usuario              : any;
+  public solicitud            : any;
+  public detalle_tipo_saneo_id: any;
+
+
+  public mostrarBoton!:boolean;
+
 
   public formularioRespuesta !:FormGroup
 
   ngOnInit(): void {
 
+      this.detalle_tipo_saneo_id = environment.detalle_tipo_saneo_id_cambio_bandeja
+
       // Obtener los datos de sessionStorage como JSON
       const datosRecuperadosString: string | null = sessionStorage.getItem('datos');
-
 
       // Verificar si hay datos en sessionStorage
       if (datosRecuperadosString !== null) {
@@ -87,6 +79,55 @@ export class FormularioSolicitudRespuestaComponent implements OnInit{
 
       this.solicitudService.findByIdsolicitud(this.solicitud_id).subscribe((resul:any) => {
 
+        this.solicitud = resul
+
+        // console.log(resul)
+
+        if(resul.asignado_id === this.usuario.id){
+          this.mostrarBoton =   true
+          this.estadosRespuestas = [
+            // {
+            //   nombre: 'ASIGNADO',
+            //   value : 'ASIGNADO'
+            // },
+            {
+              nombre: 'OBSERVADO',
+              value : 'OBSERVADO'
+            },
+            // {
+            //   nombre: 'PROCESADO',
+            //   value : 'PROCESADO'
+            // },
+            {
+              nombre: 'RECHAZADO',
+              value : 'RECHAZADO'
+            },
+            {
+              nombre: 'ANULADO',
+              value : 'ANULADO'
+            },
+          ]
+
+        }else{
+          this.mostrarBoton =   false
+          this.estadosRespuestas = [
+            {
+              nombre: 'REVISADO',
+              value : 'REVISADO'
+            },
+            {
+              nombre: 'ANULADO',
+              value : 'ANULADO'
+            },
+            // {
+            //   nombre: 'RECHAZADO',
+            //   value : 'RECHAZADO'
+            // },
+          ]
+        }
+
+        // this.mostrarBoton = (resul.asignado_id === this.usuario.id) ? true : false
+
         // ******************** DATOS DE LA OFICINA ********************
         this.datosOficina.departamento = resul.departamento
         this.datosOficina.oficina      = resul.nombre_organizacion
@@ -101,6 +142,8 @@ export class FormularioSolicitudRespuestaComponent implements OnInit{
         this.extranjeriaService.buscaExtranjeroPorSerial(data).subscribe(resul => {
           this.datosCiudadano = resul
         })
+
+        // console.log(this.solicitud)
       })
 
       // ******************** DATOS DEL TRAMITE ********************
@@ -184,8 +227,6 @@ export class FormularioSolicitudRespuestaComponent implements OnInit{
   }
 
   enviarRespesta(){
-
-    console.log(this.usuario, this.formularioRespuesta.value)
 
     let datos = {
       solicitud_id: this.solicitud_id,

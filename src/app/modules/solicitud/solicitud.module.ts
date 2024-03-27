@@ -15,6 +15,9 @@ import { FormularioBajaOrpeNaturalizacionRespuestaComponent } from './components
 import { FormularioConvenioComponent } from './components/extranjeria/formulario-convenio/pregunta/formulario-convenio.component';
 import { FormularioConvenioRespuestaComponent } from './components/extranjeria/formulario-convenio/respuesta/formulario-convenio-respuesta.component';
 import { MaterialModule } from '../shared/material.module';
+import { ComentarioComponent } from './components/extranjeria/comentario/comentario.component';
+// import { NewDocumentoComponent } from './components/extranjeria/comentario/new-documento/new-documento.component';
+import { DocumentacionComponent } from './components/extranjeria/comentario/documentacion/documentacion.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,10 @@ import { MaterialModule } from '../shared/material.module';
     FormularioBajaOrpeNaturalizacionComponent,
     FormularioBajaOrpeNaturalizacionRespuestaComponent,
     FormularioConvenioComponent,
-    FormularioConvenioRespuestaComponent
+    FormularioConvenioRespuestaComponent,
+    ComentarioComponent,
+    // NewDocumentoComponent,
+    DocumentacionComponent
   ],
   imports: [
     CommonModule,

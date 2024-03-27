@@ -79,6 +79,9 @@ export class FormularioConvenioComponent implements OnInit{
         dato_correcto        : ['',],
         usu_operador_id      : ['', Validators.required],
         fecha_certificacion  : [{value:'', disable:true}, Validators.required],
+
+        tipo_prioridad       : ['ATENCIÓN COMUN', Validators.required],
+
       });
 
     });
@@ -218,6 +221,10 @@ export class FormularioConvenioComponent implements OnInit{
       dato_anterior_respuesta        : this.solicitudFormularioTramite.value.dato_anterior,
       dato_correcto_respuesta        : this.solicitudFormularioTramite.value.fecha_certificacion,
       usu_operador_id_respuesta      : this.solicitudFormularioTramite.value.usu_operador_id,
+
+      tipo_prioridad : this.solicitudFormularioTramite.value.tipo_prioridad,
+      mensaje_adicion: (document.getElementById('mensajeTextarea') as HTMLTextAreaElement).value
+
     }
 
     // this.solicitudService.saveSolicitudCambioBandeja(dato).subscribe(resul => {

@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Documentación adjunto</h2>
+<mat-dialog-content>
+  <table>
+    <thead>
+      <tr>
+        <th>Documento</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let doc of listadoDocumentos">
+        <td>{{ doc.nombre_archivo }}</td>
+        <td>
+          <button mat-mini-fab class="extra-small-button" (click)="descargarArchivo(doc)">
+            <mat-icon class="extra-small-icon">cloud_download</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <!-- <button mat-button color="primary" (click)="onSave()" [disabled]="rolForm.invalid">
+        <mat-icon>save</mat-icon> Guardar
+    </button>
+    <button mat-button color="primary" (click)="onCancel()">
+        <mat-icon>cancel</mat-icon> Cancelar
+    </button> -->
+</mat-dialog-actions>

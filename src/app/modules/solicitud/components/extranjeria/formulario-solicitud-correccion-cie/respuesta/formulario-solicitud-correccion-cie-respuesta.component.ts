@@ -5,6 +5,7 @@ import { SolicitudService } from '../../../../../shared/services/solicitud.servi
 import { DatePipe } from '@angular/common';
 import { ExtranjeriaService } from '../../../../../shared/services/extranjeria.service';
 import Swal from 'sweetalert2';
+import { environment } from '../../../../../../../environment/environment';
 
 @Component({
   selector: 'app-formulario-solicitud-correccion-cie-respuesta',
@@ -20,10 +21,12 @@ export class FormularioSolicitudCorreccionCieRespuestaComponent implements OnIni
   private extranjeriaService = inject(ExtranjeriaService);
   private routerLink         = inject(Router);
 
-
-  public  solictudNuber: any
-  private solicitud_id : any
-  public  usuario      : any;
+  public  solictudNuber        : any;
+  private solicitud_id         : any;
+  public  usuario              : any;
+  public  solicitud            : any;
+  public  estadosRespuestas    : any;
+  public  detalle_tipo_saneo_id: any;
 
   public datos_actuales:any     = []
   public listadoDocumentos: any = []
@@ -39,16 +42,54 @@ export class FormularioSolicitudCorreccionCieRespuestaComponent implements OnIni
     fecha       : "",
   }
 
+  public mostrarBoton!:boolean;
+
   ngOnInit(): void {
 
-    this.usuario = sessionStorage.getItem('datos');
-    this.route.params.subscribe(params => {
+    this.detalle_tipo_saneo_id = environment.detalle_tipo_saneo_id_correccion_cie
 
+    const datosRecuperadosString: string | null = sessionStorage.getItem('datos');
+    if (datosRecuperadosString !== null) {
+      const datosRecuperados = JSON.parse(datosRecuperadosString);
+      this.usuario = datosRecuperados;
+    }
+
+    this.route.params.subscribe(params => {
       const idEncriptado       = params['solicitud_id'];
             this.solicitud_id  = this.desencriptarConAESBase64URL(idEncriptado, 'ESTE ES JOEL');
             this.solictudNuber = this.solicitud_id
-
       this.solicitudService.findByIdsolicitud(this.solicitud_id).subscribe((resul:any) => {
+        this.solicitud = resul
+        if(resul.asignado_id === this.usuario.id){
+          this.mostrarBoton      = true
+          this.estadosRespuestas = [
+            {
+              nombre: 'OBSERVADO',
+              value : 'OBSERVADO'
+            },
+            {
+              nombre: 'RECHAZADO',
+              value : 'RECHAZADO'
+            },
+            {
+              nombre: 'ANULADO',
+              value : 'ANULADO'
+            },
+          ]
+
+        }else{
+          this.mostrarBoton      = false
+          this.estadosRespuestas = [
+            {
+              nombre: 'REVISADO',
+              value : 'REVISADO'
+            },
+            {
+              nombre: 'ANULADO',
+              value : 'ANULADO'
+            },
+          ]
+        }
 
         // ******************** DATOS DE LA OFICINA ********************
         this.datosOficina.departamento = resul.departamento
@@ -66,13 +107,10 @@ export class FormularioSolicitudCorreccionCieRespuestaComponent implements OnIni
         })
 
         // ******************** PARA LOS ARCHIVOS DE LA SOLICITUD ********************
-        this.solicitudService.getSolicitudArchivosById(this.solicitud_id).subscribe((result:any) =>{
-          this.listadoDocumentos = result
-        })
+        // this.solicitudService.getSolicitudArchivosById(this.solicitud_id).subscribe((result:any) =>{
+        //   this.listadoDocumentos = result
+        // })
       })
-
-      console.log(this.datosCiudadano)
-
 
       // ******************** DATOS DEL TRAMITE ********************
       this.solicitudService.tramitesSolicitudesByIdSolicitud(this.solicitud_id).subscribe((resul:any) => {
@@ -80,15 +118,10 @@ export class FormularioSolicitudCorreccionCieRespuestaComponent implements OnIni
         let j = 1
         while(i < resul.length && j < resul.length){
 
-          console.log(this.datosCiudadano)
-
           let fa:any = {
             campo    : ((resul[i].pregunta).split('_'))[1],
             actual   : resul[i].respuesta,
             modificar: resul[j].respuesta,
-
-
-
           }
           this.datosTramite.push(fa)
           i = i + 2;
@@ -106,6 +139,7 @@ export class FormularioSolicitudCorreccionCieRespuestaComponent implements OnIni
   }
 
   sanear(){
+
     let ver = {
       modificacion      : this.datosTramite,
       serialExtRegistros: this.datosCiudadano.SerialExtRegistros,
@@ -147,7 +181,8 @@ export class FormularioSolicitudCorreccionCieRespuestaComponent implements OnIni
 
         let da = {
           solicitud         : this.solicitud_id,
-          usuario           : JSON.parse(this.usuario).id
+          // usuario           : JSON.parse(this.usuario).id
+          usuario           : this.usuario.id
         }
 
         this.solicitudService.sanearDirectiva0082019(da).subscribe((resul:any) => {

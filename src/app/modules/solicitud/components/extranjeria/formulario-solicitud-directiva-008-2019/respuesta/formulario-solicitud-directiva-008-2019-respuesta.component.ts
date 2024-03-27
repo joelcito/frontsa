@@ -7,6 +7,7 @@ import { UsuarioService } from '../../../../../shared/services/usuario.service';
 import { ExtranjeriaService } from '../../../../../shared/services/extranjeria.service';
 import Swal from 'sweetalert2';
 import { RuisegipService } from '../../../../../shared/services/ruisegip.service';
+import { environment } from '../../../../../../../environment/environment';
 
 @Component({
   selector: 'app-formulario-solicitud-directiva-008-2019-respuesta',
@@ -33,23 +34,66 @@ export class FormularioSolicitudDirectiva0082019RespuestaComponent implements On
   public datosCiudadano:any = {};
   public datosTramite:any   = {};
 
-  public  solictudNuber: any
-  private solicitud_id : any
-  public  usuario      : any;
+  public  solictudNuber        : any;
+  private solicitud_id         : any;
+  public  usuario              : any;
+  public  detalle_tipo_saneo_id: any;
 
 
-  public  listadotramites: any = []
+  public solicitud            : any;
+
+  public  listadotramites: any = [];
+  public estadosRespuestas:any = [];
+
+  public mostrarBoton!:boolean;
+
 
   ngOnInit(): void {
-    this.usuario = sessionStorage.getItem('datos');
+          this.detalle_tipo_saneo_id            = environment.detalle_tipo_saneo_id_directiva_008_2019
+    const datosRecuperadosString: string | null = sessionStorage.getItem('datos');
+    if (datosRecuperadosString !== null) {
+      const datosRecuperados = JSON.parse(datosRecuperadosString);
+            this.usuario     = datosRecuperados;
+    }
+
     this.route.params.subscribe(params => {
-
-      const idEncriptado      = params['solicitud_id'];
-            this.solicitud_id = this.desencriptarConAESBase64URL(idEncriptado, 'ESTE ES JOEL');
-
+      const idEncriptado       = params['solicitud_id'];
+            this.solicitud_id  = this.desencriptarConAESBase64URL(idEncriptado, 'ESTE ES JOEL');
             this.solictudNuber = this.solicitud_id
 
       this.solicitudService.findByIdsolicitud(this.solicitud_id).subscribe((resul:any) => {
+
+        this.solicitud = resul
+
+        if(resul.asignado_id === this.usuario.id){
+          this.mostrarBoton =   true
+          this.estadosRespuestas = [
+            {
+              nombre: 'OBSERVADO',
+              value : 'OBSERVADO'
+            },
+            {
+              nombre: 'RECHAZADO',
+              value : 'RECHAZADO'
+            },
+            {
+              nombre: 'ANULADO',
+              value : 'ANULADO'
+            },
+          ]
+        }else{
+          this.mostrarBoton =   false
+          this.estadosRespuestas = [
+            {
+              nombre: 'REVISADO',
+              value : 'REVISADO'
+            },
+            {
+              nombre: 'ANULADO',
+              value : 'ANULADO'
+            },
+          ]
+        }
 
         // ******************** DATOS DE LA OFICINA ********************
         this.datosOficina.departamento = resul.departamento
@@ -105,7 +149,7 @@ export class FormularioSolicitudDirectiva0082019RespuestaComponent implements On
       if(resul.r === "DESBLOQUEDO" || resul.r === "BLOQUEDO"){
         let da = {
         solicitud: this.solicitud_id,
-        usuario  : JSON.parse(this.usuario).id
+        usuario  : this.usuario.id
         }
         this.solicitudService.sanearDirectiva0082019(da).subscribe((resul:any) => {
           Swal.fire({

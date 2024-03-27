@@ -65,29 +65,57 @@ export class NewUsuarioComponent implements OnInit  {
   }
 
   onSave(){
-    let data = {
-      username: this.usuarioForm.get('username')?.value,
-      password: this.usuarioForm.get('password')?.value,
-      country : "Bolivia",
-      estado  : this.usuarioForm.get('switchControl')?.value,
 
-      cedula             : this.usuarioForm.get('cedula')?.value,
-      complemento        : this.usuarioForm.get('complemento')?.value,
-      nombres            : this.usuarioForm.get('nombres')?.value,
-      primer_apellido    : this.usuarioForm.get('primer_apellido')?.value,
-      segundo_apellido   : this.usuarioForm.get('segundo_apellido')?.value,
-      nombre_organizacion: this.usuarioForm.get('nombre_organizacion')?.value,
-      nombre_dependencia : this.usuarioForm.get('nombre_dependencia')?.value,
-      nombre_cargo       : this.usuarioForm.get('nombre_cargo')?.value,
-      departamento       : this.usuarioForm.get('departamento')?.value,
+    if(this.data != null){
+      let id = this.data.id
+
+      let data = {
+        username: this.usuarioForm.get('username')?.value,
+        password: this.usuarioForm.get('password')?.value,
+        country : "Bolivia",
+        estado  : this.usuarioForm.get('switchControl')?.value,
+
+        cedula             : this.usuarioForm.get('cedula')?.value,
+        complemento        : this.usuarioForm.get('complemento')?.value,
+        nombres            : this.usuarioForm.get('nombres')?.value,
+        primer_apellido    : this.usuarioForm.get('primer_apellido')?.value,
+        segundo_apellido   : this.usuarioForm.get('segundo_apellido')?.value,
+        nombre_organizacion: this.usuarioForm.get('nombre_organizacion')?.value,
+        nombre_dependencia : this.usuarioForm.get('nombre_dependencia')?.value,
+        nombre_cargo       : this.usuarioForm.get('nombre_cargo')?.value,
+        departamento       : this.usuarioForm.get('departamento')?.value,
+      }
+
+      this.usuarioService.upDateUsuario(id, data).subscribe(resul => {
+        this.dialogRef.close(1)
+      }, (error : any) =>{
+        this.dialogRef.close(2)
+      })
+
+    }else{
+      let data = {
+        username: this.usuarioForm.get('username')?.value,
+        password: this.usuarioForm.get('password')?.value,
+        country : "Bolivia",
+        estado  : this.usuarioForm.get('switchControl')?.value,
+
+        cedula             : this.usuarioForm.get('cedula')?.value,
+        complemento        : this.usuarioForm.get('complemento')?.value,
+        nombres            : this.usuarioForm.get('nombres')?.value,
+        primer_apellido    : this.usuarioForm.get('primer_apellido')?.value,
+        segundo_apellido   : this.usuarioForm.get('segundo_apellido')?.value,
+        nombre_organizacion: this.usuarioForm.get('nombre_organizacion')?.value,
+        nombre_dependencia : this.usuarioForm.get('nombre_dependencia')?.value,
+        nombre_cargo       : this.usuarioForm.get('nombre_cargo')?.value,
+        departamento       : this.usuarioForm.get('departamento')?.value,
+      }
+
+      this.usuarioService.saveUsario(data).subscribe(resul => {
+        this.dialogRef.close(1)
+      }, (error : any) =>{
+        this.dialogRef.close(2)
+      })
     }
-
-    this.usuarioService.saveUsario(data).subscribe(resul => {
-      this.dialogRef.close(1)
-    }, (error : any) =>{
-      this.dialogRef.close(2)
-    })
-
   }
 
   onCancel(){
@@ -143,8 +171,8 @@ export class NewUsuarioComponent implements OnInit  {
       departamento       : [data.departamento],
 
 
-      username: [data.username, Validators.required],
-      switchControl  : [data.estado, Validators.required],
+      username     : [data.username, Validators.required],
+      switchControl: [data.estado, Validators.required],
       password     : [''],
 
     });

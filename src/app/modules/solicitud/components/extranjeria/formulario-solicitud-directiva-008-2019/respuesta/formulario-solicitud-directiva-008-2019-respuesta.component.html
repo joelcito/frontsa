@@ -134,6 +134,18 @@
     <div class="usuario-container fondo">
       <button mat-raised-button color="primary" class="boton-largo" (click)="sanear()">Procesar</button>
     </div>
+
+    <mat-divider></mat-divider>
+
+    <app-comentario
+      [solicitud_id]          = "solictudNuber"
+      [usuario]               = "usuario"
+      [solicitud]             = "solicitud"
+      [estadosRespuestas]     = "estadosRespuestas"
+      [mostrarBoton]          = "mostrarBoton"
+      [detalle_tipo_saneo_id] = "detalle_tipo_saneo_id"
+      ></app-comentario>
+
   </ng-container>
 
 
