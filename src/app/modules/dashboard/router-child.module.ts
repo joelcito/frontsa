@@ -66,7 +66,6 @@ const ChildRoutes: Routes = [
   // ************************* ASIGNACION *************************
   { path: 'asignacion', component: AsignacionComponent},
 
-
   // ************************* ASIGNACION SOLICITUD DEPENDENCIA *************************
   { path: 'asignacion_solicitud_dependencia', component: AsignacionSolicitudDependenciaComponent},
 

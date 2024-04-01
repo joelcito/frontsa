@@ -14,7 +14,7 @@ export class SolicitudComponent implements OnInit {
 
   dataSourceSolicitud = new MatTableDataSource<SolicitudElement>();
   // displayedColumns: string[] = ['id', 'descripcion', 'solicitante', 'fechaSolicitud', 'acciones'];
-  displayedColumns: string[] = ['id', 'tipo_caso' , 'asignado', 'fechaSolicitud','fechaRespuesta',  'estado' ,'acciones'];
+  displayedColumns: string[] = ['id', 'tipo_caso' , 'asignado', 'fechaSolicitud','fechaRespuesta',  'estado' ,  'prioridad' ,'acciones'];
   // displayedColumns: String[]           = ['id', 'descripcion','solicitante','acciones'];
 
   private solicitudService = inject(SolicitudService);
@@ -94,6 +94,18 @@ export class SolicitudComponent implements OnInit {
     }
     let da = environment.getUrlSolicitudAsignacionRespuesta(datos)
     this.router.navigate(da);
+  }
+
+  // isPrioridadAtencionNino(element:any): boolean {
+  getColorByPrioridad(element:any){
+    if (element.prioridad === 'ATENCIÓN ADULTO MAYOR') {
+      return 'prioridad-roja';
+    } else if (element.prioridad === 'ATENCIÓN NIÑO MENOR DE 10 AÑOS' || element.prioridad === 'ATENCIÓN EMBARAZADA') {
+      return 'prioridad-amarilla';
+    } else {
+      return ''; // Si no coincide con ninguna condición, no aplicamos ninguna clase
+    }
+    // return element.prioridad === 'ATENCIÓN ADULTO MAYOR';
   }
 
 }

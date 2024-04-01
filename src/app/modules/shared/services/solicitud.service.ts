@@ -74,6 +74,12 @@ export class SolicitudService {
     );
   }
 
+  eliminarSolicitud(body:any){
+    return this.http.post(`${this.base_url}/solicitud/eliminarSolicitud`, body, {headers: this.agregarAuthorizationHeader()}).pipe(
+      catchError(error => this.manejarError(error))
+    );
+  }
+
   //***************** PARA LA TABLA DE TEMPORALES DE LA SOLICITUD *****************
   saveTemporalSolicitud(body:any){
     return this.http.post(`${this.base_url}/solicitud/saveTemporalSolicitud`, body, {headers: this.agregarAuthorizationHeader()}).pipe(

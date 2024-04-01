@@ -35,7 +35,7 @@ export class ModalNewSolicitudComponent implements OnInit{
 
   ngOnInit(): void {
 
-    console.log(this.data)
+    // console.log(this.data)
     this.nameSolictud  = this.data.tipo.nombre
     this.tipo_saneo_id = this.data.tipo.id
 
@@ -65,9 +65,9 @@ export class ModalNewSolicitudComponent implements OnInit{
     this.tipo_saneo_id = this.soliForm.value.tipo_saneo_id;
     this.formulario_id = this.soliForm.value.formulario_id;
 
-    console.log("********************************")
-    console.log(this.soliForm.value)
-    console.log("********************************")
+    // console.log("********************************")
+    // console.log(this.soliForm.value)
+    // console.log("********************************")
 
     this.dialogRef.close(1)
     const tipo_saneo_id_encry = this.encriptarConAESBase64URL(this.tipo_saneo_id, 'ESTE ES JOEL');
@@ -86,7 +86,7 @@ export class ModalNewSolicitudComponent implements OnInit{
     }
 
     let res = environment.getUrlSolicitudAsignacionRespuesta(datos)
-    console.log(res, datos)
+    // console.log(res, datos)
     this.router.navigate(res);
 
     // Swal.fire({

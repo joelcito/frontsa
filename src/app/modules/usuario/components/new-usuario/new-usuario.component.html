@@ -8,6 +8,9 @@
           <mat-form-field class="half-width">
               <input matInput placeholder="complemento" formControlName="complemento" (change)="buscarFuncionario()"/>
           </mat-form-field>
+          <mat-form-field class="half-width">
+            <input matInput placeholder="numero_celular" formControlName="numero_celular"/>
+        </mat-form-field>
       </div>
 
       <div class="usuario-container">
@@ -51,7 +54,8 @@
     </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button color="primary" (click)="onSave()" [disabled]="usuarioForm.invalid">
+    <!-- <button mat-button color="primary" (click)="onSave()" [disabled]="usuarioForm.invalid"> -->
+    <button mat-button color="primary" (click)="onSave()" [disabled]="validarBotonAgragarusuario()">
         <mat-icon>save</mat-icon> Guardar
     </button>
     <button mat-button color="primary" (click)="onCancel()">

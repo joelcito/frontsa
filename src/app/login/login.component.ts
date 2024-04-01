@@ -33,16 +33,20 @@ export class LoginComponent implements OnInit {
   private loginService = inject(LoginService);
 
   formData = {
-    // username: 'jjjoelcito123@gmail.com',
-    // password: '123456789'
-    username: '',
-    password: ''
+    username: 'jjjoelcito123@gmail.com',
+    password: '123456789'
+    // username: '',
+    // password: ''
   };
 
   onSubmit() {
 
+    console.log("ENTOR A LA FUNCION ON SUBMIT")
+
     this.loginService.login(this.formData).pipe(
       tap((ressul: any) => { // Aquí se está utilizando `any` temporalmente
+
+        // console.log(ressul)
 
         this.loginService.guardarUsuarioLogeuado(ressul.user)
         this.loginService.guardarUsuario(ressul.token);
@@ -52,6 +56,8 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/home']); // Reemplaza '/dashboard' con tu ruta real
       }),
       catchError((error: any) => {
+
+        // console.log(error)
         // Manejar el error aquí
         console.error('Error al iniciar sesión: haber qui', error);
 

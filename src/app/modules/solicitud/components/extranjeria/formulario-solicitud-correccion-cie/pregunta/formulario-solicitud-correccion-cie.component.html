@@ -223,6 +223,7 @@
     </div>
 
     <div class="usuario-container fondo">
+      <button mat-raised-button color="warn" class="boton-largo" (click)="cancelarSolicitud()">Cancelar</button>
       <button mat-raised-button color="primary" class="boton-largo" (click)="guardarSolicitud()" [disabled]="validaFormulario(formularioCoreccionCIE)">Guardar</button>
     </div>
   </ng-container>

@@ -18,12 +18,15 @@ export class NewUsuarioComponent implements OnInit  {
   private usuarioService                 = inject(UsuarioService);
   private dialogRef                      = inject(MatDialogRef<NewUsuarioComponent>);
   private validadorService               = inject(ValidadorService);
-  private requerimeinto_user:string      = '';
-  private validatorsArray: ValidatorFn[] = [];
   public  data                           = inject(MAT_DIALOG_DATA);
   private rolService                     = inject(RolService);
-  public rolElement:any = []
 
+  private requerimeinto_user:string      = '';
+
+  private validatorsArray: ValidatorFn[] = [];
+  public  rolElement:any                 = []
+
+  private botnExisteFuncionario:boolean = false;
 
   ngOnInit(): void {
 
@@ -37,7 +40,7 @@ export class NewUsuarioComponent implements OnInit  {
       nombre_dependencia : [''],
       nombre_cargo       : [''],
       departamento       : [''],
-
+      numero_celular     : [''],
 
       username        : [''],   // Puedes inicializar con un valor por defecto si es necesario
       password        : [''],
@@ -185,27 +188,49 @@ export class NewUsuarioComponent implements OnInit  {
   }
 
   buscarFuncionario(){
-    console.log(this.usuarioForm.get('cedula')?.value)
-    console.log(this.usuarioForm.get('complemento')?.value)
-
     let data = {
       cedula: this.usuarioForm.get('cedula')?.value,
       complemento: this.usuarioForm.get('complemento')?.value,
     }
-
     this.usuarioService.getFuncionario(data).subscribe((result:any) => {
       if(result != null){
         console.log(result)
         this.usuarioForm.get('nombres')?.setValue(result.nombres);
         this.usuarioForm.get('primer_apellido')?.setValue(result.primer_apellido);
         this.usuarioForm.get('segundo_apellido')?.setValue(result.segundo_apellido);
-
         this.usuarioForm.get('nombre_organizacion')?.setValue(result.nombre_organizacion);
         this.usuarioForm.get('nombre_dependencia')?.setValue(result.nombre_dependencia);
         this.usuarioForm.get('nombre_cargo')?.setValue(result.nombre_cargo);
         this.usuarioForm.get('departamento')?.setValue("LA PAZ");
-
+        this.botnExisteFuncionario = true
+      }else{
+        this.botnExisteFuncionario = false
       }
     })
+  }
+
+  validarBotonAgragarusuario():boolean{
+    // if(this.usuarioForm.invalid && !(this.botnExisteFuncionario))
+    //   return true
+    // else
+    //   return false
+    // return (this.usuarioForm.invalid && !(this.botnExisteFuncionario))? true : false ;
+    // if(this.usuarioForm.invalid){
+    //   return true;
+    // }else if(this.usuarioForm.valid){
+    //   if(this.botnExisteFuncionario){
+    //     return false
+    //   }else{
+    //     return true
+    //   }
+    // }else{
+    //   return false;
+    // }
+    // if (this.usuarioForm.invalid) {
+    //   return true;
+    // } else {
+    //   return !this.botnExisteFuncionario;
+    // }
+    return (this.usuarioForm.invalid)? true : !this.botnExisteFuncionario;
   }
 }

@@ -5,6 +5,8 @@
   align-items: center;
   justify-content: center;
   height: 100vh; /* O ajusta la altura según tus necesidades */
+ /* width: 500px; */
+ /* background-color: red; */
 }
 
 .logo {
@@ -17,4 +19,12 @@
 form {
   width: 300px; /* Ancho del formulario */
   text-align: center; /* Alineación del contenido dentro del formulario */
+}
+
+.tamanioboton{
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
 }

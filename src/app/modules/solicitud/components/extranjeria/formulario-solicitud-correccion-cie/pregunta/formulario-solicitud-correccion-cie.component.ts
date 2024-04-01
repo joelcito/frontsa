@@ -84,7 +84,7 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
       }else{
 
-        console.log(this.solicitud_id)
+        // console.log(this.solicitud_id)
 
         this.solicitudService.findByIdsolicitud(this.solicitud_id).subscribe((result:any) => {
 
@@ -119,7 +119,7 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
       //  **************************** DE AQUI ES EXTRANJERIA HABER ****************************
       this.formularioBusquedaExtranjero = this.fb.group({
-        numero_cedula   : ['10131544', Validators.required],
+        numero_cedula   : ['', Validators.required],
         complemento     : ['',],
         nombres         : ['',],
         primer_apellido : ['',],
@@ -270,8 +270,8 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
   buscarExtranjero(){
     let datos = this.formularioBusquedaExtranjero.value
     this.extranjeriaService.buscarExtranjero(datos).subscribe((result:any) => {
-      this.extrajerosBuscados = result
-      this.mostrarTabla = true
+      this.extrajerosBuscados                 = result
+      this.mostrarTabla                       = true
       this.mostrarTablaExtranjeroSeleccionado = false;
     })
   }
@@ -427,7 +427,7 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
                     timer: 4000,
                     allowOutsideClick: false
                   });
-                  
+
                   setTimeout(() => {
                     this.routerLink.navigate(['/solicitud']);
                   }, 4000);
@@ -500,7 +500,6 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
         let options = '<option value="">SELECCIONE</option>';
         let paisCod: any
         result.forEach((item:any) => {
-          // options += `<option value="JOEL">${item['Descripcion'+datos.tabla]}</option>`;
           options += '<option value="'+item['Codigo'+datos.tabla]+'">'+item['Descripcion'+datos.tabla]+'</option>';
           if(this.extranjeroElejido[datos.nombre_campo] === item['Codigo'+datos.tabla])
             paisCod = item
@@ -606,6 +605,56 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
 
 
   onFileSelected(event: any, tamanio: string, id:number){
+
+  }
+
+  cancelarSolicitud(){
+
+    Swal.fire({
+      title: "Estas seguro que deseas cancelar la solicitud?",
+      text: "¡No podras revertir eso!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, cancelar!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let datos = {
+          usuario_eliminador: this.solicitudFormulario.value.funcionario_id,
+          solicitud_id      : this.solicitud_id,
+        }
+        this.solicitudService.eliminarSolicitud(datos).subscribe((result) => {
+
+          console.log(result)
+
+          if(result == 1){
+            Swal.fire({
+              position         : "top-end",
+              icon             : "success",
+              title            : "¡EXITO!",
+              text             : "¡Se elimino con Extio!",
+              showConfirmButton: false,
+              timer            : 3000,
+              allowOutsideClick: false
+            });
+
+            setTimeout(() => {
+
+              this.routerLink.navigate(['solicitud']);
+
+
+              // this.getUsuarios()
+            }, 2000);
+          }else{
+
+          }
+
+        })
+
+
+      }
+    });
 
   }
 

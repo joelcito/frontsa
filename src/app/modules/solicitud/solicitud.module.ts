@@ -18,6 +18,8 @@ import { MaterialModule } from '../shared/material.module';
 import { ComentarioComponent } from './components/extranjeria/comentario/comentario.component';
 // import { NewDocumentoComponent } from './components/extranjeria/comentario/new-documento/new-documento.component';
 import { DocumentacionComponent } from './components/extranjeria/comentario/documentacion/documentacion.component';
+import { LicenciasComponent } from './components/licencias/licencias.component';
+
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { DocumentacionComponent } from './components/extranjeria/comentario/docu
     FormularioConvenioRespuestaComponent,
     ComentarioComponent,
     // NewDocumentoComponent,
-    DocumentacionComponent
+    DocumentacionComponent,
+    LicenciasComponent,
   ],
   imports: [
     CommonModule,
