@@ -41,6 +41,10 @@ export class ExtranjeriaService {
     return this.http.post(`${this.base_url}/extranjeria/getDatosParametricas`, body, {headers: this.agregarAuthorizationHeader()});
   }
 
+  buscaPorNumdeposito(body:any){
+    return this.http.post(`${this.base_url}/extranjeria/buscaPorNumdeposito`, body, {headers: this.agregarAuthorizationHeader()});
+  }
+
   // ********************* SANEAMIENTO EXTRANJERIA *********************
   saneoCambioBandejaSqlServer(body:any){
     return this.http.post(`${this.base_url}/extranjeria/saneoCambioBandeja`, body, {headers: this.agregarAuthorizationHeader()});

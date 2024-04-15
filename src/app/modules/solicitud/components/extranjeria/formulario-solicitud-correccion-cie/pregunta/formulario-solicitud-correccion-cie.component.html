@@ -178,7 +178,15 @@
               <td>{{ dar.name }}</td>
               <td><input type="text" formControlName="actual_{{ dar.nombre_campo }}" autocomplete="off"></td>
               <!-- <td><input id="nuevo_{{ dar.nombre_campo }}" type="text" formControlName="nuevo_{{ dar.nombre_campo }}"></td> -->
-              <td id="contenedorInput_{{ dar.nombre_campo }}"><input id="nuevo_{{ dar.nombre_campo }}" type="text" formControlName="nuevo_{{ dar.nombre_campo }}" autocomplete="off"  (change)="guardarTemporalMente(dar)"></td>
+              <td id="contenedorInput_{{ dar.nombre_campo }}">
+                <input id="nuevo_{{ dar.nombre_campo }}" type="text" formControlName="nuevo_{{ dar.nombre_campo }}" autocomplete="off"  (change)="guardarTemporalMente(dar)">
+                <!-- <span id="nuevo_{{ dar.nombre_campo }}_text" [style.display]="mostrarMensaje ? 'block' : 'none'" [style.color]="mensajeRojo ? 'red' : 'green'">
+                  {{ mensajeBoleta }}
+                </span> -->
+                <span id="nuevo_{{ dar.nombre_campo }}_text">
+                  
+                </span>
+              </td>
             </tr>
           </tbody>
         </table>

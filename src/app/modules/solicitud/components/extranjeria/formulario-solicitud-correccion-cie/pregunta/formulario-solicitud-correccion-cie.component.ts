@@ -39,6 +39,10 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
   public mostrarTabla:Boolean                        = false
   public mostrarFormularioBusquedaExtranjero:Boolean = true
   public mostrarTablaExtranjeroSeleccionado:Boolean  = false
+  // public mostrarMensaje: boolean                     = true;
+  // public mostrarMensaje: boolean                     = false;
+  public mensajeRojo: boolean                        = true;
+
 
   public botonGuardara:boolean   = true
 
@@ -63,6 +67,7 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
   public valorSeleccionado  :string = ''
   public sele1              :string = ''
   public mensaje            :string = ''
+  // public mensajeBoleta      :string = 'LA BOLETA ESTA USADA'
 
   ngOnInit(): void {
     this.detalle_tipo_saneo_id = environment.detalle_tipo_saneo_id_correccion_cie
@@ -522,7 +527,7 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
       this.formularioCoreccionCIE.get("actual_" + datos.nombre_campo)?.setValue(valor ? ((this.extranjeroElejido[datos.nombre_campo])? "MASCULINO": "FEMENINO") : '');
       let options = '<option value="">SELECCIONE</option><option value="1">MASCULINO</option><option value="0">FEMENINO</option>';
       const contenedor           = document.getElementById('contenedorInput_'+datos.nombre_campo) as HTMLElement;
-              contenedor.innerHTML = '';
+            contenedor.innerHTML = '';
 
         const select               = document.createElement('select');
         select.setAttribute('formControlName', 'nuevo_' + datos.nombre_campo);
@@ -539,6 +544,36 @@ export class FormularioSolicitudCorreccionCieComponent implements OnInit{
         inputElement.setAttribute('type', nuevoTipo);
         this.formularioCoreccionCIE.get("actual_" + datos.nombre_campo)?.setValue(this.extranjeroElejido[datos.nombre_campo]);
       }
+    }else if(datos.tipo_campo === "numeroVerifica"){
+      const nuevoTipo = 'number';
+      const inputElement = document.getElementById('nuevo_' + datos.nombre_campo) as HTMLInputElement;
+      if (inputElement){
+        inputElement.setAttribute('type', nuevoTipo);
+        this.formularioCoreccionCIE.get("actual_" + datos.nombre_campo)?.setValue(this.extranjeroElejido[datos.nombre_campo]);
+        inputElement.addEventListener('change', (event) => {
+          const inputElementText = document.getElementById('nuevo_' + datos.nombre_campo + '_text') as HTMLInputElement;
+          if (inputElementText) {
+            let dat = {
+              numeroBoleta: inputElement.value,
+              nombre_campo: datos.nombre_campo
+            }
+            this.extranjeriaService.buscaPorNumdeposito(dat).subscribe((resulDat:any) =>{
+
+              console.log("HABER ESTE => "+dat)
+
+              if(resulDat.cantidad === 0){
+                inputElementText.innerText   = 'Boleta habilitada';
+                inputElementText.style.color = 'green';
+              }else{
+                inputElementText.innerText   = 'La Boleta ya esta asociada';
+                inputElementText.style.color = 'red';
+              }
+            })
+          }else{
+          }
+        });
+      }
+
     }
   }
 
